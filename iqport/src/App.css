@@ -1,0 +1,106 @@
+.card-body.text-center h3 {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-color: grey;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  font-size: 2em;
+}
+
+.home-container {
+  position : flex;
+  background-color:rgb(255, 255, 255);
+}
+
+.page-content {
+  background-image: url('./Components/images/nightsky.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+
+.navbar {
+  background-color: rgb(225, 232, 242) !important;
+  
+}
+.navbar .navbar-brand {
+  margin-left: 20px;
+  
+}
+
+.navbar .navbar-nav .nav-link{
+  color : rgba(0, 0, 0, 0.849);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* align to the right */
+  margin: 20px;
+  background-color: #fff;
+  border-radius: 30px;
+  border: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 6px 20px;
+  transition: all 0.3s ease-in-out;
+  width: 300px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1000;
+  margin-left:auto;
+}
+
+
+.search-bar form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-bar input[type=search] {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  flex-grow: 1;
+  box-shadow: none;
+}
+
+.search-bar button {
+  background-color: transparent;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.search-bar:hover {
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.location-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 6px 20px;
+  width: 100%;
+}
+
+
+.ranking-list.card, .iklan.card {
+  width: 280px;
+}
+
+.chart-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
