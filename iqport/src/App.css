@@ -1,22 +1,30 @@
 .card-body.text-center h3 {
   width: 100px;
   height: 100px;
-  margin: 0 auto;
+  margin: -5px auto;
+  
   border-radius: 50%;
-  background-color: grey;
-  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;  
   font-size: 2em;
 }
 
+.card-deck {
+  display: flex;
+  justify-content: center;
+  gap: -30px; /* Sesuaikan jarak horizontal antar deck */
+  
+}
+
 .home-container {
+  overflow-x: hidden;
   position : flex;
   background-color:rgb(255, 255, 255);
 }
 
 .page-content {
+  overflow-x: hidden;
   background-image: url('./Components/images/nightsky.jpg');
   background-size: cover;
   background-position: center center;
@@ -99,8 +107,37 @@
   width: 280px;
 }
 
-.chart-container {
-  position: absolute;
-  right: 0;
-  top: 0;
+
+#button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.button {
+  display: inline-block;
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button.active {
+  background-color: #f44336;
+}
+
+.graph-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.graph {
+  width: 100%;
+  max-height: 400px;
 }

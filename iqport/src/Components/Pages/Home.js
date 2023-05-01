@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
+
 
 
 function Home() {
   {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
-
-  const [airQuality, setAirQuality] = useState("Good");
 
   const [error, setError] = useState(null);
 
@@ -32,6 +31,7 @@ function Home() {
 
   const searchRef = useRef(null);
 
+  {/*Hook untuk searchbar */ }
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -51,7 +51,7 @@ function Home() {
     setLocation(value);
 
     if (value !== "") {
-      fetch(`http://34.101.124.69:3300/main/5/live_ranking/2023-03-30%2009:00:00`)
+      fetch(`http://34.101.124.69:3300/main/5/live_ranking/2023-02-23%2018:00:00`)
         .then((response) => response.json())
         .then((data) => {
           const filteredLocations = data.filter((loc) =>
@@ -70,7 +70,7 @@ function Home() {
 
   useEffect(() => {
     {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
-    fetch('http://34.101.124.69:3300/main/1/2023-04-05/Andir')
+    fetch('http://34.101.124.69:3300/main/1/realtime/2023-05-01%2002:48:00/Coblong2')
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -94,7 +94,7 @@ function Home() {
       });
 
     {/* Live ranking*/ }
-    fetch("http://34.101.124.69:3300/main/5/live_ranking/2023-02-23%2018:00:00")
+    fetch("http://34.101.124.69:3300/main/5/live_ranking/2023-03-31%2023:00:00")
       .then((response) => response.json())
       .then((data) => {
         // Sort the data by "rata_nilai_ispu" in descending order
@@ -102,28 +102,95 @@ function Home() {
         setRankingData(data);
       })
       .catch((error) => console.error(error));
-
-    {/*Penentuan Warna Polutan */}
-      fetch('http://34.101.124.69:3300/main/1/2023-04-05/Andir')
-      .then(response => response.json())
-      .then(data => {
-        const color_pm25 = data.rata_konsentrasi_pm25;
-        const percentage = (color_pm25/50)*100;
-        const element_pm25=document.getElementById("pm25 card-body text-center");
-        element_pm25.style.background ="linear-gradient(to right, #00ff00, #000000" + percentage + "%)";
-      })
-      .catch(error => console.error(error));
   }, []);
 
-  {/*search bar*/ }
 
-  {/* Penentuan warna polutan */ }
+  {/*Penentuan Warna Polutan */ }
+  fetch("http://34.101.124.69:3300/main/1/realtime/2023-05-01%2002:48:00/Coblong2")
+    .then(response => response.json())
+    .then(data => {
+      //pm25
+      const warna_konsentrasi_pm25 = data[0].warna_konsentrasi_pm25;
+      let pm25Color;
 
+      if (warna_konsentrasi_pm25 === "kuning") {
+        pm25Color = "#FFE9A0";
+      } else if (warna_konsentrasi_pm25 === "hijau") {
+        pm25Color = "#B3FFAE";
+      } else if (warna_konsentrasi_pm25 === "merah") {
+        pm25Color = "#FF6464";
+      } else {
+        pm25Color = "#B0A4A4";
+      }
+
+      const warna_pm25 = data[0].rata_konsentrasi_pm25;
+      document.getElementById("pm25").innerHTML = warna_pm25 ?? "N/A";
+
+      const pm25Card = document.querySelector(".card.border-0 .pm25.card-body.text-center h3");
+      pm25Card.style.setProperty("background-color", pm25Color);
+
+      //pm10
+      const warna_konsentrasi_pm10 = data[0].warna_konsentrasi_pm10;
+      let pm10Color;
+
+      if (warna_konsentrasi_pm10 === "kuning") {
+        pm10Color = "#FFE9A0";
+      } else if (warna_konsentrasi_pm10 === "hijau") {
+        pm10Color = "#B3FFAE";
+      } else if (warna_konsentrasi_pm10 === "merah") {
+        pm10Color = "#FF6464";
+      } else {
+        pm10Color = "#B0A4A4";
+      }
+
+      const pm10 = data[0].rata_konsentrasi_pm10;
+      document.getElementById("pm10").innerHTML = pm10 ?? "N/A";
+
+      const pm10Card = document.querySelector(".card.border-0 .pm10.card-body.text-center h3");
+      pm10Card.style.setProperty("background-color", pm10Color);
+
+      //co
+      const warna_konsentrasi_co = data[0].warna_konsentrasi_co;
+      let coColor;
+
+      if (warna_konsentrasi_co === "kuning") {
+        coColor = "#FFE9A0";
+      } else if (warna_konsentrasi_co === "hijau") {
+        coColor = "#B3FFAE";
+      } else if (warna_konsentrasi_co === "merah") {
+        coColor = "#FF6464";
+      } else {
+        coColor = "#B0A4A4";
+      }
+
+      const co = data[0].rata_konsentrasi_co;
+      document.getElementById("co").innerHTML = co ?? "N/A";
+
+      const coCard = document.querySelector(".card.border-0 .co.card-body.text-center h3");
+      coCard.style.setProperty("background-color", coColor);
+    })
+    .catch(error => console.error(error));
+
+
+  {/*penentuan tindakan who*/ }
+  fetch("http://34.101.124.69:3300/main/1/2023-04-05/Coblong1")
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      const tindakan = data.tindakan;
+      document.getElementById("tindakanWHO").innerHTML = tindakan || "Data tidak ditemukan";
+      console.log(tindakan)
+    })
+    .catch(error => console.error(error));
+    
 
   return (
     <div className="home-container">
       <div className="d-flex align-items-center">
-        <h3 className="text-left  mr-auto" style={{ marginLeft: "20px" }}>Bandung </h3>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+          <h3 className="text-left mr-auto" style={{ marginLeft: "100px", marginBottom: "0" }}>Nama Kecamatan</h3>
+          <p style={{ marginLeft: "100px" }}>Bandung, Jawa Barat</p>
+        </div>
         <div className="search-bar" ref={searchRef} style={{ marginRight: "30px" }}>
           <form className="form-inline my-2 my-lg-0">
             <input
@@ -154,48 +221,57 @@ function Home() {
         </div>
       </div>
 
-      <div className="CurrentAQI card mb-3">
+      <div className="CurrentAQI card mb-3" style={{ marginLeft: "100px", marginRight: "100px" }}>
         <div className="card-body">
           <h5 className="">Indeks Standar Pencemar Udara (ISPU)</h5>
-          <p className="card-text">{ispu}</p>
+          <p className="card-text">{ispu ?? "No data"} </p>
         </div>
       </div>
       <div className="card-deck">
-      <div className ="pm25">
-      <div className="card mt-5 border-0">
-          <div className="pm25 card-body text-center">
-            <h3>{pm25 ?? 'N/A'}</h3>
-            <p>PM2.5</p>
+        <div className="card border-0">
+          <div className="card-body text-center">
+            <p><strong>Temperature</strong></p>
+            <h3>{temperatur ?? 'N/A'}°C</h3>
+          </div>
+        </div>
+        <div className="card border-0"> 
+          <div className="card-body text-center">
+            <p><strong>Humidity</strong></p>
+            <h3>{kelembapan ?? 'N/A'}%</h3>
           </div>
         </div>
       </div>
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>{pm10 ?? 'N/A'}</h3>
-            <p>PM10</p>
+      <div className="card-deck">
+        <div className="card border-0">
+          <div className="pm25 card-body text-center">
+            <p><strong>PM2.5</strong></p>
+            <h3 id="pm25">
+              {pm25 ?? "N/A"}
+            </h3>
+            <p>ug/m3</p>
           </div>
         </div>
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>{co ?? 'N/A'}</h3>
-            <p>CO</p>
+        <div className="card border-0">
+          <div className="pm10 card-body text-center">
+            <p><strong>PM10</strong></p>
+            <h3 id="pm10">
+              {pm10 ?? 'N/A'}
+            </h3>
+            <p>ug/m3</p>
           </div>
         </div>
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>{temperatur ?? 'N/A'}</h3>
-            <p>Temperature</p>
-          </div>
-        </div>
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>{kelembapan ?? 'N/A'}</h3>
-            <p>Humidity</p>
+        <div className="card border-0">
+          <div className="co card-body text-center">
+            <p><strong>CO</strong></p>
+            <h3 id="co">
+              {co ?? 'N/A'}
+            </h3>
+            <p>ug/m3</p>
           </div>
         </div>
       </div>
       <div className="konten">
-        <div className="row">
+        <div className="row" style={{ marginLeft: "100px", marginRight: "10px" }}>
           <div className="col-md-12">
             <div className="row card-body">
               <div className="col-md-3 ml-3">
@@ -206,7 +282,7 @@ function Home() {
                       {rankingData.map((item, index) => (
                         <li key={index}>
                           {item.lokasi}
-                          <span className="float-right">{item.rata_nilai_ispu.toFixed(2)} ppm</span>
+                          <span className="float-right">{item.rata_nilai_ispu.toFixed(2)}</span>
                         </li>
                       ))}
                     </ol>
@@ -216,11 +292,8 @@ function Home() {
               <div className="anjuranWHO col-md-8">
                 <div className="card">
                   <div className="card-body">
-                    <h4> Anjuran WHO</h4>
-                    <li> Tutup jendela untuk menghindari udara kotor </li>
-                    <li> Gunakan masker saat berkegiatan di luar</li>
-                    <li> Bernapaslah pakai hidung, jangan mulut</li>
-                    <li> Jangan merokok</li>
+                    <h4>Anjuran WHO</h4>
+                    <p id="tindakanWHO"></p>
                   </div>
                 </div>
               </div>

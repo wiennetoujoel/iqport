@@ -4,40 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar() {
-  {/*useEffect(() => {
-    // Check if the form element already exists
-    const formExists = document.querySelector('.navbar-collapse form');
-    if (formExists) {
-      return;
-    }
-
-    // Create the form element
-    const form = document.createElement('form');
-    form.classList.add('form-inline', 'my-2', 'my-lg-0', 'ml-auto');
-
-    // Create the input element
-    const input = document.createElement('input');
-    input.classList.add('form-control', 'mr-sm-2');
-    input.type = 'search';
-    input.placeholder = 'Search Location';
-    input.setAttribute('aria-label', 'Search');
-
-    // Create the button element
-    const button = document.createElement('button');
-    button.classList.add('btn', 'btn-outline-success', 'my-2', 'my-sm-0');
-    button.type = 'submit';
-    button.textContent = 'Search';
-
-    // Add the input and button elements to the form element
-    form.appendChild(input);
-    form.appendChild(button);
-
-    // Add the form element to the navbar element
-    const navbar = document.querySelector('.navbar-collapse');
-    navbar.appendChild(form);
-  }, []);*/}
-
-  return (
+   return (
     <nav className="navbar navbar-expand-lg" >
       <Link to="/" className="navbar-brand">
         IQPort
@@ -66,7 +33,7 @@ function Navbar() {
               About Us
             </Link>
           </li>
-          <li className="nav-item">
+          {/*<li className="nav-item">
             <Link to="/Contact" className="nav-link">
               Contact Us
             </Link>
@@ -75,7 +42,7 @@ function Navbar() {
             <Link to="/LocationFound" className="nav-link">
               LocationFound
             </Link>
-          </li>
+          </li>*/}
         </ul>
         <div className="d-flex align-items-center">
           <FontAwesomeIcon icon={faUser} className="mr-3" />
