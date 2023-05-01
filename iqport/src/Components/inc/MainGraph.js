@@ -23,7 +23,7 @@ function MainGraph() {
   //Masuk ke pembuatan chart
   let apiUrl = "";
   let chart = null;
-  let currentParam = "PM25";
+  let currentParam = "ISPU";
   let currentLabel = "hourly";
 
   function setLabels(label) {

@@ -282,7 +282,7 @@ function Home() {
                       {rankingData.map((item, index) => (
                         <li key={index}>
                           {item.lokasi}
-                          <span className="float-right">{item.rata_nilai_ispu.toFixed(2)}</span>
+                          <span className="float-right">{item.rata_nilai_ispu}</span>
                         </li>
                       ))}
                     </ol>
