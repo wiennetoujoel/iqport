@@ -1,122 +1,263 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationPin } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import Chart from 'chart.js/auto'
+import Home from '../Pages/Home.js';
+import { useLocation, useParams, } from 'react-router-dom';
 
+function MainGraph() {
 
-function AirQualityPage() {
-  const { location } = useParams();
-  const [airQuality, setAirQuality] = useState("Good");
-  const [pm25, setPm25] = useState('N/A');
+  //mengambil kecamatan dari landingpage
+  const { kecamatan } = useParams();
+  const [kota, setKota] = useState('');
+  const [provinsi, setProvinsi] = useState('');
 
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
 
   useEffect(() => {
-    axios.get('http://34.101.124.69:3300/main/1/2023-04-05%2009:00:00/Andir')
-      .then(response => {
-        const data = response.data[0];
-        setPm25(data.rata_konsentrasi_pm25);
-      })
-      .catch(error => {
-        console.log(error);
+    setKota(params.get('kota'));
+    setProvinsi(params.get('provinsi'));
+    console.log('kota:', params.get('kota'), 'provinsi:', params.get('provinsi'));
+  }, [location]);
+
+
+
+  //Masuk ke pembuatan chart
+  let apiUrl = "";
+  let chart = null;
+  let currentParam = "ISPU";
+  let currentLabel = "hourly";
+
+  function setLabels(label) {
+    currentLabel = label;
+    getData(currentParam, currentLabel);
+  }
+
+  function getData(param) {
+    currentParam = param;
+    let yLabel = "";
+    let dataUrl = "";
+
+
+    //mengambil jam dari servertime
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const date = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours().toString().padStart(2, '0');
+    //untuk hourly
+    const dateStr = `${year}-${month}-${date}T${hours}:00:00`;
+    const encodedDateStr = encodeURIComponent(dateStr);
+    document.getElementById("clock").textContent = dateStr;
+
+    //untuk daily dan this week
+    const tanggalStr = `${year}-${month}-${date}`;
+    const encodedTanggalStr = encodeURIComponent(tanggalStr);
+
+    switch (param) {
+      case "ISPU":
+        yLabel = "ISPU";
+        if (currentLabel === "hourly") {
+          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/${encodedDateStr}/Coblong1`;
+        }
+        else if (currentLabel === "daily") {
+          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/mingguan/${encodedTanggalStr}/Coblong1`;
+        }
+        else {
+          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/harian/${encodedTanggalStr}/Coblong1`;
+        }
+        break;
+
+      case "PM25":
+        yLabel = "PM2.5 (ppm)";
+        if (currentLabel === "hourly") {
+          dataUrl = `http://34.101.124.69:3300/main/3/PM25/${encodedDateStr}/Coblong1`;
+        }
+        else if (currentLabel == "daily") {
+          dataUrl = `http://34.101.124.69:3300/main/3/PM25/mingguan/${encodedTanggalStr}/Coblong1`;
+        }
+        else {
+          dataUrl = `http://34.101.124.69:3300/main/3/PM25/harian/${encodedTanggalStr}/Coblong1`;
+        }
+        break;
+
+      case "PM10":
+        yLabel = "PM10 (ppm)";
+        if (currentLabel === "hourly") {
+          dataUrl = `http://34.101.124.69:3300/main/4/PM10/${encodedDateStr}/Coblong1}`;;
+        }
+        else if (currentLabel === "daily") {
+          dataUrl = `http://34.101.124.69:3300/main/4/PM10/mingguan/${encodedTanggalStr}/Coblong1}`;
+        }
+        else {
+          dataUrl = `http://34.101.124.69:3300/main/4/PM10/harian/${encodedTanggalStr}/Coblong1}`;
+        }
+        break;
+    }
+    fetch(dataUrl)
+      .then(response => response.json())
+      .then(data => {
+        const labels = [];
+
+
+        if (currentLabel === "hourly") {
+          labels.push(...data.map(d => d.jam));
+        }
+        else if (currentLabel === "daily") {
+          labels.push(...data.map(d => d.tanggal));
+        }
+        else {
+          labels.push(...data.map(d => d.tanggal));
+        }
+
+        let yData = [];
+
+        switch (param) {
+          case "ISPU":
+            if (currentLabel === "hourly") {
+              yData = data.map(d => d.input_value);
+            }
+            else if (currentLabel === "daily") {
+              yData = data.map(d => d.rata_nilai_ispu);
+            }
+            else {
+              yData = data.map(d => d.rata_nilai_ispu);
+            }
+            break;
+
+          case "PM25":
+            if (currentLabel === "hourly") {
+              yData = data.map(d => d.rata_konsentrasipm25);
+            }
+            else if (currentLabel === "daily") {
+              yData = data.map(d => d.rata_pm25);
+            }
+            else {
+              yData = data.map(d => d.rata_pm25);
+            }
+            break;
+
+          case "PM10":
+            if (currentLabel === "hourly") {
+              yData = data.map(d => d.rata_konsentrasi_pm10);
+            }
+            else if (currentLabel === "daily") {
+              yData = data.map(d => d.rata_pm10);
+            }
+            else {
+              yData = data.map(d => d.rata_pm10);
+            }
+            break;
+        }
+
+        //untuk penentuan warna bar chart
+        let colorData = data.map(d => {
+          switch (d.color) {
+            case "hijau":
+              return "#B3FFAE";
+            case "merah":
+              return "#FF6464";
+            case "kuning":
+              return "#FFE9A0";
+            case "hitam":
+              return "#B0A4A4";
+            case "biru":
+              return "#C0DBEA";
+            default:
+              return "white";
+          }
+        });
+
+        const color = colorData;
+
+        if (chart) {
+          chart.destroy();
+          chart=null;
+        }
+
+        chart = new Chart(document.getElementById("myChart"), {
+          
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: currentParam,
+                data: yData,
+                backgroundColor: color,
+                borderColor: "rgba(0, 0, 0, 1)",
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: yLabel
+                },
+                ticks: {
+                  beginAtZero: true,
+                  stepSize: 5
+                }
+              }]
+            }
+          }
+        });
       });
+  }
+
+  useEffect(() => {
+    getData(currentParam);
+
+    //penentuan warna bar dalam bar chart
   }, []);
 
+
+
+  function handleParamClick(e) {
+    e.preventDefault();
+    let param;
+    if (e.currentTarget.id === "pm25Button") {
+      param = "PM25";
+    } else if (e.currentTarget.id === "pm10Button") {
+      param = "PM10";
+    } else if (e.currentTarget.id === "ispuButton") {
+      param = "ISPU";
+    }
+    getData(param);
+
+  };
+
+  function handleLabelClick(e, label) {
+    e.preventDefault();
+    setLabels(label);
+    return false;
+  }
+
   return (
-    <div className="location-found-container">
-      <h3 className="text-left my-2"><FontAwesomeIcon icon={faLocationPin} />Bandung {location}</h3>
-      <div className="CurrentAQI card mb-3">
-        <div className="card-body">
-          <h5 className="">Current Air Quality</h5>
-          <p className="card-text">{airQuality}</p>
+    <div>
+      
+
+      <div id="button-container" style={{ marginLeft: "100px" }}>
+        <button id="ispuButton" onClick={handleParamClick}>ISPU</button>
+        <button id="pm25Button" onClick={handleParamClick}>PM2.5</button>
+        <button id="pm10Button" onClick={handleParamClick}>PM10</button>
+      </div>
+      <div className="graph-container">
+        <div className="graph">
+          <canvas id="myChart"></canvas>
         </div>
       </div>
-      <div className="card-deck">
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>{pm25 ?? 'N/A'}</h3>
-            <p>PM2.5</p>
-          </div>
-        </div>
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>Value</h3>
-            <p>PM10</p>
-          </div>
-        </div>
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>Value</h3>
-            <p>CO</p>
-          </div>
-        </div>
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>Value</h3>
-            <p>Temperature</p>
-          </div>
-        </div>
-        <div className="card mt-5 border-0">
-          <div className="card-body text-center">
-            <h3>Value</h3>
-            <p>Humidity</p>
-          </div>
-        </div>
+      <div id="button-container" style={{ marginLeft: "100px" }}>
+        <button id="hourlyButton" onClick={(e) => { handleLabelClick(e, "hourly"); }}>Hourly</button>
+        <button id="dailyButton" onClick={(e) => { handleLabelClick(e, "daily"); }}>Daily</button>
+        <button id="weeklyButton" onClick={(e) => { handleLabelClick(e, "weekly"); }}>This Week</button>
       </div>
-      <div className="konten">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="row card-body">
-              <div className="col-md-3 ml-3">
-                <div className="ranking-list card">
-                  <div className="card-body">
-                    <h5>Kualitas Udara Kota Bandung{location} setiap stasiun</h5>
-                    <ol>
-                      <li>
-                        Stasiun A
-                        <span className="float-right">40 ppm</span>
-                      </li>
-                      <li>
-                        Stasiun B
-                        <span className="float-right">35 ppm</span>
-                      </li>
-                      <li>
-                        Stasiun C
-                        <span className="float-right">30 ppm</span>
-                      </li>
-                      <li>
-                        Stasiun D
-                        <span className="float-right">25 ppm</span>
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-              </div>
-              <div className="anjuranWHO col-md-8">
-                <div className="card">
-                  <div className="card-body">
-                    <h4> Anjuran WHO</h4>
-                    <li> Tutup jendela untuk menghindari udara kotor </li>
-                    <li> Gunakan masker saat berkegiatan di luar</li>
-                    <li> Bernapaslah pakai hidung, jangan mulut</li>
-                    <li> Jangan merokok</li>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-3 mt-1">
-          <div className="iklan card">
-            <div className="card-body">
-              <h5>Lorem Ipsum</h5>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at metus enim. Praesent bibendum mi tellus, porttitor auctor ex laoreet et. Nulla id augue eget arcu consequat semper. Morbi vehicula in ante quis pulvinar. Etiam quis lorem sagittis, egestas nunc ut, egestas risus. Aenean ex quam, viverra pretium tincidunt eu, ullamcorper id magna. Sed id ultricies mi. Vivamus consectetur, sapien vitae ullamcorper cursus, sem turpis consectetur neque, ut tincidunt tellus nulla eget lorem.</p>
-            </div>
-          </div>
-        </div>
+      <div id="clock">
       </div>
     </div>
   );
 }
 
-export default AirQualityPage;
+export default MainGraph;

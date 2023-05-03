@@ -5,17 +5,18 @@ import Contact from './Components/Pages/Contact';
 import Home from './Components/Pages/Home';
 import Account from './Components/Pages/Account';
 import Navbar from './Components/inc/Navbar';
-import Footer from './Components/inc/Footer';
+import LandingPage from './Components/Pages/LandingPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
     <Router>
-      <div>
-        <Navbar />
-        <MainGraph/>
-      </div>
+      <Navbar />    
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/main-graph/:kecamatan" element={<MainGraph />} />
+      </Routes>
     </Router>
   );
 }

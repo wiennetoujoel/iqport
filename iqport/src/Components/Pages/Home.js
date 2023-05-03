@@ -1,12 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import SearchBar from '../inc/SearchBar';
 
+function Home(props) {
+  {/*Pengambilan nilai kecamata, kota, dan provinsi */}
+  const { kecamatan } = props;
+  const [kota, setKota] = useState("");
+  const [provinsi, setProvinsi] = useState("");
 
-
-
-function Home() {
+  useEffect(() => {
+    fetch(`http://34.101.124.69:3300/main/5/tampil_lokasi`)
+      .then((response) => response.json())
+      .then((data) => {
+        const kota = data[0].kota;
+        const provinsi = data[0].provinsi;
+        setKota(kota);
+        setProvinsi(provinsi);
+        console.log(kota)
+        console.log(provinsi)
+      })
+      .catch((error) => console.error(error));
+  }, [kecamatan]);
   {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
 
   const [error, setError] = useState(null);
@@ -24,53 +39,25 @@ function Home() {
   {/*const untuk nilai ispu */ }
   const [ispu, setIspu] = useState(null);
 
-  {/*const untuk search bar*/ }
-  const [location, setLocation] = useState("");
-  const [locations, setLocations] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
+  {/*Pembuatan Waktu Realtime*/ }
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const date = now.getDate().toString().padStart(2, '0');
+  const hours = now.getHours().toString().padStart(2, '0');
 
-  const searchRef = useRef(null);
+  //untuk hourly
+  const dateStr = `${year}-${month}-${date}T${hours}:00:00`;
+  const encodedDateStr = encodeURIComponent(dateStr);
 
-  {/*Hook untuk searchbar */ }
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    };
+  document.textContent = dateStr;
 
-    document.addEventListener("click", handleOutsideClick);
+  useEffect((livepollutant) => {
+    let url = "";
 
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  }, [searchRef]);
-
-  const handleLocationChange = (event) => {
-    const { value } = event.target;
-    setLocation(value);
-
-    if (value !== "") {
-      fetch(`http://34.101.124.69:3300/main/5/live_ranking/2023-02-23%2018:00:00`)
-        .then((response) => response.json())
-        .then((data) => {
-          const filteredLocations = data.filter((loc) =>
-            loc.lokasi.toLowerCase().includes(value.toLowerCase())
-          );
-          setLocations(filteredLocations);
-          setShowDropdown(true);
-        })
-        .catch((error) => console.log(error));
-    } else {
-      setShowDropdown(false);
-      setLocations([]);
-    }
-  };
-
-
-  useEffect(() => {
+    url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/Coblong1`;
     {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
-    fetch('http://34.101.124.69:3300/main/1/realtime/2023-05-01%2002:48:00/Coblong2')
+    fetch(url)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -91,10 +78,16 @@ function Home() {
       .catch(error => {
         console.log(error);
         setError('An error occurred while fetching data.');
+        console.log(pm25)
       });
+  }, []);
 
+
+  useEffect((liveranking) => {
     {/* Live ranking*/ }
-    fetch("http://34.101.124.69:3300/main/5/live_ranking/2023-03-31%2023:00:00")
+    let liveUrl = "";
+    liveUrl = `http://34.101.124.69:3300/main/5/live_ranking/${encodedDateStr}`;
+    fetch(liveUrl)
       .then((response) => response.json())
       .then((data) => {
         // Sort the data by "rata_nilai_ispu" in descending order
@@ -102,123 +95,103 @@ function Home() {
         setRankingData(data);
       })
       .catch((error) => console.error(error));
-  }, []);
+  });
+
+  useEffect((pollutantcolor) => {
+    {/*Penentuan Warna Polutan */ }
+    let url = "";
+    url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        //pm25
+        const warna_konsentrasi_pm25 = data[0].warna_konsentrasi_pm25;
+        let pm25Color;
+
+        if (warna_konsentrasi_pm25 === "kuning") {
+          pm25Color = "#FFE9A0";
+        } else if (warna_konsentrasi_pm25 === "hijau") {
+          pm25Color = "#B3FFAE";
+        } else if (warna_konsentrasi_pm25 === "merah") {
+          pm25Color = "#FF6464";
+        } else {
+          pm25Color = "#B0A4A4";
+        }
+
+        const warna_pm25 = data[0].rata_konsentrasi_pm25;
+        document.getElementById("pm25").innerHTML = warna_pm25 ?? "N/A";
+
+        const pm25Card = document.querySelector(".card.border-0 .pm25.card-body.text-center h3");
+        pm25Card.style.setProperty("background-color", pm25Color);
+
+        //pm10
+        const warna_konsentrasi_pm10 = data[0].warna_konsentrasi_pm10;
+        let pm10Color;
+
+        if (warna_konsentrasi_pm10 === "kuning") {
+          pm10Color = "#FFE9A0";
+        } else if (warna_konsentrasi_pm10 === "hijau") {
+          pm10Color = "#B3FFAE";
+        } else if (warna_konsentrasi_pm10 === "merah") {
+          pm10Color = "#FF6464";
+        } else {
+          pm10Color = "#B0A4A4";
+        }
+
+        const pm10 = data[0].rata_konsentrasi_pm10;
+        document.getElementById("pm10").innerHTML = pm10 ?? "N/A";
+
+        const pm10Card = document.querySelector(".card.border-0 .pm10.card-body.text-center h3");
+        pm10Card.style.setProperty("background-color", pm10Color);
+
+        //co
+        const warna_konsentrasi_co = data[0].warna_konsentrasi_co;
+        let coColor;
+
+        if (warna_konsentrasi_co === "kuning") {
+          coColor = "#FFE9A0";
+        } else if (warna_konsentrasi_co === "hijau") {
+          coColor = "#B3FFAE";
+        } else if (warna_konsentrasi_co === "merah") {
+          coColor = "#FF6464";
+        } else {
+          coColor = "#B0A4A4";
+        }
+
+        const co = data[0].rata_konsentrasi_co;
+        document.getElementById("co").innerHTML = co ?? "N/A";
+
+        const coCard = document.querySelector(".card.border-0 .co.card-body.text-center h3");
+        coCard.style.setProperty("background-color", coColor);
+      })
+      .catch(error => console.error(error));
+  });
+
+  useEffect((whoactions) => {
+    {/*penentuan tindakan who*/ }
+    let liveUrl = "";
+    liveUrl = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/Coblong1`;
+    fetch(liveUrl)
+      .then(response => response.json())
+      .then(data => {
+        const tindakan = data[0].tindakan;
+        document.getElementById("tindakanWHO").innerHTML = tindakan || "Data tidak ditemukan";
+
+      })
+      .catch(error => console.error(error));
+  });
 
 
-  {/*Penentuan Warna Polutan */ }
-  fetch("http://34.101.124.69:3300/main/1/realtime/2023-05-01%2002:48:00/Coblong2")
-    .then(response => response.json())
-    .then(data => {
-      //pm25
-      const warna_konsentrasi_pm25 = data[0].warna_konsentrasi_pm25;
-      let pm25Color;
-
-      if (warna_konsentrasi_pm25 === "kuning") {
-        pm25Color = "#FFE9A0";
-      } else if (warna_konsentrasi_pm25 === "hijau") {
-        pm25Color = "#B3FFAE";
-      } else if (warna_konsentrasi_pm25 === "merah") {
-        pm25Color = "#FF6464";
-      } else {
-        pm25Color = "#B0A4A4";
-      }
-
-      const warna_pm25 = data[0].rata_konsentrasi_pm25;
-      document.getElementById("pm25").innerHTML = warna_pm25 ?? "N/A";
-
-      const pm25Card = document.querySelector(".card.border-0 .pm25.card-body.text-center h3");
-      pm25Card.style.setProperty("background-color", pm25Color);
-
-      //pm10
-      const warna_konsentrasi_pm10 = data[0].warna_konsentrasi_pm10;
-      let pm10Color;
-
-      if (warna_konsentrasi_pm10 === "kuning") {
-        pm10Color = "#FFE9A0";
-      } else if (warna_konsentrasi_pm10 === "hijau") {
-        pm10Color = "#B3FFAE";
-      } else if (warna_konsentrasi_pm10 === "merah") {
-        pm10Color = "#FF6464";
-      } else {
-        pm10Color = "#B0A4A4";
-      }
-
-      const pm10 = data[0].rata_konsentrasi_pm10;
-      document.getElementById("pm10").innerHTML = pm10 ?? "N/A";
-
-      const pm10Card = document.querySelector(".card.border-0 .pm10.card-body.text-center h3");
-      pm10Card.style.setProperty("background-color", pm10Color);
-
-      //co
-      const warna_konsentrasi_co = data[0].warna_konsentrasi_co;
-      let coColor;
-
-      if (warna_konsentrasi_co === "kuning") {
-        coColor = "#FFE9A0";
-      } else if (warna_konsentrasi_co === "hijau") {
-        coColor = "#B3FFAE";
-      } else if (warna_konsentrasi_co === "merah") {
-        coColor = "#FF6464";
-      } else {
-        coColor = "#B0A4A4";
-      }
-
-      const co = data[0].rata_konsentrasi_co;
-      document.getElementById("co").innerHTML = co ?? "N/A";
-
-      const coCard = document.querySelector(".card.border-0 .co.card-body.text-center h3");
-      coCard.style.setProperty("background-color", coColor);
-    })
-    .catch(error => console.error(error));
-
-
-  {/*penentuan tindakan who*/ }
-  fetch("http://34.101.124.69:3300/main/1/2023-04-05/Coblong1")
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      const tindakan = data.tindakan;
-      document.getElementById("tindakanWHO").innerHTML = tindakan || "Data tidak ditemukan";
-      console.log(tindakan)
-    })
-    .catch(error => console.error(error));
-    
 
   return (
     <div className="home-container">
       <div className="d-flex align-items-center">
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-          <h3 className="text-left mr-auto" style={{ marginLeft: "100px", marginBottom: "0" }}>Nama Kecamatan</h3>
-          <p style={{ marginLeft: "100px" }}>Bandung, Jawa Barat</p>
+          <h3 className="text-left mr-auto" style={{ marginLeft: "100px", marginBottom: "0" }}>{kecamatan}</h3>
+          <p style={{ marginLeft: "100px" }}>{kota}, {provinsi}</p>
         </div>
-        <div className="search-bar" ref={searchRef} style={{ marginRight: "30px" }}>
-          <form className="form-inline my-2 my-lg-0">
-            <input
-              className="form-control mr-sm-2"
-              type="search"
-              placeholder="Cari kecamatan"
-              aria-label="Search"
-              value={location}
-              onChange={handleLocationChange}
-            />
-            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">
-              <FontAwesomeIcon icon={faSearch} />
-            </button>
-          </form>
-          {showDropdown && (
-            <div className="location-dropdown">
-              {locations.filter((loc) => loc.lokasi.toLowerCase().includes(location.toLowerCase())).length === 0 ?
-                <div className="location-item">No Result</div>
-                :
-                locations.map((loc) => (
-                  <div key={loc.lokasi} className="location-item">
-                    {loc.lokasi}
-                  </div>
-                ))
-              }
-            </div>
-          )}
-        </div>
+        <SearchBar />
       </div>
 
       <div className="CurrentAQI card mb-3" style={{ marginLeft: "100px", marginRight: "100px" }}>
@@ -234,7 +207,7 @@ function Home() {
             <h3>{temperatur ?? 'N/A'}°C</h3>
           </div>
         </div>
-        <div className="card border-0"> 
+        <div className="card border-0">
           <div className="card-body text-center">
             <p><strong>Humidity</strong></p>
             <h3>{kelembapan ?? 'N/A'}%</h3>

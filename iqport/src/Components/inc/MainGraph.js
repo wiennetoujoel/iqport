@@ -1,24 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto'
 import Home from '../Pages/Home.js';
+import { useLocation, useParams, } from 'react-router-dom';
 
 function MainGraph() {
-  //pembangunan server time
-  function updateTime() {
-    const now = new Date();
-    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    const day = days[now.getDay()];
-    const date = now.getDate().toString().padStart(2, '0');
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const year = now.getFullYear();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const seconds = now.getSeconds().toString().padStart(2, '0');
-    const timeString = `${day}, ${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
-    document.getElementById('clock').textContent = timeString;
-  }
+  //mengambil kecamatan dari searchbar
 
-  setInterval(updateTime, 1000);
+  const { kecamatan } = useParams();
+
 
   //Masuk ke pembuatan chart
   let apiUrl = "";
@@ -35,7 +24,6 @@ function MainGraph() {
     currentParam = param;
     let yLabel = "";
     let dataUrl = "";
-    let colorUrl = "";
 
     //mengambil jam dari servertime
     const now = new Date();
@@ -46,7 +34,7 @@ function MainGraph() {
     //untuk hourly
     const dateStr = `${year}-${month}-${date}T${hours}:00:00`;
     const encodedDateStr = encodeURIComponent(dateStr);
-    document.getElementById('time').textContent = dateStr;
+    document.getElementById("clock").textContent = dateStr;
 
     //untuk daily dan this week
     const tanggalStr = `${year}-${month}-${date}`;
@@ -56,43 +44,42 @@ function MainGraph() {
       case "ISPU":
         yLabel = "ISPU";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/${encodedDateStr}/Coblong1`;;
+          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/${encodedDateStr}/${kecamatan}`;
         }
         else if (currentLabel === "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/mingguan/${encodedTanggalStr}/Coblong1`;
+          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/harian/${encodedTanggalStr}/Coblong1`;
+          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
 
       case "PM25":
         yLabel = "PM2.5 (ppm)";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/3/PM25/${encodedDateStr}/Coblong1`;
+          dataUrl = `http://34.101.124.69:3300/main/3/PM25/${encodedDateStr}/${kecamatan}`;
         }
         else if (currentLabel == "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/3/PM25/mingguan/${encodedTanggalStr}/Coblong1`;
+          dataUrl = `http://34.101.124.69:3300/main/3/PM25/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/3/PM25/harian/${encodedTanggalStr}/Coblong1`;
+          dataUrl = `http://34.101.124.69:3300/main/3/PM25/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
 
       case "PM10":
         yLabel = "PM10 (ppm)";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/4/PM10/${encodedDateStr}/Coblong1`;;
+          dataUrl = `http://34.101.124.69:3300/main/4/PM10/${encodedDateStr}/${kecamatan}`;;
         }
         else if (currentLabel === "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/4/PM10/mingguan/${encodedTanggalStr}/Coblong1`;
+          dataUrl = `http://34.101.124.69:3300/main/4/PM10/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/4/PM10/harian/${encodedTanggalStr}/Coblong1`;
+          dataUrl = `http://34.101.124.69:3300/main/4/PM10/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
     }
-
     fetch(dataUrl)
       .then(response => response.json())
       .then(data => {
@@ -169,13 +156,13 @@ function MainGraph() {
 
         const color = colorData;
 
-
-
         if (chart) {
           chart.destroy();
+          chart = null;
         }
 
         chart = new Chart(document.getElementById("myChart"), {
+
           type: "bar",
           data: {
             labels: labels,
@@ -211,8 +198,6 @@ function MainGraph() {
     getData(currentParam);
 
     //penentuan warna bar dalam bar chart
-
-
   }, []);
 
 
@@ -239,9 +224,8 @@ function MainGraph() {
 
   return (
     <div>
-      <Home />
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <div id="button-container" style={{ marginLeft: "100px" }}>
+      <Home kecamatan={kecamatan} />
+      <div id="button-container" style={{ marginLeft: "100px" }} >
         <button id="ispuButton" onClick={handleParamClick}>ISPU</button>
         <button id="pm25Button" onClick={handleParamClick}>PM2.5</button>
         <button id="pm10Button" onClick={handleParamClick}>PM10</button>
@@ -256,9 +240,9 @@ function MainGraph() {
         <button id="dailyButton" onClick={(e) => { handleLabelClick(e, "daily"); }}>Daily</button>
         <button id="weeklyButton" onClick={(e) => { handleLabelClick(e, "weekly"); }}>This Week</button>
       </div>
-      <div id="time">
-
+      <div id="clock">
       </div>
+
     </div>
   );
 }
