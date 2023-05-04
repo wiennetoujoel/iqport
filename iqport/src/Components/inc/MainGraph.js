@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto'
 import Home from '../Pages/Home.js';
-import { useLocation, useParams, } from 'react-router-dom';
+import { useParams, } from 'react-router-dom';
+
 
 function MainGraph() {
   //mengambil kecamatan dari searchbar
 
   const { kecamatan } = useParams();
-
 
   //Masuk ke pembuatan chart
   let apiUrl = "";
@@ -80,6 +80,7 @@ function MainGraph() {
         }
         break;
     }
+
     fetch(dataUrl)
       .then(response => response.json())
       .then(data => {
@@ -197,7 +198,6 @@ function MainGraph() {
   useEffect(() => {
     getData(currentParam);
 
-    //penentuan warna bar dalam bar chart
   }, []);
 
 
@@ -216,8 +216,8 @@ function MainGraph() {
 
   };
 
-  function handleLabelClick(e, label) {
-    e.preventDefault();
+  function handleLabelClick(p, label) {
+    p.preventDefault();
     setLabels(label);
     return false;
   }
@@ -236,13 +236,13 @@ function MainGraph() {
         </div>
       </div>
       <div id="button-container" style={{ marginLeft: "100px" }}>
-        <button id="hourlyButton" onClick={(e) => { handleLabelClick(e, "hourly"); }}>Hourly</button>
-        <button id="dailyButton" onClick={(e) => { handleLabelClick(e, "daily"); }}>Daily</button>
-        <button id="weeklyButton" onClick={(e) => { handleLabelClick(e, "weekly"); }}>This Week</button>
+        <button id="hourlyButton" onClick={(p) => { handleLabelClick(p, "hourly"); }}>Hourly</button>
+        <button id="dailyButton" onClick={(p) => { handleLabelClick(p, "daily"); }}>Daily</button>
+        <button id="weeklyButton" onClick={(p) => { handleLabelClick(p, "weekly"); }}>This Week</button>
       </div>
       <div id="clock">
       </div>
-
+      
     </div>
   );
 }

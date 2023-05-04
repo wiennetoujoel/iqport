@@ -9,7 +9,7 @@ function Home(props) {
   const [kota, setKota] = useState("");
   const [provinsi, setProvinsi] = useState("");
 
-  useEffect(() => {
+  useEffect((lokasi) => {
     fetch(`http://34.101.124.69:3300/main/5/tampil_lokasi`)
       .then((response) => response.json())
       .then((data) => {
@@ -55,7 +55,7 @@ function Home(props) {
   useEffect((livepollutant) => {
     let url = "";
 
-    url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/Coblong1`;
+    url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
     {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
     fetch(url)
       .then(response => {
@@ -171,7 +171,7 @@ function Home(props) {
   useEffect((whoactions) => {
     {/*penentuan tindakan who*/ }
     let liveUrl = "";
-    liveUrl = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/Coblong1`;
+    liveUrl = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
     fetch(liveUrl)
       .then(response => response.json())
       .then(data => {
@@ -243,8 +243,8 @@ function Home(props) {
           </div>
         </div>
       </div>
-      <div className="konten">
-        <div className="row" style={{ marginLeft: "100px", marginRight: "10px" }}>
+      <div className="konten card" style = {{margin : "100px"}}>
+        <div className="row">
           <div className="col-md-12">
             <div className="row card-body">
               <div className="col-md-3 ml-3">
@@ -262,7 +262,7 @@ function Home(props) {
                   </div>
                 </div>
               </div>
-              <div className="anjuranWHO col-md-8">
+              <div className="anjuranWHO col-md-8" style = {{marginLeft : "50px"}}>
                 <div className="card">
                   <div className="card-body">
                     <h4>Anjuran WHO</h4>
