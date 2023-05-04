@@ -55,7 +55,11 @@ function Home(props) {
   useEffect((livepollutant) => {
     let url = "";
 
+<<<<<<< HEAD
     url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
+=======
+    url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/{kecamatan}`;
+>>>>>>> 9b267458651854cd25bce1308c57381cd524ddbb
     {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
     fetch(url)
       .then(response => {
