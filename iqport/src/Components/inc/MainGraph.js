@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto'
 import Home from '../Pages/Home.js';
 import { useParams, } from 'react-router-dom';
+import DateParam from './DateParam'
 
 
 function MainGraph() {
@@ -242,7 +243,7 @@ function MainGraph() {
       </div>
       <div id="clock">
       </div>
-      
+      <DateParam kecamatan ={kecamatan}/>
     </div>
   );
 }

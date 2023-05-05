@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from "prop-types";
+import CustomGraph from './CustomGraph'
 
-function DateParam() {
+function DateParam(props) {
+    const { kecamatan } = props;
+    const [startDateString, setStartDateString] = useState("");
+    const [endDateString, setEndDateString] = useState("");
+    const [selectedParam, setSelectedParam] = useState("ISPU");
+
     const [date1, setDate1] = useState("");
     const [date2, setDate2] = useState("");
-    const [dateRange, setDateRange] = useState({
-        startDateString: '',
-        endDateString: ''
-    });
     const [currentParam, setCurrentParam] = useState("ISPU");
 
     const dateInput1Ref = useRef(null);
@@ -40,13 +43,13 @@ function DateParam() {
         const today = new Date();
         const startDate = new Date(date1);
         const endDate = new Date(date2);
-    
+
         if (startDate > today || endDate > today) {
             alert("Tanggal awal atau akhir tidak bisa lebih besar dari hari ini");
         } else {
             const diffTime = Math.abs(endDate - startDate);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
             if (diffDays > 30) {
                 alert("Tanggal awal dan akhir terpaut lebih dari 30 hari");
             }
@@ -56,17 +59,18 @@ function DateParam() {
             else {
                 const startDateString = `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')}`;
                 const endDateString = `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`;
-    
-                setDateRange({ startDateString, endDateString });
-    
-                // Menggunakan nilai parameter dan tanggal yang diperbarui
+
+                setStartDateString(startDateString);
+                setEndDateString(endDateString);
+                setSelectedParam(selectedParam);
+
                 console.log("Parameter:", selectedParam);
                 console.log("Start date:", startDateString);
                 console.log("End date:", endDateString);
             }
         }
     };
-    
+
     const handleChangeParam = (e) => {
         setCurrentParam(e.target.value);
     };
@@ -99,8 +103,15 @@ function DateParam() {
                 </select>
             </div>
             <button id="submitButton" onClick={handleSubmit} style={{ width: "100px", display: "flex", alignSelf: "center", marginTop: "0px" }}>Submit</button>
+            <CustomGraph startDateString={startDateString} endDateString={endDateString} selectedParam={selectedParam} kecamatan ={kecamatan}/>
         </div>
     );
 }
+
+DateParam.propTypes = {
+    startDateString: PropTypes.string.isRequired,
+    endDateString: PropTypes.string.isRequired,
+    selectedParam: PropTypes.string.isRequired,
+};
 
 export default DateParam;

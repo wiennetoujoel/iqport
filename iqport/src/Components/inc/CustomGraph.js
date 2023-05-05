@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto'
-import DateParam from './DateParam'
+
+import PropTypes from "prop-types";
 
 
-function CustomGraph(props) {
-    const { startDateString, endDateString, selectedParam } = props;
-  
- 
+function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan= "" }) {
+    let dataUrl = "";
+
+
+    const [startDate, setStartDate] = useState(new Date(startDateString));
+    const [endDate, setEndDate] = useState(new Date(endDateString));
+    const [param, setParam] = useState(selectedParam);
     const chart = useRef(null);
 
     useEffect(() => {
@@ -14,27 +18,26 @@ function CustomGraph(props) {
       }, [selectedParam, startDateString, endDateString]);
 
     async function getData(param, startDateString, endDateString) {
-
         const tanggalawal = encodeURIComponent(startDateString);
         const tanggalakhir = encodeURIComponent(endDateString);
 
         let yLabel = "";
-        let dataUrl = "";
+        
 
         switch (param) {
             case "ISPU":
                 yLabel = "ISPU";
-                dataUrl = `http://34.101.124.69:3300/main/1/ISPU/custom/${tanggalawal}/${tanggalakhir}/Andir`;
+                dataUrl = `http://34.101.124.69:3300/main/1/ISPU/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             case "PM25":
                 yLabel = "PM2.5 (ppm)";
-                dataUrl = `http://34.101.124.69:3300/main/3/PM25/custom/${tanggalawal}/${tanggalakhir}/Andir`;
+                dataUrl = `http://34.101.124.69:3300/main/3/PM25/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             case "PM10":
                 yLabel = "PM10 (ppm)";
-                dataUrl = `http://34.101.124.69:3300/main/4/PM10/custom/${tanggalawal}/${tanggalakhir}/Coblong1`;
+                dataUrl = `http://34.101.124.69:3300/main/4/PM10/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             default:
@@ -64,12 +67,28 @@ function CustomGraph(props) {
                 default:
                     break;
             }
-
-
+            let colorData = data.map(d => {
+                switch (d.color) {
+                  case "hijau":
+                    return "#B3FFAE";
+                  case "merah":
+                    return "#FF6464";
+                  case "kuning":
+                    return "#FFE9A0";
+                  case "hitam":
+                    return "#B0A4A4";
+                  case "biru":
+                    return "#C0DBEA";
+                  default:
+                    return "white";
+                }
+              });
+      
+              const color = colorData;
+      
             if (chart.current) {
                 chart.current.destroy();
             }
-
             chart.current = new Chart(document.getElementById("custom"), {
                 type: "bar",
                 data: {
@@ -78,7 +97,7 @@ function CustomGraph(props) {
                         {
                             label: yLabel,
                             data: yData,
-                            backgroundColor: "blue",
+                            backgroundColor: color,
                             borderColor: "rgba(0, 0, 0, 1)",
                             borderWidth: 1,
                         },
@@ -104,18 +123,24 @@ function CustomGraph(props) {
         } catch (error) {
             console.error(error);
             console.log(param);
+            console.log(startDateString);
+            console.log(endDateString);
         }
     }
 
-
     return (
         <div> 
-            <DateParam/>
             <div className="chart-container">
                 <canvas id="custom"></canvas>
             </div>
         </div>
     );
 }
+
+CustomGraph.propTypes = {
+    selectedParam: PropTypes.string.isRequired,
+    startDateString: PropTypes.string.isRequired,
+    endDateString: PropTypes.string.isRequired,
+  };
 
 export default CustomGraph;

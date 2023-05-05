@@ -13,7 +13,7 @@ import './App.css';
 function App() {
   return (
     <Router>
-      <Navbar />    
+      <Navbar/>    
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/main-graph/:kecamatan" element={<MainGraph />} />
