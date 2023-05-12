@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto'
-
+import './CustomGraph.css'
 import PropTypes from "prop-types";
 
 
-function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan= "" }) {
+function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan = "" }) {
     let dataUrl = "";
 
 
@@ -15,14 +15,14 @@ function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan=
 
     useEffect(() => {
         getData(selectedParam, startDateString, endDateString);
-      }, [selectedParam, startDateString, endDateString]);
+    }, [selectedParam, startDateString, endDateString]);
 
     async function getData(param, startDateString, endDateString) {
         const tanggalawal = encodeURIComponent(startDateString);
         const tanggalakhir = encodeURIComponent(endDateString);
 
         let yLabel = "";
-        
+
 
         switch (param) {
             case "ISPU":
@@ -38,6 +38,21 @@ function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan=
             case "PM10":
                 yLabel = "PM10 (ppm)";
                 dataUrl = `http://34.101.124.69:3300/main/4/PM10/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                break;
+
+            case "CO":
+                yLabel = "CO (ppm)";
+                dataUrl = `http://34.101.124.69:3300/main/4/CO/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                break;
+
+            case "temperatur":
+                yLabel = "Temperature (°C)";
+                dataUrl = `http://34.101.124.69:3300/main/2/temperatur/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                break;
+
+            case "kelembapan":
+                yLabel = "Humidity (%)";
+                dataUrl = `http://34.101.124.69:3300/main/3/kelembapan/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             default:
@@ -64,28 +79,40 @@ function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan=
                     yData = data.map((d) => d.rata_pm10);
                     break;
 
+                case "CO":
+                    yData = data.map((d) => d.rata_nilai_co);
+                    break;
+
+                case "temperatur":
+                    yData = data.map((d) => d.rata_nilai_temperatur);
+                    break;
+
+                case "kelembapan":
+                    yData = data.map((d) => d.rata_nilai_kelembapan);
+                    break;
+
                 default:
                     break;
             }
             let colorData = data.map(d => {
                 switch (d.color) {
-                  case "hijau":
-                    return "#B3FFAE";
-                  case "merah":
-                    return "#FF6464";
-                  case "kuning":
-                    return "#FFE9A0";
-                  case "hitam":
-                    return "#B0A4A4";
-                  case "biru":
-                    return "#C0DBEA";
-                  default:
-                    return "white";
+                    case "hijau":
+                        return "#B3FFAE";
+                    case "merah":
+                        return "#FF6464";
+                    case "kuning":
+                        return "#FFE9A0";
+                    case "hitam":
+                        return "#B0A4A4";
+                    case "biru":
+                        return "#C0DBEA";
+                    default:
+                        return "grey";
                 }
-              });
-      
-              const color = colorData;
-      
+            });
+
+            const color = colorData;
+
             if (chart.current) {
                 chart.current.destroy();
             }
@@ -129,7 +156,7 @@ function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan=
     }
 
     return (
-        <div> 
+        <div>
             <div className="chart-container">
                 <canvas id="custom"></canvas>
             </div>
@@ -141,6 +168,6 @@ CustomGraph.propTypes = {
     selectedParam: PropTypes.string.isRequired,
     startDateString: PropTypes.string.isRequired,
     endDateString: PropTypes.string.isRequired,
-  };
+};
 
 export default CustomGraph;

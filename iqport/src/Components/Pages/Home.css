@@ -1,0 +1,477 @@
+.home-container .informasiKota {
+
+  color: white;
+}
+
+.card-deck-wrapper {
+  background-color: #f0f0f0;
+  /* Ganti dengan warna latar belakang yang diinginkan */
+  padding: 20px;
+  /* Sesuaikan padding sesuai kebutuhan */
+  max-width: 650px;
+  border-radius: 10px;
+
+  justify-content: center;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.CurrentAQI {
+  max-width: 650px;
+  margin: 0 20px;
+  margin-top: 20px;
+}
+
+.penjelasan-polutan {
+  height: 200px;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.card-body.text-center h3 {
+  width: 100px;
+  height: 100px;
+  margin: -5px auto;
+
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+}
+
+.card-deck {
+  display: flex;
+  justify-content: center;
+  gap: -30px;
+  /* Sesuaikan jarak horizontal antar deck */
+
+}
+
+.home-container {
+  overflow-x: hidden;
+  position: flex;
+}
+
+.nilai-ranking {
+
+   width: 100px;
+  line-height: 0.04 ;
+  padding: 5px;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.nilai-ranking span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/*ranking list*/
+
+
+/*Untuk bar pengukuran ISPU */
+
+.ISPU .scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.ISPU .scale-item {
+  position: relative;
+}
+
+.ISPU .scale-value {
+  position: relative;
+  z-index: 2;
+  transform: translateX(-50%);
+  top: -20px;
+  font-size: 12px;
+}
+
+.ISPU .scale-value0 {
+  position: relative;
+  z-index: 2;
+  right: 60%;
+  transform: translateX(-50%);
+  top: -5px;
+  font-size: 12px;
+}
+
+.ISPU .scale-value-max {
+  position: relative;
+  z-index: 2;
+  left: 100%;
+  transform: translateX(-100%);
+  top: -5px;
+  font-size: 12px;
+}
+
+.ISPU .scale-label {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 10px;
+}
+
+.ISPU .scale-item[data-value="51"]::before,
+.ISPU .scale-item[data-value="101"]::before,
+.ISPU .scale-item[data-value="151"]::before,
+.ISPU .scale-item[data-value="201"]::before {
+  content: "";
+  position: absolute;
+  top: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.75px;
+  height: 100%;
+  background-color: black;
+  z-index: 1;
+}
+
+.ISPU .scale-item[data-value="51"]::before {
+  height: 83%;
+}
+
+.ISPU .scale-item[data-value="101"]::before {
+  height: 83%;
+}
+
+.ISPU .scale-item[data-value="151"]::before {
+  height: 83%;
+}
+
+.ISPU .scale-item[data-value="201"]::before {
+  height: 83%;
+
+}
+
+/*Untuk bar pengukuran PM25 */
+
+.PM25 .scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.PM25 .scale-item {
+  position: relative;
+}
+
+.PM25 .scale-value {
+  position: relative;
+  z-index: 2;
+  transform: translateX(-50%);
+  top: -20px;
+  font-size: 12px;
+}
+
+.PM25 .scale-value0 {
+  position: relative;
+  z-index: 2;
+  right: 60%;
+  transform: translateX(-50%);
+  top: -5px;
+  font-size: 12px;
+}
+
+.PM25 .scale-value-max {
+  position: relative;
+  z-index: 2;
+  left: 100%;
+  transform: translateX(-100%);
+  top: -5px;
+  font-size: 12px;
+}
+
+.PM25 .scale-label {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 10px;
+}
+
+.PM25 .scale-item[data-value="12"]::before,
+.PM25 .scale-item[data-value="35"]::before,
+.PM25 .scale-item[data-value="55"]::before,
+.PM25 .scale-item[data-value="150"]::before {
+  content: "";
+  position: absolute;
+  top: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.75px;
+  height: 100%;
+  background-color: black;
+  z-index: 1;
+}
+
+.PM25 .scale-item[data-value="12"]::before {
+  height: 83%;
+}
+
+.PM25 .scale-item[data-value="35"]::before {
+  height: 83%;
+}
+
+.PM25 .scale-item[data-value="55"]::before {
+  height: 83%;
+}
+
+.PM25 .scale-item[data-value="150"]::before {
+  height: 83%;
+
+}
+
+/*Untuk bar pengukuran PM10 */
+
+.PM10 .scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.PM10 .scale-item {
+  position: relative;
+}
+
+.PM10 .scale-value {
+  position: relative;
+  z-index: 2;
+  transform: translateX(-50%);
+  top: -20px;
+  font-size: 12px;
+}
+
+.PM10 .scale-value0 {
+  position: relative;
+  z-index: 2;
+  right: 60%;
+  transform: translateX(-50%);
+  top: -5px;
+  font-size: 12px;
+}
+
+.PM10 .scale-value-max {
+  position: relative;
+  z-index: 2;
+  left: 100%;
+  transform: translateX(-100%);
+  top: -5px;
+  font-size: 12px;
+}
+
+.PM10 .scale-label {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 10px;
+}
+
+.PM10 .scale-item[data-value="55"]::before,
+.PM10 .scale-item[data-value="155"]::before,
+.PM10 .scale-item[data-value="255"]::before,
+.PM10 .scale-item[data-value="355"]::before {
+  content: "";
+  position: absolute;
+  top: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.75px;
+  height: 100%;
+  background-color: black;
+  z-index: 1;
+}
+
+.PM10 .scale-item[data-value="55"]::before {
+  height: 83%;
+}
+
+.PM10 .scale-item[data-value="155"]::before {
+  height: 83%;
+}
+
+.PM10 .scale-item[data-value="255"]::before {
+  height: 83%;
+}
+
+.PM10 .scale-item[data-value="355"]::before {
+  height: 83%;
+
+}
+
+/*Untuk bar pengukuran CO */
+
+.CO .scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.CO .scale-item {
+  position: relative;
+}
+
+.CO .scale-value {
+  position: relative;
+  z-index: 2;
+  transform: translateX(-50%);
+  top: -20px;
+  font-size: 12px;
+}
+
+.CO .scale-value0 {
+  position: relative;
+  z-index: 2;
+  right: 60%;
+  transform: translateX(-50%);
+  top: -5px;
+  font-size: 12px;
+}
+
+.CO .scale-value-max {
+  position: relative;
+  z-index: 2;
+  left: 100%;
+  transform: translateX(-100%);
+  top: -5px;
+  font-size: 12px;
+}
+
+.CO .scale-label {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 10px;
+}
+
+.CO .scale-item[data-value="4.5"]::before,
+.CO .scale-item[data-value="9.5"]::before,
+.CO .scale-item[data-value="12.5"]::before,
+.CO .scale-item[data-value="15.5"]::before {
+  content: "";
+  position: absolute;
+  top: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.75px;
+  height: 100%;
+  background-color: black;
+  z-index: 1;
+}
+
+.CO .scale-item[data-value="4.5"]::before {
+  height: 83%;
+}
+
+.CO .scale-item[data-value="9.5"]::before {
+  height: 83%;
+}
+
+.CO .scale-item[data-value="12.5"]::before {
+  height: 83%;
+}
+
+.CO .scale-item[data-value="15.5"]::before {
+  height: 83%;
+
+}
+
+@media screen and (max-width: 480px) {
+  .home-container .informasiKota {
+    /* Modifikasi CSS Anda di sini */
+    /* Contoh: */
+    width: 50%;
+    height: auto;
+    color: white;
+  }
+  .kolom-kanan .penjelasan-polutan{
+    margin: 20px auto;
+    max-width: 345px;
+  }
+
+  .ISPU, .PM25, .PM10, .CO {
+    margin: 25px !important;
+  }
+
+  .CurrentAQI {
+    .penulisan-ispu {
+      font-size: 13px;
+      margin-left: 2px;
+    }
+  }
+
+  #messageIspu {
+    font-size: 13px !important;
+    margin-left: 5px !important;
+  }
+
+  .card-body.text-center h3 {
+    width: 60px;
+    height: 60px;
+    font-size: 1.2em;
+  }
+
+  .card-deck .card {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+
+  .scale-label {
+    max-width: 74px; /* Ubah lebar maksimum sesuai kebutuhan */
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    text-align: center;
+    font-size: 6px !important;
+  
+  }
+
+  .scale-label-line1 {
+    display: block;
+  }
+
+  .scale-label-line2 {
+    display: block;
+  }
+
+  .col-md {
+    width: 100%;
+  }
+
+  .rank-who{
+    margin-top: 0 !important;
+    }
+
+  .col-md, .anjuranWHO{
+    margin:20px 0;
+  }
+  
+  .ranking-list.card {
+    width: 100%;
+    max-width: 342px;
+  }
+
+
+
+
+}

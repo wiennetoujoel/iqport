@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from '../inc/SearchBar';
+import './Home.css';
 
 function Home(props) {
-  {/*Pengambilan nilai kecamata, kota, dan provinsi */}
+  {/*Pengambilan nilai kecamata, kota, dan provinsi */ }
   const { kecamatan } = props;
   const [kota, setKota] = useState("");
   const [provinsi, setProvinsi] = useState("");
@@ -54,7 +55,7 @@ function Home(props) {
 
   useEffect((livepollutant) => {
     let url = "";
-    
+
     url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
     {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
     fetch(url)
@@ -83,6 +84,32 @@ function Home(props) {
   }, []);
 
 
+  // untuk penentuan warna
+  function calculateColor(startColor, endColor, percentage) {
+    const startRGB = hexToRgb(startColor);
+    const endRGB = hexToRgb(endColor);
+
+    const r = Math.round(startRGB.r + (endRGB.r - startRGB.r) * (percentage / 100));
+    const g = Math.round(startRGB.g + (endRGB.g - startRGB.g) * (percentage / 100));
+    const b = Math.round(startRGB.b + (endRGB.b - startRGB.b) * (percentage / 100));
+
+    return rgbToHex(r, g, b);
+  }
+
+  function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+  }
+
+
   useEffect((liveranking) => {
     {/* Live ranking*/ }
     let liveUrl = "";
@@ -93,6 +120,47 @@ function Home(props) {
         // Sort the data by "rata_nilai_ispu" in descending order
         data.sort((a, b) => b.rata_nilai_ispu - a.rata_nilai_ispu);
         setRankingData(data);
+
+        //pewarnaan
+        const ispu_ranking = data[0].rata_nilai_ispu;
+        let ispuColor;
+        let ispuTextColor = "";
+   
+ 
+
+        if (ispu_ranking >= 0 && ispu_ranking <= 50) {
+          const percentage = Math.round(((ispu_ranking - 0) / (50 - 0)) * 100);
+          ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
+          
+        } else if (ispu_ranking >= 51 && ispu_ranking <= 100) {
+          const percentage = Math.round(((ispu_ranking - 51) / (100 - 51)) * 100);
+          ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
+          
+        } else if (ispu_ranking >= 101 && ispu_ranking <= 150) {
+          const percentage = Math.round(((ispu_ranking - 101) / (150 - 101)) * 100);
+          ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
+         
+        } else if (ispu_ranking >= 151 && ispu_ranking <= 200) {
+          const percentage = Math.round(((ispu_ranking - 151) / (200 - 151)) * 100);
+          ispuColor = calculateColor("#ff0000", "#800080", percentage);
+          
+        } else if (ispu_ranking >= 201 && ispu_ranking <= 300) {
+          const percentage = Math.round(((ispu_ranking - 201) / (300 - 201)) * 100);
+          ispuColor = calculateColor("#800080", "#000000", percentage);
+         
+        } else {
+          ispuColor = "#000000"; // Default color for other cases
+          
+        }
+
+        // Mengatur tampilan elemen dengan ID "nilaiIspu"
+        const nilaiIspuElement = document.getElementById("ranking");
+        nilaiIspuElement.innerHTML = ispu_ranking ?? "N/A";
+        nilaiIspuElement.style.backgroundColor = ispuColor;
+
+
+        ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
+        nilaiIspuElement.style.color = ispuTextColor;
       })
       .catch((error) => console.error(error));
   });
@@ -105,65 +173,143 @@ function Home(props) {
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        //pm25
-        const warna_konsentrasi_pm25 = data[0].warna_konsentrasi_pm25;
-        let pm25Color;
 
-        if (warna_konsentrasi_pm25 === "kuning") {
-          pm25Color = "#FFE9A0";
-        } else if (warna_konsentrasi_pm25 === "hijau") {
-          pm25Color = "#B3FFAE";
-        } else if (warna_konsentrasi_pm25 === "merah") {
-          pm25Color = "#FF6464";
+        //pm25      
+        const pm25 = data[0].rata_konsentrasi_pm25;
+        let pm25Color;
+        let pm25TextColor = "";
+
+        if (pm25 >= 0 && pm25 <= 12) {
+          const percentage = Math.round(((pm25 - 0) / (12 - 0)) * 100);
+          pm25Color = calculateColor("#00ff00", "#ffff00", percentage);
+        } else if (pm25 >= 12.1 && pm25 <= 35.4) {
+          const percentage = Math.round(((pm25 - 12.1) / (35.4 - 12.1)) * 100);
+          pm25Color = calculateColor("#ffff00", "#ff7f00", percentage);
+        } else if (pm25 >= 35.5 && pm25 <= 55.4) {
+          const percentage = Math.round(((pm25 - 35.5) / (55.4 - 35.5)) * 100);
+          pm25Color = calculateColor("#ff7f00", "#ff0000", percentage);
+        } else if (pm25 >= 55.5 && pm25 <= 150.4) {
+          const percentage = Math.round(((pm25 - 55.5) / (150.4 - 55.5)) * 100);
+          pm25Color = calculateColor("#ff0000", "#800080", percentage);
+        } else if (pm25 >= 150.5 && pm25 <= 250.4) {
+          const percentage = Math.round(((pm25 - 150.5) / (250.4 - 150.5)) * 100);
+          pm25Color = calculateColor("#800080", "#000000", percentage);
         } else {
-          pm25Color = "#B0A4A4";
+          pm25Color = "#000000"; // Default color for other cases
         }
 
-        const warna_pm25 = data[0].rata_konsentrasi_pm25;
-        document.getElementById("pm25").innerHTML = warna_pm25 ?? "N/A";
+        document.getElementById("pm25").innerHTML = pm25 ?? "N/A";
+
+        pm25TextColor = pm25Color === "#000000" ? "#ffffff" : "#000000";
 
         const pm25Card = document.querySelector(".card.border-0 .pm25.card-body.text-center h3");
-        pm25Card.style.setProperty("background-color", pm25Color);
+        pm25Card.style.backgroundColor = pm25Color;
+        pm25Card.style.color = pm25TextColor;
 
         //pm10
-        const warna_konsentrasi_pm10 = data[0].warna_konsentrasi_pm10;
+        const pm10 = data[0].rata_konsentrasi_pm10;
         let pm10Color;
+        let pm10TextColor = "";
 
-        if (warna_konsentrasi_pm10 === "kuning") {
-          pm10Color = "#FFE9A0";
-        } else if (warna_konsentrasi_pm10 === "hijau") {
-          pm10Color = "#B3FFAE";
-        } else if (warna_konsentrasi_pm10 === "merah") {
-          pm10Color = "#FF6464";
+        if (pm10 >= 0 && pm10 <= 54) {
+          const percentage = Math.round(((pm10 - 0) / (54 - 0)) * 100);
+          pm10Color = calculateColor("#00ff00", "#ffff00", percentage);
+        } else if (pm10 >= 55 && pm10 <= 154) {
+          const percentage = Math.round(((pm10 - 55) / (154 - 55)) * 100);
+          pm10Color = calculateColor("#ffff00", "#ff7f00", percentage);
+        } else if (pm10 >= 155 && pm10 <= 254) {
+          const percentage = Math.round(((pm10 - 155) / (254 - 155)) * 100);
+          pm10Color = calculateColor("#ff7f00", "#ff0000", percentage);
+        } else if (pm10 >= 255 && pm10 <= 354) {
+          const percentage = Math.round(((pm10 - 255) / (354 - 255)) * 100);
+          pm10Color = calculateColor("#ff0000", "#800080", percentage);
+        } else if (pm10 >= 355 && pm10 <= 424) {
+          const percentage = Math.round(((pm10 - 355) / (424 - 355)) * 100);
+          pm10Color = calculateColor("#800080", "#000000", percentage);
         } else {
-          pm10Color = "#B0A4A4";
+          pm10Color = "#000000"; // Default color for other cases
         }
 
-        const pm10 = data[0].rata_konsentrasi_pm10;
+
         document.getElementById("pm10").innerHTML = pm10 ?? "N/A";
+        pm10TextColor = pm10Color === "#000000" ? "#ffffff" : "#000000";
 
         const pm10Card = document.querySelector(".card.border-0 .pm10.card-body.text-center h3");
-        pm10Card.style.setProperty("background-color", pm10Color);
+        pm10Card.style.backgroundColor = pm10Color;
+        pm10Card.style.color = pm10TextColor;
 
         //co
-        const warna_konsentrasi_co = data[0].warna_konsentrasi_co;
+        const co = data[0].rata_konsentrasi_co;
         let coColor;
+        let coTextColor = "";
 
-        if (warna_konsentrasi_co === "kuning") {
-          coColor = "#FFE9A0";
-        } else if (warna_konsentrasi_co === "hijau") {
-          coColor = "#B3FFAE";
-        } else if (warna_konsentrasi_co === "merah") {
-          coColor = "#FF6464";
+        if (co >= 0 && co <= 4.4) {
+          const percentage = Math.round(((co - 0) / (4.4 - 0)) * 100);
+          coColor = calculateColor("#00ff00", "#ffff00", percentage);
+        } else if (co >= 4.5 && co <= 9.4) {
+          const percentage = Math.round(((co - 4.5) / (9.4 - 4.5)) * 100);
+          coColor = calculateColor("#ffff00", "#ff7f00", percentage);
+        } else if (co >= 9.5 && co <= 12.4) {
+          const percentage = Math.round(((co - 9.5) / (12.4 - 9.5)) * 100);
+          coColor = calculateColor("#ff7f00", "#ff0000", percentage);
+        } else if (co >= 12.5 && co <= 15.4) {
+          const percentage = Math.round(((co - 12.5) / (15.4 - 12.5)) * 100);
+          coColor = calculateColor("#ff0000", "#800080", percentage);
+        } else if (co >= 15.5 && co <= 30.4) {
+          const percentage = Math.round(((co - 15.5) / (30.4 - 15.5)) * 100);
+          coColor = calculateColor("#800080", "#000000", percentage);
         } else {
-          coColor = "#B0A4A4";
+          coColor = "#000000"; // Default color for other cases
         }
 
-        const co = data[0].rata_konsentrasi_co;
         document.getElementById("co").innerHTML = co ?? "N/A";
+        coTextColor = coColor === "#000000" ? "#ffffff" : "#000000";
 
         const coCard = document.querySelector(".card.border-0 .co.card-body.text-center h3");
-        coCard.style.setProperty("background-color", coColor);
+        coCard.style.backgroundColor = coColor;
+        coCard.style.color = coTextColor;
+
+        //ispu
+        const warna_ispu = data[0].nilai_ispu;
+        let ispuColor;
+        let ispuTextColor = "";
+        let message;
+
+        if (warna_ispu >= 0 && warna_ispu <= 50) {
+          const percentage = Math.round(((warna_ispu - 0) / (50 - 0)) * 100);
+          ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
+          message = "Good";
+        } else if (warna_ispu >= 51 && warna_ispu <= 100) {
+          const percentage = Math.round(((warna_ispu - 51) / (100 - 51)) * 100);
+          ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
+          message = "Moderate";
+        } else if (warna_ispu >= 101 && warna_ispu <= 150) {
+          const percentage = Math.round(((warna_ispu - 101) / (150 - 101)) * 100);
+          ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
+          message = "Unhealthy for Sensitive Groups";
+        } else if (warna_ispu >= 151 && warna_ispu <= 200) {
+          const percentage = Math.round(((warna_ispu - 151) / (200 - 151)) * 100);
+          ispuColor = calculateColor("#ff0000", "#800080", percentage);
+          message = "Unhealthy";
+        } else if (warna_ispu >= 201 && warna_ispu <= 300) {
+          const percentage = Math.round(((warna_ispu - 201) / (300 - 201)) * 100);
+          ispuColor = calculateColor("#800080", "#000000", percentage);
+          message = "Very Unhealthy";
+        } else {
+          ispuColor = "#000000"; // Default color for other cases
+          message = "Hazardous";
+        }
+
+        // Mengatur tampilan elemen dengan ID "nilaiIspu"
+        const nilaiIspuElement = document.getElementById("nilaiIspu");
+        nilaiIspuElement.innerHTML = warna_ispu ?? "N/A";
+        nilaiIspuElement.style.backgroundColor = ispuColor;
+
+
+        ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
+        nilaiIspuElement.style.color = ispuTextColor;
+
+        document.getElementById("messageIspu").innerHTML = message;
       })
       .catch(error => console.error(error));
   });
@@ -185,91 +331,253 @@ function Home(props) {
 
 
   return (
-    <div className="home-container">
+    <div className="home-container" style={{ marginTop: "50px" }}>
       <div className="d-flex align-items-center">
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-          <h3 className="text-left mr-auto" style={{ marginLeft: "100px", marginBottom: "0" }}>{kecamatan}</h3>
-          <p style={{ marginLeft: "100px" }}>{kota}, {provinsi}</p>
+        <div className="informasiKota" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+          <h3 className="text-left mr-auto" style={{ margin: "0 20px" }}>{kecamatan}</h3>
+          <p style={{ margin: "0 20px" }}>{kota}, {provinsi}</p>
         </div>
         <SearchBar />
       </div>
 
-      <div className="CurrentAQI card mb-3" style={{ marginLeft: "100px", marginRight: "100px" }}>
-        <div className="card-body">
-          <h5 className="">Indeks Standar Pencemar Udara (ISPU)</h5>
-          <p className="card-text">{ispu ?? "No data"} </p>
-        </div>
-      </div>
-      <div className="card-deck">
-        <div className="card border-0">
-          <div className="card-body text-center">
-            <p><strong>Temperature</strong></p>
-            <h3>{temperatur ?? 'N/A'}°C</h3>
+      <div className="row">
+        <div className="kolom-kiri col">
+          <div className="CurrentAQI card mb-3" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
+            <div className="card-body col d-flex align-items-center">
+              <div id="nilaiIspu" className="nilai-ISPU card-body d-flex align-items-center justify-content-center" style={{ backgroundColor: "red", maxWidth: "100px", borderRadius: "10px" }}>
+                <p className="card-text" style={{ fontWeight: "bold", fontSize: "30px", textAlign: "center", margin: "0 auto" }}>{ispu ?? "No data"}</p>
+              </div>
+              <div>
+                <h5 className="penulisan-ispu" style = {{marginLeft:"5px"}}>Indeks Standar Pencemar Udara (ISPU)</h5>
+                <p id="messageIspu" style={{ fontSize: "18px", margin: "0", marginTop: "5px", marginLeft:"5px" }}></p>
+              </div>
+            </div>
+          </div>
+          <div className="card-deck-wrapper" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
+            <div className="card-deck">
+              <div className="card border-0" style={{ backgroundColor: "transparent" }}>
+                <div className="card-body text-center">
+                  <p><strong>Temperature</strong></p>
+                  <h3>{temperatur ?? 'N/A'}°C</h3>
+                </div>
+              </div>
+              <div className="card border-0" style={{ backgroundColor: "transparent" }}>
+                <div className="card-body text-center">
+                  <p><strong>Humidity</strong></p>
+                  <h3>{kelembapan ?? 'N/A'}%</h3>
+                </div>
+              </div>
+            </div>
+            <div className="card-deck">
+              <div className="card border-0" style={{ backgroundColor: "transparent" }}>
+                <div className="pm25 card-body text-center">
+                  <p><strong>PM2.5</strong></p>
+                  <h3 id="pm25">
+                    {pm25 ?? "N/A"}
+                  </h3>
+                  <p>µg/m3</p>
+                </div>
+              </div>
+              <div className="card border-0" style={{ backgroundColor: "transparent" }}>
+                <div className="pm10 card-body text-center">
+                  <p><strong>PM10</strong></p>
+                  <h3 id="pm10">
+                    {pm10 ?? 'N/A'}
+                  </h3>
+                  <p>µg/m3</p>
+                </div>
+              </div>
+              <div className="card border-0" style={{ backgroundColor: "transparent" }}>
+                <div className="co card-body text-center">
+                  <p><strong>CO</strong></p>
+                  <h3 id="co">
+                    {co ?? 'N/A'}
+                  </h3>
+                  <p>ppm</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="card border-0">
-          <div className="card-body text-center">
-            <p><strong>Humidity</strong></p>
-            <h3>{kelembapan ?? 'N/A'}%</h3>
-          </div>
-        </div>
-      </div>
-      <div className="card-deck">
-        <div className="card border-0">
-          <div className="pm25 card-body text-center">
-            <p><strong>PM2.5</strong></p>
-            <h3 id="pm25">
-              {pm25 ?? "N/A"}
-            </h3>
-            <p>ug/m3</p>
-          </div>
-        </div>
-        <div className="card border-0">
-          <div className="pm10 card-body text-center">
-            <p><strong>PM10</strong></p>
-            <h3 id="pm10">
-              {pm10 ?? 'N/A'}
-            </h3>
-            <p>ug/m3</p>
-          </div>
-        </div>
-        <div className="card border-0">
-          <div className="co card-body text-center">
-            <p><strong>CO</strong></p>
-            <h3 id="co">
-              {co ?? 'N/A'}
-            </h3>
-            <p>ug/m3</p>
-          </div>
-        </div>
-      </div>
-      <div className="konten card" style = {{margin : "100px"}}>
-        <div className="row">
-          <div className="col-md-12">
-            <div className="row card-body">
-              <div className="col-md-3 ml-3">
-                <div className="ranking-list card">
-                  <div className="card-body">
-                    <h5>Kualitas Udara Kota Bandung setiap stasiun</h5>
-                    <ol>
-                      {rankingData.map((item, index) => (
-                        <li key={index}>
-                          {item.lokasi}
-                          <span className="float-right">{item.rata_nilai_ispu}</span>
-                        </li>
-                      ))}
-                    </ol>
+        <div className="kolom-kanan col">
+          <div className="penjelasan-polutan card" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
+            <h5 style={{ marginTop: "10px", marginLeft: "15px" }}>Pollutant Measurement</h5>
+            <div className="ISPU" style={{ margin: " 20px", marginBottom: "0px", marginTop: "0" }}>
+              ISPU
+              <div className="color-bar" style={{ marginBottom: "0", margin: "20px auto", width: "95%", height: "20px", borderRadius: "10px", background: "linear-gradient(to right, #00ff00 0%, #ffff00 20%, #ff7f00 40%, #ff0000 60%, #800080 80%, #000000 100%)" }}>
+                <div className="scale">
+                  <div className="scale-item" data-value="0">
+                    <span className="scale-value0" style={{ right: "90%" }}> 0</span>
+                    <span className="scale-label">Good</span>
+                  </div>
+                  <div className="scale-item" data-value="51">
+                    <span className="scale-value">51</span>
+                    <span className="scale-label">Moderate</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="101">
+                    <span className="scale-value">101</span>
+                    <span className="scale-label">
+                      <span class="scale-label-line1">Unhealthy for</span>
+                      <span class="scale-label-line2"> sensitive groups</span>
+                    </span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="151">
+                    <span className="scale-value">151</span>
+                    <span className="scale-label">Unhealthy</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="201">
+                    <span className="scale-value">201</span>
+                    <span className="scale-label">Very Unhealthy</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="301">
+                    <span className="scale-value-max">301</span>
+                    <span className="scale-label">Hazardous</span>
                   </div>
                 </div>
               </div>
-              <div className="anjuranWHO col-md-8" style = {{marginLeft : "50px"}}>
-                <div className="card">
-                  <div className="card-body">
-                    <h4>Anjuran WHO</h4>
-                    <p id="tindakanWHO"></p>
+            </div>
+            <div className="PM25" style={{ margin: " 20px", marginBottom: "10px" }}>
+              {'PM25 (µg/m3)'}
+              <div className="color-bar" style={{ marginBottom: "0px", margin: "20px auto", width: "95%", height: "20px", borderRadius: "10px", background: "linear-gradient(to right, #00ff00 0%, #ffff00 20%, #ff7f00 40%, #ff0000 60%, #800080 80%, #000000 100%)" }}>
+                <div className="scale">
+                  <div className="scale-item" data-value="0">
+                    <span className="scale-value0" style={{ right: "90%" }}> 0</span>
+                    <span className="scale-label">Good</span>
+                  </div>
+                  <div className="scale-item" data-value="12">
+                    <span className="scale-value">12</span>
+                    <span className="scale-label">Moderate</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="35">
+                    <span className="scale-value">35</span>
+                    <span className="scale-label">
+                      <span class="scale-label-line1">Unhealthy for</span>
+                      <span class="scale-label-line2"> sensitive groups</span>
+                    </span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="55">
+                    <span className="scale-value">55</span>
+                    <span className="scale-label">Unhealthy</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="150">
+                    <span className="scale-value">150</span>
+                    <span className="scale-label">Very Unhealthy</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="250">
+                    <span className="scale-value-max">250</span>
+                    <span className="scale-label">Hazardous</span>
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="PM10" style={{ margin: " 20px", marginBottom: "10px" }}>
+              {'PM10 (µg/m3)'}
+              <div className="color-bar" style={{ marginBottom: "0", margin: "20px auto", width: "95%", height: "20px", borderRadius: "10px", background: "linear-gradient(to right, #00ff00 0%, #ffff00 20%, #ff7f00 40%, #ff0000 60%, #800080 80%, #000000 100%)" }}>
+                <div className="scale">
+                  <div className="scale-item" data-value="0">
+                    <span className="scale-value0" style={{ right: "90%" }}> 0</span>
+                    <span className="scale-label">Good</span>
+                  </div>
+                  <div className="scale-item" data-value="55">
+                    <span className="scale-value">55</span>
+                    <span className="scale-label">Moderate</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="155">
+                    <span className="scale-value">155</span>
+                    <span className="scale-label">
+                      <span class="scale-label-line1">Unhealthy for</span>
+                      <span class="scale-label-line2"> sensitive groups</span>
+                    </span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="255">
+                    <span className="scale-value">255</span>
+                    <span className="scale-label">Unhealthy</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="355">
+                    <span className="scale-value">355</span>
+                    <span className="scale-label">Very Unhealthy</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="425">
+                    <span className="scale-value-max">425</span>
+                    <span className="scale-label">Hazardous</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="CO" style={{ margin: " 20px", marginBottom: "55px" }}>
+              {'CO (ppm)'}
+              <div className="color-bar" style={{ marginBottom: "0", margin: "20px auto", width: "95%", height: "20px", borderRadius: "10px", background: "linear-gradient(to right, #00ff00 0%, #ffff00 20%, #ff7f00 40%, #ff0000 60%, #800080 80%, #000000 100%)" }}>
+                <div className="scale">
+                  <div className="scale-item" data-value="0">
+                    <span className="scale-value0" style={{ right: "90%" }}> 0</span>
+                    <span className="scale-label">Good</span>
+                  </div>
+                  <div className="scale-item" data-value="4.5">
+                    <span className="scale-value">4.5</span>
+                    <span className="scale-label">Moderate</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="9.5">
+                    <span className="scale-value">9.5</span>
+                    <span className="scale-label">
+                      <span class="scale-label-line1">Unhealthy for</span>
+                      <span class="scale-label-line2"> sensitive groups</span>
+                    </span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="12.5">
+                    <span className="scale-value">12.5</span>
+                    <span className="scale-label">Unhealthy</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="15.5">
+                    <span className="scale-value">15.5</span>
+                    <span className="scale-label">Very Unhealthy</span>
+                    <span className="vertical-line"></span>
+                  </div>
+                  <div className="scale-item" data-value="30.5">
+                    <span className="scale-value-max">30.5</span>
+                    <span className="scale-label">Hazardous</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="rank-who row card-body" style={{ marginTop: "20px", marginLeft: "10px" }}>
+        <div className="col-md">
+          <div className="ranking-list card" style={{ width: "580px", backgroundColor: "rgb(236, 242, 255)" }}>
+            <div className="card-body">
+              <h5>Kualitas Udara Kota Bandung setiap stasiun</h5>
+              <ol>
+                {rankingData.map((item, index) => (
+                  <li key={index}>
+                    {item.lokasi}
+                    <span id = "ranking" className="nilai-ranking float-right card-body">{item.rata_nilai_ispu}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div className="anjuranWHO col" style={{ marginRight: "20px" }}>
+          <div className="card" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
+            <div className="card-body">
+              <h5>Anjuran WHO</h5>
+              <p id="tindakanWHO"></p>
             </div>
           </div>
         </div>

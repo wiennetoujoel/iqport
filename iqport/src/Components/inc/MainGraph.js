@@ -2,13 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto'
 import Home from '../Pages/Home.js';
 import { useParams, } from 'react-router-dom';
-import DateParam from './DateParam'
+import DateParam from './DateParam';
+import './MainGraph.css';
 
 
 function MainGraph() {
   //mengambil kecamatan dari searchbar
-
   const { kecamatan } = useParams();
+
+  //untuk menentukan button yang mana sedang aktif pada
+  const [activeParam, setActiveParam] = useState('ISPU');
+  const [activeLabel, setActiveLabel] = useState('hourly');
 
   //Masuk ke pembuatan chart
   let apiUrl = "";
@@ -80,6 +84,45 @@ function MainGraph() {
           dataUrl = `http://34.101.124.69:3300/main/4/PM10/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
+
+      case "CO":
+        yLabel = "CO (ppm)";
+        if (currentLabel === "hourly") {
+          dataUrl = `http://34.101.124.69:3300/main/4/CO/${encodedDateStr}/${kecamatan}`;;
+        }
+        else if (currentLabel === "daily") {
+          dataUrl = `http://34.101.124.69:3300/main/4/CO/mingguan/${encodedTanggalStr}/${kecamatan}`;
+        }
+        else {
+          dataUrl = `http://34.101.124.69:3300/main/4/CO/harian/${encodedTanggalStr}/${kecamatan}`;
+        }
+        break;
+
+      case "temperatur":
+        yLabel = "Temperature (°C)";
+        if (currentLabel === "hourly") {
+          dataUrl = `http://34.101.124.69:3300/main/2/temperatur/${encodedDateStr}/${kecamatan}`;;
+        }
+        else if (currentLabel === "daily") {
+          dataUrl = `http://34.101.124.69:3300/main/2/temperatur/mingguan/${encodedTanggalStr}/${kecamatan}`;
+        }
+        else {
+          dataUrl = `http://34.101.124.69:3300/main/2/temperatur/harian/${encodedTanggalStr}/${kecamatan}`;
+        }
+        break;
+
+      case "kelembapan":
+        yLabel = "Humidity (%)";
+        if (currentLabel === "hourly") {
+          dataUrl = `http://34.101.124.69:3300/main/3/kelembapan/${encodedDateStr}/${kecamatan}`;;
+        }
+        else if (currentLabel === "daily") {
+          dataUrl = `http://34.101.124.69:3300/main/3/kelembapan/mingguan/${encodedTanggalStr}/${kecamatan}`;
+        }
+        else {
+          dataUrl = `http://34.101.124.69:3300/main/3/kelembapan/harian/${encodedTanggalStr}/${kecamatan}`;
+        }
+        break;
     }
 
     fetch(dataUrl)
@@ -136,6 +179,42 @@ function MainGraph() {
               yData = data.map(d => d.rata_pm10);
             }
             break;
+
+          case "CO":
+            if (currentLabel === "hourly") {
+              yData = data.map(d => d.rata_co);
+            }
+            else if (currentLabel === "daily") {
+              yData = data.map(d => d.rata_nilai_co);
+            }
+            else {
+              yData = data.map(d => d.rata_nilai_co);
+            }
+            break;
+
+          case "temperatur":
+            if (currentLabel === "hourly") {
+              yData = data.map(d => d.rata_temperatur);
+            }
+            else if (currentLabel === "daily") {
+              yData = data.map(d => d.rata_nilai_temperatur);
+            }
+            else {
+              yData = data.map(d => d.rata_nilai_temperatur);
+            }
+            break;
+
+          case "kelembapan":
+            if (currentLabel === "hourly") {
+              yData = data.map(d => d.rata_kelembapan);
+            }
+            else if (currentLabel === "daily") {
+              yData = data.map(d => d.rata_nilai_kelembapan);
+            }
+            else {
+              yData = data.map(d => d.rata_nilai_kelembapan);
+            }
+            break;
         }
 
         //untuk penentuan warna bar chart
@@ -152,7 +231,7 @@ function MainGraph() {
             case "biru":
               return "#C0DBEA";
             default:
-              return "white";
+              return "grey";
           }
         });
 
@@ -210,8 +289,14 @@ function MainGraph() {
       param = "PM25";
     } else if (e.currentTarget.id === "pm10Button") {
       param = "PM10";
+    } else if (e.currentTarget.id === "coButton") {
+      param = "CO";
     } else if (e.currentTarget.id === "ispuButton") {
       param = "ISPU";
+    } else if (e.currentTarget.id === "temperaturButton") {
+      param = "temperatur";
+    } else if (e.currentTarget.id === "kelembapanButton") {
+      param = "kelembapan";
     }
     getData(param);
 
@@ -224,26 +309,32 @@ function MainGraph() {
   }
 
   return (
-    <div>
+    <div className="Main-Container" style={{ paddingTop: "20px" }}>
       <Home kecamatan={kecamatan} />
-      <div id="button-container" style={{ marginLeft: "100px" }} >
-        <button id="ispuButton" onClick={handleParamClick}>ISPU</button>
-        <button id="pm25Button" onClick={handleParamClick}>PM2.5</button>
-        <button id="pm10Button" onClick={handleParamClick}>PM10</button>
-      </div>
-      <div className="graph-container">
-        <div className="graph">
-          <canvas id="myChart"></canvas>
+      <div className="graph-card card" style={{ margin: "60px auto", marginBottom: "0", height: "570px", backgroundColor: "rgb(236, 242, 255)  " }}>
+        <h5 className = "title-card" style={{ margin: "0 auto", marginTop: "10px" }}> Historic Air Quality Graphic for {kecamatan} </h5>
+        <div id="button-container" style={{ marginTop: "20px" }}  >
+          <button className="button" id="ispuButton" onClick={handleParamClick}>ISPU</button>
+          <button className="button" id="pm25Button" onClick={handleParamClick}>PM2.5</button>
+          <button className="button" id="pm10Button" onClick={handleParamClick}>PM10</button>
+          <button className="button" id="coButton" onClick={handleParamClick}>CO</button>
+          <button className="button" id="temperaturButton" onClick={handleParamClick}>Temperature</button>
+          <button className="button" id="kelembapanButton" onClick={handleParamClick}>Humidity</button>
         </div>
-      </div>
-      <div id="button-container" style={{ marginLeft: "100px" }}>
-        <button id="hourlyButton" onClick={(p) => { handleLabelClick(p, "hourly"); }}>Hourly</button>
-        <button id="dailyButton" onClick={(p) => { handleLabelClick(p, "daily"); }}>Daily</button>
-        <button id="weeklyButton" onClick={(p) => { handleLabelClick(p, "weekly"); }}>This Week</button>
+        <div className="graph-container">
+          <div className="graph d-flex">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+        <div id="button-container" style={{ margin: "0 auto", marginBottom: "20px" }}>
+          <button className="button" id="hourlyButton" onClick={(p) => { handleLabelClick(p, "hourly"); }}>Hourly</button>
+          <button className="button" id="dailyButton" onClick={(p) => { handleLabelClick(p, "daily"); }}>Daily</button>
+          <button className="button" id="weeklyButton" onClick={(p) => { handleLabelClick(p, "weekly"); }}>This Week</button>
+        </div>
       </div>
       <div id="clock">
       </div>
-      <DateParam kecamatan ={kecamatan}/>
+      <DateParam kecamatan={kecamatan} />
     </div>
   );
 }

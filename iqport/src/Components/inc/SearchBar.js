@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import '../../App.css';
+import './SearchBar.css';
 
 
 
@@ -42,10 +42,10 @@ function SearchBar() {
                 {Object.keys(groupedLocations).map((kota) => {
                     return Object.keys(groupedLocations[kota]).map((provinsi) => {
                         return (
-                            <div key={`${kota}_${provinsi}`} className="location-item">
-                                {kota}, {provinsi}
+                            <div key={`${kota}_${provinsi}`} className="location-item" >
+                                <div style={{fontWeight:"bold", fontSize:"15px", opacity:"0.75"}}>{kota}, {provinsi}</div>
                                 {groupedLocations[kota][provinsi].map((kecamatan) => (
-                                    <div key={kecamatan} onClick={() => handleClick(kecamatan, kota, provinsi)}>
+                                    <div className="kecamatan" key={kecamatan} style={{ cursor: "pointer", }} onClick={() => handleClick(kecamatan, kota, provinsi)}>
                                         {kecamatan}
                                     </div>
                                 ))}
@@ -66,7 +66,7 @@ function SearchBar() {
         window.location.href = `/main-graph/${kecamatan}?kota=${kota}&provinsi=${provinsi}`;
     };
 
-   
+
 
 
     {/*Hook untuk searchbar */ }
@@ -119,7 +119,7 @@ function SearchBar() {
                     value={location}
                     onChange={handleLocationChange}
                 />
-                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">
+                <button id ="searchIcon" className="btn btn-outline-success my-2 my-sm-0" type="submit">
                     <FontAwesomeIcon icon={faSearch} />
                 </button>
             </form>

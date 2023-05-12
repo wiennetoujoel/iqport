@@ -1,22 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomGraph from './Components/inc/CustomGraph';
 import MainGraph from './Components/inc/MainGraph';
 import DateParam from './Components/inc/DateParam';
-import Contact from './Components/Pages/Contact';
+
 import Home from './Components/Pages/Home';
-import Account from './Components/Pages/Account';
+import Footer from './Components/inc/Footer';
+import SignupForm from './Components/Pages/SignupForm';
+import SigninForm from './Components/Pages/SigninForm';
 import Navbar from './Components/inc/Navbar';
 import LandingPage from './Components/Pages/LandingPage';
+import Dashboard from './Components/Pages/Dashboard';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
     <Router>
-      <Navbar/>    
+      <Navbar className="transparent-navbar" />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />}/>
         <Route path="/main-graph/:kecamatan" element={<MainGraph />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

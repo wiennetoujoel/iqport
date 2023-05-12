@@ -1,0 +1,73 @@
+.login-form {
+  max-width:400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: rgb(214, 225, 237);
+  border-radius: 8px;
+}
+
+
+
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-form button:hover {
+  background-color: #45a049;
+}
+
+.login-form .or-text {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.login-form .google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: #db4437;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-form .google-btn:hover {
+  background-color: #c53929;
+}
+
+.login-form .google-icon {
+  margin-right: 10px;
+}
+
+@media screen and (max-width: 1000px) {
+  .login-form {
+    max-width: 700px;
+  }
+}

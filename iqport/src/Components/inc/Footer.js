@@ -1,47 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 
 function Footer() {
-    const [isVisible, setIsVisible] = useState(false);
-  
-    useEffect(() => {
-      const toggleVisibility = () => {
-        const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight;
-        setIsVisible(scrolledToBottom);
-      };
-  
-      window.addEventListener('scroll', toggleVisibility);
-  
-      return () => window.removeEventListener('scroll', toggleVisibility);
-    }, []);
-  
-    return (
-      <section className={`section footer bg-dark text-white ${isVisible ? 'visible' : ''}`}>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-4">
-              <h6>Ini footer</h6>
-              <hr />
-              <p className="text-white">asdnojasdnasjodnjosadnjnjoansjdonasdj</p>
-            </div>
-            <div className="col-md-4">
-              <h6>Links</h6>
-              <hr />
-              <div><Link to="/">Home</Link></div>
-              <div><Link to="/About">About Us</Link></div>
-              <div><Link to="/Contact">Contact</Link></div>
-            </div>
-            <div className="col-md-4">
-              <h6>Informasi Kontak</h6>
-              <hr />
-              <div><p className="text-white mb-1">Bandung Jawa Barat</p></div>
-              <div><p className="text-white mb-1">082216220622</p></div>
-              <div><p className="text-white mb-1">wiennetouj@gmail.com</p></div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+    //mau bikin 10 koordinat
+  const [koordinat, setKoordinat] = useState(Array(10).fill({ x: 0, y: 0 }));
 
-  export default Footer;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // mengambil nilai x dan y dari form
+    const x = e.target.elements.x.value;
+    const y = e.target.elements.y.value;
+    
+    // memperbarui nilai koordinat di state
+    setKoordinat((prevCoordinates) =>
+      prevCoordinates.map((coord, index) =>
+        index === Number(e.target.dataset.index) ? { x, y } : coord
+      )
+    );
+  };
+
+  return (
+    <div>
+      {koordinat.map((coord, index) => (
+        <div
+          key={index}
+          id={`coor${index + 1}`}
+        >
+          <p>X: {coord.x}</p>
+          <p>Y: {coord.y}</p>
+        </div>
+      ))}
+      <form onSubmit={handleSubmit}>
+        {koordinat.map((coord, index) => (
+          <div key={index}>
+            <label htmlFor={`coor${index + 1}`}>Coordinate {index + 1}</label>
+            <br />
+            <label htmlFor={`x${index + 1}`}>X:</label>
+            <input type="number" id={`x${index + 1}`} name="x" />
+            <label htmlFor={`y${index + 1}`}>Y:</label>
+            <input type="number" id={`y${index + 1}`} name="y" />
+            <button type="submit" data-index={index}>
+              Submit
+            </button>
+          </div>
+        ))}
+      </form>
+    </div>
+  );
+}
+
+export default Footer;

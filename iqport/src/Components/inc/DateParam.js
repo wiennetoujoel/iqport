@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from "prop-types";
-import CustomGraph from './CustomGraph'
+import CustomGraph from './CustomGraph';
+import './DateParam.css'
 
 function DateParam(props) {
     const { kecamatan } = props;
@@ -77,8 +78,12 @@ function DateParam(props) {
 
     return (
         <div className="customgraph card "
-            style={{ margin: "20px", marginLeft: "100px", marginRight: "100px" }}
-        > Custom Graph
+            style={{ margin: "0 auto", maxWidth: "1000px", backgroundColor: "rgb(236, 242, 255)" }}
+        >
+            <div className="title-card" style={{ margin: "0 auto", marginTop: "20px" }}>
+                <h5 className="title-line1">Historic Air Quality Custom Graphic</h5>
+                <h5 className="title-line2">for {kecamatan}</h5>
+            </div>
             <div className="row">
                 <div className="col">
                     <div
@@ -97,13 +102,16 @@ function DateParam(props) {
             <div class="form-group" style={{ width: "300px", padding: "20px", margin: "0 auto", marginTop: "-50px" }}>
                 <label for="param">Parameter</label>
                 <select class="form-control" id="param" name="param" onChange={handleChangeParam}>
+                    <option value="ISPU">ISPU</option>
                     <option value="PM25">PM2.5 </option>
                     <option value="PM10">PM10 </option>
-                    <option value="ISPU">ISPU</option>
+                    <option value="CO">CO</option>
+                    <option value="temperatur">Temperature</option>
+                    <option value="kelembapan">Kelembaban</option>
                 </select>
             </div>
             <button id="submitButton" onClick={handleSubmit} style={{ width: "100px", display: "flex", alignSelf: "center", marginTop: "0px" }}>Submit</button>
-            <CustomGraph startDateString={startDateString} endDateString={endDateString} selectedParam={selectedParam} kecamatan ={kecamatan}/>
+            <CustomGraph startDateString={startDateString} endDateString={endDateString} selectedParam={selectedParam} kecamatan={kecamatan} />
         </div>
     );
 }

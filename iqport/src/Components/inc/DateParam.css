@@ -1,0 +1,56 @@
+.customgraph {
+  margin: 0 auto;
+  
+  background-color: rgb(236, 242, 255);
+}
+
+.title-card h5{
+  margin: 0 auto;
+  font-size: 18px !important;
+  text-align: center;
+}
+
+.card-body {
+  padding: 0px;
+}
+
+.tanggalAwal,
+.tanggalAkhir {
+  width: 100%;
+  padding: 10px;
+}
+
+.label {
+  margin-left: 5px;
+}
+
+
+#submitButton {
+  width: 100%;
+  display: flex;
+  align-self: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 480px) {
+  .tanggalAwal,
+  .tanggalAkhir,
+  .form-group {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .customgraph {
+    margin: 0 auto;
+    max-width: 355px !important; 
+  }
+  
+
+  .title-card {
+    font-size: 15px !important;
+  }
+
+  #submitButton {
+    margin-top: 5px;
+  }
+}
