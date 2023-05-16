@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from '../inc/SearchBar';
 import './Home.css';
+import Temperatur from '../../images/temperature_image.jpg';
+
+
 
 function Home(props) {
   {/*Pengambilan nilai kecamata, kota, dan provinsi */ }
@@ -40,18 +43,34 @@ function Home(props) {
   {/*const untuk nilai ispu */ }
   const [ispu, setIspu] = useState(null);
 
-  {/*Pembuatan Waktu Realtime*/ }
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
-  const date = now.getDate().toString().padStart(2, '0');
-  const hours = now.getHours().toString().padStart(2, '0');
+  const [encodedDateStr, setEncodedDateStr] = useState('');
 
-  //untuk hourly
-  const dateStr = `${year}-${month}-${date}T${hours}:00:00`;
-  const encodedDateStr = encodeURIComponent(dateStr);
+  const updateEncodedDateStr = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const date = now.getDate().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const hours = now.getHours().toString().padStart(2, '0');
 
-  document.textContent = dateStr;
+    const dateStr = `${year}-${month}-${date}T${hours}:${minutes}:00`;
+    const encodedDate = encodeURIComponent(dateStr);
+    setEncodedDateStr(encodedDate);
+  };
+
+  useEffect(() => {
+    updateEncodedDateStr();
+
+    const interval = setInterval(() => {
+      updateEncodedDateStr();
+    }, 60000); // Memperbarui waktu setiap 1 menit
+
+    return () => {
+      clearInterval(interval); // Membersihkan interval saat komponen di-unmount
+    };
+  }, []);
+
 
   useEffect((livepollutant) => {
     let url = "";
@@ -81,7 +100,7 @@ function Home(props) {
         setError('An error occurred while fetching data.');
         console.log(pm25)
       });
-  }, []);
+  }, [encodedDateStr, kecamatan]);
 
 
   // untuk penentuan warna
@@ -125,32 +144,32 @@ function Home(props) {
         const ispu_ranking = data[0].rata_nilai_ispu;
         let ispuColor;
         let ispuTextColor = "";
-   
- 
+
+
 
         if (ispu_ranking >= 0 && ispu_ranking <= 50) {
           const percentage = Math.round(((ispu_ranking - 0) / (50 - 0)) * 100);
           ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
-          
+
         } else if (ispu_ranking >= 51 && ispu_ranking <= 100) {
           const percentage = Math.round(((ispu_ranking - 51) / (100 - 51)) * 100);
           ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
-          
+
         } else if (ispu_ranking >= 101 && ispu_ranking <= 150) {
           const percentage = Math.round(((ispu_ranking - 101) / (150 - 101)) * 100);
           ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
-         
+
         } else if (ispu_ranking >= 151 && ispu_ranking <= 200) {
           const percentage = Math.round(((ispu_ranking - 151) / (200 - 151)) * 100);
           ispuColor = calculateColor("#ff0000", "#800080", percentage);
-          
+
         } else if (ispu_ranking >= 201 && ispu_ranking <= 300) {
           const percentage = Math.round(((ispu_ranking - 201) / (300 - 201)) * 100);
           ispuColor = calculateColor("#800080", "#000000", percentage);
-         
+
         } else {
           ispuColor = "#000000"; // Default color for other cases
-          
+
         }
 
         // Mengatur tampilan elemen dengan ID "nilaiIspu"
@@ -328,6 +347,35 @@ function Home(props) {
       .catch(error => console.error(error));
   });
 
+  //untuk hover 5 polutan utama
+  const [ispm25Hovered, setIspm25Hovered] = useState(false);
+  const [ispm10Hovered, setIspm10Hovered] = useState(false);
+  const [iscoHovered, setIscoHovered] = useState(false);
+
+  const pm25HandleMouseEnter = () => {
+    setIspm25Hovered(true);
+  };
+
+  const pm25HandleMouseLeave = () => {
+    setIspm25Hovered(false);
+  };
+
+  const pm10HandleMouseEnter = () => {
+    setIspm10Hovered(true);
+  };
+
+  const pm10HandleMouseLeave = () => {
+    setIspm10Hovered(false);
+  };
+
+  const coHandleMouseEnter = () => {
+    setIscoHovered(true);
+  };
+
+  const coHandleMouseLeave = () => {
+    setIscoHovered(false);
+  };
+
 
 
   return (
@@ -348,14 +396,17 @@ function Home(props) {
                 <p className="card-text" style={{ fontWeight: "bold", fontSize: "30px", textAlign: "center", margin: "0 auto" }}>{ispu ?? "No data"}</p>
               </div>
               <div>
-                <h5 className="penulisan-ispu" style = {{marginLeft:"5px"}}>Indeks Standar Pencemar Udara (ISPU)</h5>
-                <p id="messageIspu" style={{ fontSize: "18px", margin: "0", marginTop: "5px", marginLeft:"5px" }}></p>
+                <h5 className="penulisan-ispu" style={{ marginLeft: "5px" }}>Indeks Standar Pencemar Udara (ISPU)</h5>
+                <p id="messageIspu" style={{ fontSize: "18px", margin: "0", marginTop: "5px", marginLeft: "5px" }}></p>
               </div>
             </div>
           </div>
           <div className="card-deck-wrapper" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
             <div className="card-deck">
-              <div className="card border-0" style={{ backgroundColor: "transparent" }}>
+              <div
+                className="card border-0"
+                style={{ backgroundColor: "transparent" }} 
+              >
                 <div className="card-body text-center">
                   <p><strong>Temperature</strong></p>
                   <h3>{temperatur ?? 'N/A'}°C</h3>
@@ -369,31 +420,62 @@ function Home(props) {
               </div>
             </div>
             <div className="card-deck">
-              <div className="card border-0" style={{ backgroundColor: "transparent" }}>
-                <div className="pm25 card-body text-center">
+              <div className="card border-0"
+                style={{ backgroundColor: "transparent" }}
+                onMouseEnter={pm25HandleMouseEnter}
+                onMouseLeave={pm25HandleMouseLeave}
+              >
+                <div className="pm25 card-body text-center" style={{ cursor: "pointer" }}>
                   <p><strong>PM2.5</strong></p>
                   <h3 id="pm25">
                     {pm25 ?? "N/A"}
                   </h3>
                   <p>µg/m3</p>
+                  {ispm25Hovered && (
+                    <div className="pm25-overlay">
+                      <div className="pm25-overlay-content">
+                        <div className="pm25-overlay-column">
+                          <p>Temperatur adalah besaran atau </p>
+                          <p>Place your explanation text here...</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="card border-0" style={{ backgroundColor: "transparent" }}>
-                <div className="pm10 card-body text-center">
+                <div className="pm10 card-body text-center" style={{ cursor: "pointer" }} onMouseEnter={pm10HandleMouseEnter} onMouseLeave={pm10HandleMouseLeave}>
                   <p><strong>PM10</strong></p>
-                  <h3 id="pm10">
-                    {pm10 ?? 'N/A'}
-                  </h3>
+                  <h3 id="pm10">{pm10 ?? 'N/A'}</h3>
                   <p>µg/m3</p>
+                  {ispm10Hovered && (
+                    <div className="pm10-overlay">
+                      <div className="pm10-overlay-content">
+                        <div className="pm10-overlay-column">
+                          <p>About PM10</p>
+                          <p>Place your explanation text here...</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
+
               <div className="card border-0" style={{ backgroundColor: "transparent" }}>
-                <div className="co card-body text-center">
+                <div className="co card-body text-center" style={{ cursor: "pointer" }} onMouseEnter={coHandleMouseEnter} onMouseLeave={coHandleMouseLeave}>
                   <p><strong>CO</strong></p>
-                  <h3 id="co">
-                    {co ?? 'N/A'}
-                  </h3>
+                  <h3 id="co">{co ?? 'N/A'}</h3>
                   <p>ppm</p>
+                  {iscoHovered && (
+                    <div className="co-overlay">
+                      <div className="co-overlay-content">
+                        <div className="co-overlay-column">
+                          <p>About CO</p>
+                          <p>Place your explanation text here...</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -566,7 +648,7 @@ function Home(props) {
                 {rankingData.map((item, index) => (
                   <li key={index}>
                     {item.lokasi}
-                    <span id = "ranking" className="nilai-ranking float-right card-body">{item.rata_nilai_ispu}</span>
+                    <span id="ranking" className="nilai-ranking float-right card-body">{item.rata_nilai_ispu}</span>
                   </li>
                 ))}
               </ol>

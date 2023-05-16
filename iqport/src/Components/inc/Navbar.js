@@ -9,6 +9,9 @@ function Navbar() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+
   const openOverlay = () => {
     setShowOverlay(true);
   };
@@ -20,27 +23,24 @@ function Navbar() {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("loggedIn");
     if (isLoggedIn) {
-      const { photoURL, email } = JSON.parse(isLoggedIn);
+      const { username, email } = JSON.parse(isLoggedIn);
       setLoggedIn({
         loggedIn: true,
-        photoURL,
         email,
+        username,
       });
     }
   }, []);
 
-  const handleLogin = (photoUrl, email) => {
-    const username = email.split("@")[0]; // Mengambil nama pengguna sebelum tanda @
-    setLoggedIn({
-      loggedIn: true,
-      photoURL: photoUrl,
-      email: email,
-    });
-    closeOverlay();
+  const handleLogin = (email, username) => {
+    setLoggedIn(true);
+    setUsername(username);
+    setEmail(email);
   };
 
   const handleLogout = () => {
     setLoggedIn(false);
+    localStorage.removeItem("loggedIn");
   };
 
 
@@ -73,7 +73,7 @@ function Navbar() {
               ) : (
                 <FontAwesomeIcon icon={faUser} className="mr-3" />
               )}
-              <span className="mr-2">{loggedIn.email}</span>
+              <span className="mr-2">{loggedIn.username}</span>
             </button>
             <ul className="dropdown-menu" aria-labelledby="adminDropdown">
               <li>

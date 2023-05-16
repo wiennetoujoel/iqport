@@ -62,6 +62,12 @@
   background-color: #c53929;
 }
 
+.error-message {
+  margin-left: 3px;
+  color: red; /* Warna teks */
+  font-size: 12px; /* Ukuran teks */
+}
+
 .login-form .google-icon {
   margin-right: 10px;
 }

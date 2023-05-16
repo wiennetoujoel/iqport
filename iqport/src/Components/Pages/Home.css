@@ -53,6 +53,121 @@
   position: flex;
 }
 
+/*untuk hover 3 polutan, pertama adalah temperatur*/
+
+/*pm25*/
+.pm25-overlay {
+  position: absolute;
+  top: 0;
+  left: 80%;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.hovered-element:hover + .pm25-overlay {
+  left: 100%;
+}
+
+.pm25-overlay-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.pm25-overlay-column {
+  flex: 1;
+  padding: 20px;
+  color: white;
+}
+
+.pm25-overlay-column p {
+  margin-bottom: 10px;
+}
+
+/*pm10*/
+.pm10-overlay {
+  position: absolute;
+  top: 0;
+  left: 80%;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.hovered-element:hover + .pm10-overlay {
+  left: 100%;
+}
+
+.pm10-overlay-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.pm10-overlay-column {
+  flex: 1;
+  padding: 20px;
+  color: white;
+}
+
+.pm10-overlay-column p {
+  margin-bottom: 10px;
+}
+
+/*co*/
+.co-overlay {
+  position: absolute;
+  top: 0;
+  left: 80%;
+  width: 200px;
+  height: 150px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.hovered-element:hover + .co-overlay {
+  left: 100%;
+}
+
+.co-overlay-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.co-overlay-column {
+  flex: 1;
+  padding: 20px;
+  color: white;
+}
+
+.co-overlay-column p {
+  margin-bottom: 10px;
+}
+
+
+
 .nilai-ranking {
 
    width: 100px;
