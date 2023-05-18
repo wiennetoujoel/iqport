@@ -64,7 +64,7 @@ function Home(props) {
 
     const interval = setInterval(() => {
       updateEncodedDateStr();
-    }, 60000); // Memperbarui waktu setiap 1 menit
+    }, 120000); // Memperbarui waktu setiap 1 menit
 
     return () => {
       clearInterval(interval); // Membersihkan interval saat komponen di-unmount
@@ -405,7 +405,7 @@ function Home(props) {
             <div className="card-deck">
               <div
                 className="card border-0"
-                style={{ backgroundColor: "transparent" }} 
+                style={{ backgroundColor: "transparent" }}
               >
                 <div className="card-body text-center">
                   <p><strong>Temperature</strong></p>
@@ -435,8 +435,9 @@ function Home(props) {
                     <div className="pm25-overlay">
                       <div className="pm25-overlay-content">
                         <div className="pm25-overlay-column">
-                          <p>Temperatur adalah besaran atau </p>
-                          <p>Place your explanation text here...</p>
+                          <p>PM2.5</p>
+                          <p>PM2.5 (Particular Matter 2.5) adalah partikel partikel udara yang berukuran lebih kecil dari 2.5 mikrometer </p>
+                          <p>Paparan PM2.5 berlebih dapat menyebabkan gangguan saluran pernafasan, kanker paru-paru, dan penyakit paru-paru obstruktif kronis</p>
                         </div>
                       </div>
                     </div>
@@ -452,8 +453,9 @@ function Home(props) {
                     <div className="pm10-overlay">
                       <div className="pm10-overlay-content">
                         <div className="pm10-overlay-column">
-                          <p>About PM10</p>
-                          <p>Place your explanation text here...</p>
+                          <p>PM10</p>
+                          <p>PM10 (Particular Matter 10) adalah partikel partikel udara yang berukuran lebih kecil dari 10 mikrometer </p>
+                          <p>Paparan PM10 berlebih dapat menyebabkan reaksi radang paru-paru dan ISPA</p>
                         </div>
                       </div>
                     </div>
@@ -470,8 +472,9 @@ function Home(props) {
                     <div className="co-overlay">
                       <div className="co-overlay-content">
                         <div className="co-overlay-column">
-                          <p>About CO</p>
-                          <p>Place your explanation text here...</p>
+                          <p>CO</p>
+                          <p>CO (Carbon Monoxide) adalah gas tak berwarna, tidak berwarna, dan tidak berbau yang dihasilkan dari pembakaran gas, minyak, dan bahan bakar padat</p>
+                          <p>Paparan CO berlebih menyebabkan gangguan pada kerja jantung, sistem saraf pusat, dan saluran pernapasan</p>
                         </div>
                       </div>
                     </div>

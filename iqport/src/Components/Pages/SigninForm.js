@@ -18,14 +18,14 @@ const SigninForm = ({ handleLogin }) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [loggedIn, setLoggedIn] = useState({ loggedIn: false, photoURL: "" });
-  
+
 
   const signInWithEmail = () => {
     axios
-      .post("http://34.101.124.69:3300/main/login", { email, password },  { withCredentials: true })
+      .post("http://34.101.124.69:3300/main/login", { email, password }, { withCredentials: true })
       .then((response) => {
-        const { success, email, username } = response.data;
-        if (success) {
+        const { success, email, username, token } = response.data.data; // Menambahkan token ke respons data
+        if (success) {  
           handleLogin(email, username);
           localStorage.setItem(
             "loggedIn",
@@ -35,6 +35,9 @@ const SigninForm = ({ handleLogin }) => {
               username,
             })
           );
+
+          // Menyimpan token pada header setiap kali melakukan permintaan ke server
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         } else {
           setErrorMessage("*Email or password is incorrect");
         }
@@ -44,6 +47,7 @@ const SigninForm = ({ handleLogin }) => {
         setErrorMessage("*An error occurred. Please try again.");
       });
   };
+
 
   const handleFormClick = (e) => {
     e.stopPropagation();

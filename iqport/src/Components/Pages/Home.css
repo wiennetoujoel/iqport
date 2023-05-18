@@ -58,16 +58,17 @@
 /*pm25*/
 .pm25-overlay {
   position: absolute;
-  top: 0;
-  left: 80%;
+  top: 10%;
+  left: 90%;
   width: 200px;
   height: 150px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   transition: left 0.3s ease-in-out;
   z-index: 1000;
+  border-radius: 10px;
 }
 
 .hovered-element:hover + .pm25-overlay {
@@ -84,8 +85,10 @@
 
 .pm25-overlay-column {
   flex: 1;
-  padding: 20px;
+  padding: 10px;
   color: white;
+  text-align: left;
+  font-size: 10px;
 }
 
 .pm25-overlay-column p {
@@ -95,16 +98,17 @@
 /*pm10*/
 .pm10-overlay {
   position: absolute;
-  top: 0;
-  left: 80%;
+  top: 10%;
+  left: 90%;
   width: 200px;
   height: 150px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   transition: left 0.3s ease-in-out;
   z-index: 1000;
+  border-radius: 10px;
 }
 
 .hovered-element:hover + .pm10-overlay {
@@ -113,16 +117,18 @@
 
 .pm10-overlay-content {
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+  align-items: left;
+  justify-content: left;
   max-width: 500px;
   margin: 0 auto;
 }
 
 .pm10-overlay-column {
   flex: 1;
-  padding: 20px;
+  padding: 10px;
   color: white;
+  text-align: left;
+  font-size: 10px;
 }
 
 .pm10-overlay-column p {
@@ -132,16 +138,17 @@
 /*co*/
 .co-overlay {
   position: absolute;
-  top: 0;
-  left: 80%;
+  top: 10%;
+  left: 90%;
   width: 200px;
   height: 150px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   transition: left 0.3s ease-in-out;
   z-index: 1000;
+  border-radius: 10px;
 }
 
 .hovered-element:hover + .co-overlay {
@@ -158,8 +165,10 @@
 
 .co-overlay-column {
   flex: 1;
-  padding: 20px;
+  padding: 10px;
   color: white;
+  text-align: left;
+  font-size: 10px;
 }
 
 .co-overlay-column p {

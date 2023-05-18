@@ -269,7 +269,8 @@ function MainGraph() {
                   stepSize: 5
                 }
               }]
-            }
+            },
+          
           }
         });
       });

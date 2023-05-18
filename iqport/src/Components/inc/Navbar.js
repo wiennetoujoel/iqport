@@ -7,10 +7,10 @@ import './Navbar.css';
 
 function Navbar() {
   const [showOverlay, setShowOverlay] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('joel');
+  const [email, setEmail] = useState('joel@gmail.com');
 
   const openOverlay = () => {
     setShowOverlay(true);
@@ -107,7 +107,7 @@ function Navbar() {
   };
 
   const adminDashboard = () => {
-    if (loggedIn.loggedIn) {
+   
       return (
         <li className="nav-item">
           <Link to="/Dashboard" className="nav-link dashboard" style={{color:"white"}}>
@@ -115,7 +115,7 @@ function Navbar() {
           </Link>
         </li>
       );
-    }
+    
   }
 
   // JavaScript
@@ -128,7 +128,7 @@ window.addEventListener("scroll", function() {
   return (
     <nav className="navbar fixed-top navbar-expand-lg navbar-dark p-md-3 transparent-navbar">
       <Link to="/" className="navbar-brand">
-        IQPort
+        AQPort
       </Link>
       <button
         className="navbar-toggler"
