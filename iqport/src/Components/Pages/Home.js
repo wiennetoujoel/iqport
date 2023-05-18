@@ -57,10 +57,10 @@ function Home(props) {
     const dateStr = `${year}-${month}-${date}T${hours}:${minutes}:00`;
     const encodedDate = encodeURIComponent(dateStr);
     setEncodedDateStr(encodedDate);
-    
+
   };
-  
-  
+
+
 
   useEffect(() => {
     updateEncodedDateStr();
@@ -73,37 +73,49 @@ function Home(props) {
       clearInterval(interval); // Membersihkan interval saat komponen di-unmount
     };
   }
-  , []);
+    , []);
 
 
-  useEffect((livepollutant) => {
-    let url = "";
+  useEffect(() => {
+    const fetchData = () => {
+      const startTime = performance.now(); // Waktu awal
 
-    url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
-    {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('An error occurred while fetching data.');
-        }
-      })
-      .then(data => {
-        setPm25(data[0].rata_konsentrasi_pm25);
-        setPm10(data[0].rata_konsentrasi_pm10);
-        setCo(data[0].rata_konsentrasi_co);
-        setTemperatur(data[0].rata_temperatur);
-        setKelembapan(data[0].rata_kelembapan);
+      let url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
 
-        setIspu(data[0].nilai_ispu)
+      fetch(url)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('An error occurred while fetching data.');
+          }
+        })
+        .then(data => {
+          const endTime = performance.now(); // Waktu akhir
+          const latency = endTime - startTime; // Perhitungan latency
 
-      })
-      .catch(error => {
-        console.log(error);
-        setError('An error occurred while fetching data.');
-        console.log(pm25)
-      });
+          console.log(`Latency: ${latency} milliseconds`);
+
+          setPm25(data[0].rata_konsentrasi_pm25);
+          setPm10(data[0].rata_konsentrasi_pm10);
+          setCo(data[0].rata_konsentrasi_co);
+          setTemperatur(data[0].rata_temperatur);
+          setKelembapan(data[0].rata_kelembapan);
+          setIspu(data[0].nilai_ispu);
+        })
+        .catch(error => {
+          console.log(error);
+          setError('An error occurred while fetching data.');
+        });
+    };
+
+    fetchData(); // Initial fetch
+
+    const interval = setInterval(fetchData, 60000); // Fetch every 1 minute
+
+    return () => {
+      clearInterval(interval); // Clean up interval on component unmount
+    };
   }, [encodedDateStr, kecamatan]);
 
 
@@ -183,152 +195,162 @@ function Home(props) {
 
   useEffect((pollutantcolor) => {
     {/*Penentuan Warna Polutan */ }
-    let url = "";
-    url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
+    const fetchData = () => {
+      let url = "";
+      url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
 
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
 
-        //pm25      
-        const pm25 = data[0].rata_konsentrasi_pm25;
-        let pm25Color;
-        let pm25TextColor = "";
+          //pm25      
+          const pm25 = data[0].rata_konsentrasi_pm25;
+          let pm25Color;
+          let pm25TextColor = "";
 
-        if (pm25 >= 0 && pm25 <= 12) {
-          const percentage = Math.round(((pm25 - 0) / (12 - 0)) * 100);
-          pm25Color = calculateColor("#00ff00", "#ffff00", percentage);
-        } else if (pm25 >= 12.1 && pm25 <= 35.4) {
-          const percentage = Math.round(((pm25 - 12.1) / (35.4 - 12.1)) * 100);
-          pm25Color = calculateColor("#ffff00", "#ff7f00", percentage);
-        } else if (pm25 >= 35.5 && pm25 <= 55.4) {
-          const percentage = Math.round(((pm25 - 35.5) / (55.4 - 35.5)) * 100);
-          pm25Color = calculateColor("#ff7f00", "#ff0000", percentage);
-        } else if (pm25 >= 55.5 && pm25 <= 150.4) {
-          const percentage = Math.round(((pm25 - 55.5) / (150.4 - 55.5)) * 100);
-          pm25Color = calculateColor("#ff0000", "#800080", percentage);
-        } else if (pm25 >= 150.5 && pm25 <= 250.4) {
-          const percentage = Math.round(((pm25 - 150.5) / (250.4 - 150.5)) * 100);
-          pm25Color = calculateColor("#800080", "#000000", percentage);
-        } else {
-          pm25Color = "#000000"; // Default color for other cases
-        }
+          if (pm25 >= 0 && pm25 <= 12) {
+            const percentage = Math.round(((pm25 - 0) / (12 - 0)) * 100);
+            pm25Color = calculateColor("#00ff00", "#ffff00", percentage);
+          } else if (pm25 >= 12.1 && pm25 <= 35.4) {
+            const percentage = Math.round(((pm25 - 12.1) / (35.4 - 12.1)) * 100);
+            pm25Color = calculateColor("#ffff00", "#ff7f00", percentage);
+          } else if (pm25 >= 35.5 && pm25 <= 55.4) {
+            const percentage = Math.round(((pm25 - 35.5) / (55.4 - 35.5)) * 100);
+            pm25Color = calculateColor("#ff7f00", "#ff0000", percentage);
+          } else if (pm25 >= 55.5 && pm25 <= 150.4) {
+            const percentage = Math.round(((pm25 - 55.5) / (150.4 - 55.5)) * 100);
+            pm25Color = calculateColor("#ff0000", "#800080", percentage);
+          } else if (pm25 >= 150.5 && pm25 <= 250.4) {
+            const percentage = Math.round(((pm25 - 150.5) / (250.4 - 150.5)) * 100);
+            pm25Color = calculateColor("#800080", "#000000", percentage);
+          } else {
+            pm25Color = "#000000"; // Default color for other cases
+          }
 
-        document.getElementById("pm25").innerHTML = pm25 ?? "N/A";
+          document.getElementById("pm25").innerHTML = pm25 ?? "N/A";
 
-        pm25TextColor = pm25Color === "#000000" ? "#ffffff" : "#000000";
+          pm25TextColor = pm25Color === "#000000" ? "#ffffff" : "#000000";
 
-        const pm25Card = document.querySelector(".card.border-0 .pm25.card-body.text-center h3");
-        pm25Card.style.backgroundColor = pm25Color;
-        pm25Card.style.color = pm25TextColor;
+          const pm25Card = document.querySelector(".card.border-0 .pm25.card-body.text-center h3");
+          pm25Card.style.backgroundColor = pm25Color;
+          pm25Card.style.color = pm25TextColor;
 
-        //pm10
-        const pm10 = data[0].rata_konsentrasi_pm10;
-        let pm10Color;
-        let pm10TextColor = "";
+          //pm10
+          const pm10 = data[0].rata_konsentrasi_pm10;
+          let pm10Color;
+          let pm10TextColor = "";
 
-        if (pm10 >= 0 && pm10 <= 54) {
-          const percentage = Math.round(((pm10 - 0) / (54 - 0)) * 100);
-          pm10Color = calculateColor("#00ff00", "#ffff00", percentage);
-        } else if (pm10 >= 55 && pm10 <= 154) {
-          const percentage = Math.round(((pm10 - 55) / (154 - 55)) * 100);
-          pm10Color = calculateColor("#ffff00", "#ff7f00", percentage);
-        } else if (pm10 >= 155 && pm10 <= 254) {
-          const percentage = Math.round(((pm10 - 155) / (254 - 155)) * 100);
-          pm10Color = calculateColor("#ff7f00", "#ff0000", percentage);
-        } else if (pm10 >= 255 && pm10 <= 354) {
-          const percentage = Math.round(((pm10 - 255) / (354 - 255)) * 100);
-          pm10Color = calculateColor("#ff0000", "#800080", percentage);
-        } else if (pm10 >= 355 && pm10 <= 424) {
-          const percentage = Math.round(((pm10 - 355) / (424 - 355)) * 100);
-          pm10Color = calculateColor("#800080", "#000000", percentage);
-        } else {
-          pm10Color = "#000000"; // Default color for other cases
-        }
-
-
-        document.getElementById("pm10").innerHTML = pm10 ?? "N/A";
-        pm10TextColor = pm10Color === "#000000" ? "#ffffff" : "#000000";
-
-        const pm10Card = document.querySelector(".card.border-0 .pm10.card-body.text-center h3");
-        pm10Card.style.backgroundColor = pm10Color;
-        pm10Card.style.color = pm10TextColor;
-
-        //co
-        const co = data[0].rata_konsentrasi_co;
-        let coColor;
-        let coTextColor = "";
-
-        if (co >= 0 && co <= 4.4) {
-          const percentage = Math.round(((co - 0) / (4.4 - 0)) * 100);
-          coColor = calculateColor("#00ff00", "#ffff00", percentage);
-        } else if (co >= 4.5 && co <= 9.4) {
-          const percentage = Math.round(((co - 4.5) / (9.4 - 4.5)) * 100);
-          coColor = calculateColor("#ffff00", "#ff7f00", percentage);
-        } else if (co >= 9.5 && co <= 12.4) {
-          const percentage = Math.round(((co - 9.5) / (12.4 - 9.5)) * 100);
-          coColor = calculateColor("#ff7f00", "#ff0000", percentage);
-        } else if (co >= 12.5 && co <= 15.4) {
-          const percentage = Math.round(((co - 12.5) / (15.4 - 12.5)) * 100);
-          coColor = calculateColor("#ff0000", "#800080", percentage);
-        } else if (co >= 15.5 && co <= 30.4) {
-          const percentage = Math.round(((co - 15.5) / (30.4 - 15.5)) * 100);
-          coColor = calculateColor("#800080", "#000000", percentage);
-        } else {
-          coColor = "#000000"; // Default color for other cases
-        }
-
-        document.getElementById("co").innerHTML = co ?? "N/A";
-        coTextColor = coColor === "#000000" ? "#ffffff" : "#000000";
-
-        const coCard = document.querySelector(".card.border-0 .co.card-body.text-center h3");
-        coCard.style.backgroundColor = coColor;
-        coCard.style.color = coTextColor;
-
-        //ispu
-        const warna_ispu = data[0].nilai_ispu;
-        let ispuColor;
-        let ispuTextColor = "";
-        let message;
-
-        if (warna_ispu >= 0 && warna_ispu <= 50) {
-          const percentage = Math.round(((warna_ispu - 0) / (50 - 0)) * 100);
-          ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
-          message = "Good";
-        } else if (warna_ispu >= 51 && warna_ispu <= 100) {
-          const percentage = Math.round(((warna_ispu - 51) / (100 - 51)) * 100);
-          ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
-          message = "Moderate";
-        } else if (warna_ispu >= 101 && warna_ispu <= 150) {
-          const percentage = Math.round(((warna_ispu - 101) / (150 - 101)) * 100);
-          ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
-          message = "Unhealthy for Sensitive Groups";
-        } else if (warna_ispu >= 151 && warna_ispu <= 200) {
-          const percentage = Math.round(((warna_ispu - 151) / (200 - 151)) * 100);
-          ispuColor = calculateColor("#ff0000", "#800080", percentage);
-          message = "Unhealthy";
-        } else if (warna_ispu >= 201 && warna_ispu <= 300) {
-          const percentage = Math.round(((warna_ispu - 201) / (300 - 201)) * 100);
-          ispuColor = calculateColor("#800080", "#000000", percentage);
-          message = "Very Unhealthy";
-        } else {
-          ispuColor = "#000000"; // Default color for other cases
-          message = "Hazardous";
-        }
-
-        // Mengatur tampilan elemen dengan ID "nilaiIspu"
-        const nilaiIspuElement = document.getElementById("nilaiIspu");
-        nilaiIspuElement.innerHTML = warna_ispu ?? "N/A";
-        nilaiIspuElement.style.backgroundColor = ispuColor;
+          if (pm10 >= 0 && pm10 <= 54) {
+            const percentage = Math.round(((pm10 - 0) / (54 - 0)) * 100);
+            pm10Color = calculateColor("#00ff00", "#ffff00", percentage);
+          } else if (pm10 >= 55 && pm10 <= 154) {
+            const percentage = Math.round(((pm10 - 55) / (154 - 55)) * 100);
+            pm10Color = calculateColor("#ffff00", "#ff7f00", percentage);
+          } else if (pm10 >= 155 && pm10 <= 254) {
+            const percentage = Math.round(((pm10 - 155) / (254 - 155)) * 100);
+            pm10Color = calculateColor("#ff7f00", "#ff0000", percentage);
+          } else if (pm10 >= 255 && pm10 <= 354) {
+            const percentage = Math.round(((pm10 - 255) / (354 - 255)) * 100);
+            pm10Color = calculateColor("#ff0000", "#800080", percentage);
+          } else if (pm10 >= 355 && pm10 <= 424) {
+            const percentage = Math.round(((pm10 - 355) / (424 - 355)) * 100);
+            pm10Color = calculateColor("#800080", "#000000", percentage);
+          } else {
+            pm10Color = "#000000"; // Default color for other cases
+          }
 
 
-        ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
-        nilaiIspuElement.style.color = ispuTextColor;
+          document.getElementById("pm10").innerHTML = pm10 ?? "N/A";
+          pm10TextColor = pm10Color === "#000000" ? "#ffffff" : "#000000";
 
-        document.getElementById("messageIspu").innerHTML = message;
-      })
-      .catch(error => console.error(error));
-  });
+          const pm10Card = document.querySelector(".card.border-0 .pm10.card-body.text-center h3");
+          pm10Card.style.backgroundColor = pm10Color;
+          pm10Card.style.color = pm10TextColor;
+
+          //co
+          const co = data[0].rata_konsentrasi_co;
+          let coColor;
+          let coTextColor = "";
+
+          if (co >= 0 && co <= 4.4) {
+            const percentage = Math.round(((co - 0) / (4.4 - 0)) * 100);
+            coColor = calculateColor("#00ff00", "#ffff00", percentage);
+          } else if (co >= 4.5 && co <= 9.4) {
+            const percentage = Math.round(((co - 4.5) / (9.4 - 4.5)) * 100);
+            coColor = calculateColor("#ffff00", "#ff7f00", percentage);
+          } else if (co >= 9.5 && co <= 12.4) {
+            const percentage = Math.round(((co - 9.5) / (12.4 - 9.5)) * 100);
+            coColor = calculateColor("#ff7f00", "#ff0000", percentage);
+          } else if (co >= 12.5 && co <= 15.4) {
+            const percentage = Math.round(((co - 12.5) / (15.4 - 12.5)) * 100);
+            coColor = calculateColor("#ff0000", "#800080", percentage);
+          } else if (co >= 15.5 && co <= 30.4) {
+            const percentage = Math.round(((co - 15.5) / (30.4 - 15.5)) * 100);
+            coColor = calculateColor("#800080", "#000000", percentage);
+          } else {
+            coColor = "#000000"; // Default color for other cases
+          }
+
+          document.getElementById("co").innerHTML = co ?? "N/A";
+          coTextColor = coColor === "#000000" ? "#ffffff" : "#000000";
+
+          const coCard = document.querySelector(".card.border-0 .co.card-body.text-center h3");
+          coCard.style.backgroundColor = coColor;
+          coCard.style.color = coTextColor;
+
+          //ispu
+          const warna_ispu = data[0].nilai_ispu;
+          let ispuColor;
+          let ispuTextColor = "";
+          let message;
+
+          if (warna_ispu >= 0 && warna_ispu <= 50) {
+            const percentage = Math.round(((warna_ispu - 0) / (50 - 0)) * 100);
+            ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
+            message = "Good";
+          } else if (warna_ispu >= 51 && warna_ispu <= 100) {
+            const percentage = Math.round(((warna_ispu - 51) / (100 - 51)) * 100);
+            ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
+            message = "Moderate";
+          } else if (warna_ispu >= 101 && warna_ispu <= 150) {
+            const percentage = Math.round(((warna_ispu - 101) / (150 - 101)) * 100);
+            ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
+            message = "Unhealthy for Sensitive Groups";
+          } else if (warna_ispu >= 151 && warna_ispu <= 200) {
+            const percentage = Math.round(((warna_ispu - 151) / (200 - 151)) * 100);
+            ispuColor = calculateColor("#ff0000", "#800080", percentage);
+            message = "Unhealthy";
+          } else if (warna_ispu >= 201 && warna_ispu <= 300) {
+            const percentage = Math.round(((warna_ispu - 201) / (300 - 201)) * 100);
+            ispuColor = calculateColor("#800080", "#000000", percentage);
+            message = "Very Unhealthy";
+          } else {
+            ispuColor = "#000000"; // Default color for other cases
+            message = "Hazardous";
+          }
+
+          // Mengatur tampilan elemen dengan ID "nilaiIspu"
+          const nilaiIspuElement = document.getElementById("nilaiIspu");
+          nilaiIspuElement.innerHTML = warna_ispu ?? "N/A";
+          nilaiIspuElement.style.backgroundColor = ispuColor;
+
+
+          ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
+          nilaiIspuElement.style.color = ispuTextColor;
+
+          document.getElementById("messageIspu").innerHTML = message;
+        })
+        .catch(error => console.error(error));
+    }
+
+    fetchData(); // Initial fetch
+
+    const interval = setInterval(fetchData, 60000); // Fetch every 1 minute
+
+    return () => {
+      clearInterval(interval); // Clean up interval on component unmount
+    };
+  }, [encodedDateStr, kecamatan]);
 
   useEffect(() => {
     {/*penentuan tindakan who*/ }

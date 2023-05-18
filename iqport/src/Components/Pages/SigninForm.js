@@ -27,7 +27,12 @@ const SigninForm = ({ handleLogin }) => {
 
   const signInWithEmail = () => {
     axios
-      .post("http://34.101.124.69:3300/main/login", { email, password }, { withCredentials: true })
+      .post("http://34.101.124.69:3300/main/login", { email, password }, { withCredentials: true },{
+        headers:{
+          'Access-Control-Allow-Origin': '*', // Mengatur header Access-Control-Allow-Origin
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept' // Mengatur header Access-Control-Allow-Headers
+        }
+      })
       .then((response) => {
         const { success, email, username, token } = response.data.data; // Menambahkan token ke respons data
         if (success) {  

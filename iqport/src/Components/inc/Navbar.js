@@ -107,7 +107,7 @@ function Navbar() {
   };
 
   const adminDashboard = () => {
-   
+    if (loggedIn.loggedIn) {
       return (
         <li className="nav-item">
           <Link to="/Dashboard" className="nav-link dashboard" style={{color:"white"}}>
@@ -115,7 +115,7 @@ function Navbar() {
           </Link>
         </li>
       );
-    
+    }
   }
 
   // JavaScript
