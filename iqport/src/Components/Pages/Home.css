@@ -179,12 +179,13 @@
 
 .nilai-ranking {
 
-   width: 100px;
-  line-height: 0.04 ;
+  width: 100px;
+  line-height: 0.01 ;
   padding: 5px;
   text-align: center;
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 12px;
+
 }
 
 .nilai-ranking span {
@@ -192,7 +193,11 @@
   vertical-align: middle;
 }
 
-/*ranking list*/
+.ranking-list li {
+  
+  margin-bottom: 10px;
+}
+
 
 
 /*Untuk bar pengukuran ISPU */

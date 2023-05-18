@@ -385,7 +385,7 @@ const AdminDashboard = () => {
                   <tr>
                     <th>Kota</th>
                     <th>Kecamatan</th>
-                    <th>ID Lokasi</th>
+                    <th>ID Alat</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
                     <th>CSV</th>

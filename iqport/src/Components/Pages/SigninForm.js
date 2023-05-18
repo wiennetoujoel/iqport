@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./SigninForm.css"
 
+
+const cors = require('cors');
+
+
+
 const SigninForm = ({ handleLogin }) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [errorMessage, setErrorMessage] = useState(""); // Menambah state untuk pesan kesalahan
@@ -27,13 +32,13 @@ const SigninForm = ({ handleLogin }) => {
         const { success, email, username, token } = response.data.data; // Menambahkan token ke respons data
         if (success) {  
           handleLogin(email, username);
-          localStorage.setItem(
-            "loggedIn",
-            JSON.stringify({
-              loggedIn: true,
-              email,
-              username,
-            })
+            localStorage.setItem(
+              "loggedIn",
+              JSON.stringify({
+                loggedIn: true,
+                email,
+                username,
+              })
           );
 
           // Menyimpan token pada header setiap kali melakukan permintaan ke server

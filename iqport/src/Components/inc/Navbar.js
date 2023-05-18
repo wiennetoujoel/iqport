@@ -7,10 +7,10 @@ import './Navbar.css';
 
 function Navbar() {
   const [showOverlay, setShowOverlay] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const [username, setUsername] = useState('joel');
-  const [email, setEmail] = useState('joel@gmail.com');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
 
   const openOverlay = () => {
     setShowOverlay(true);

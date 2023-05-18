@@ -48,7 +48,7 @@ function DateParam(props) {
         if (startDate > today || endDate > today) {
             alert("Tanggal awal atau akhir tidak bisa lebih besar dari hari ini");
         } else {
-            const diffTime = Math.abs(endDate - startDate);
+            const diffTime = endDate - startDate;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
             if (diffDays > 30) {

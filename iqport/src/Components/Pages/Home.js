@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from '../inc/SearchBar';
 import './Home.css';
-import Temperatur from '../../images/temperature_image.jpg';
-
 
 
 function Home(props) {
+  const [updatedData, setUpdatedData] = useState(null);
+
   {/*Pengambilan nilai kecamata, kota, dan provinsi */ }
   const { kecamatan } = props;
   const [kota, setKota] = useState("");
@@ -57,19 +57,23 @@ function Home(props) {
     const dateStr = `${year}-${month}-${date}T${hours}:${minutes}:00`;
     const encodedDate = encodeURIComponent(dateStr);
     setEncodedDateStr(encodedDate);
+    
   };
+  
+  
 
   useEffect(() => {
     updateEncodedDateStr();
 
     const interval = setInterval(() => {
       updateEncodedDateStr();
-    }, 120000); // Memperbarui waktu setiap 1 menit
+    }, 60000); // Memperbarui waktu setiap 1 menit
 
     return () => {
       clearInterval(interval); // Membersihkan interval saat komponen di-unmount
     };
-  }, []);
+  }
+  , []);
 
 
   useEffect((livepollutant) => {
@@ -129,57 +133,50 @@ function Home(props) {
   }
 
 
-  useEffect((liveranking) => {
+  useEffect(() => {
     {/* Live ranking*/ }
     let liveUrl = "";
     liveUrl = `http://34.101.124.69:3300/main/5/live_ranking/${encodedDateStr}`;
     fetch(liveUrl)
       .then((response) => response.json())
       .then((data) => {
-        // Sort the data by "rata_nilai_ispu" in descending order
-        data.sort((a, b) => b.rata_nilai_ispu - a.rata_nilai_ispu);
         setRankingData(data);
 
-        //pewarnaan
-        const ispu_ranking = data[0].rata_nilai_ispu;
-        let ispuColor;
-        let ispuTextColor = "";
+        // Loop through each data item
+        data.forEach((item, index) => {
+          const ispu_ranking = item.rata_nilai_ispu;
+          let ispuColor;
+          let ispuTextColor = "";
 
+          // Apply color based on the value range
+          if (ispu_ranking >= 0 && ispu_ranking <= 50) {
+            const percentage = Math.round(((ispu_ranking - 0) / (50 - 0)) * 100);
+            ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
+          } else if (ispu_ranking >= 51 && ispu_ranking <= 100) {
+            const percentage = Math.round(((ispu_ranking - 51) / (100 - 51)) * 100);
+            ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
+          } else if (ispu_ranking >= 101 && ispu_ranking <= 150) {
+            const percentage = Math.round(((ispu_ranking - 101) / (150 - 101)) * 100);
+            ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
+          } else if (ispu_ranking >= 151 && ispu_ranking <= 200) {
+            const percentage = Math.round(((ispu_ranking - 151) / (200 - 151)) * 100);
+            ispuColor = calculateColor("#ff0000", "#800080", percentage);
+          } else if (ispu_ranking >= 201 && ispu_ranking <= 300) {
+            const percentage = Math.round(((ispu_ranking - 201) / (300 - 201)) * 100);
+            ispuColor = calculateColor("#800080", "#000000", percentage);
+          } else {
+            ispuColor = "#000000"; // Default color for other cases
+          }
 
-
-        if (ispu_ranking >= 0 && ispu_ranking <= 50) {
-          const percentage = Math.round(((ispu_ranking - 0) / (50 - 0)) * 100);
-          ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
-
-        } else if (ispu_ranking >= 51 && ispu_ranking <= 100) {
-          const percentage = Math.round(((ispu_ranking - 51) / (100 - 51)) * 100);
-          ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
-
-        } else if (ispu_ranking >= 101 && ispu_ranking <= 150) {
-          const percentage = Math.round(((ispu_ranking - 101) / (150 - 101)) * 100);
-          ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
-
-        } else if (ispu_ranking >= 151 && ispu_ranking <= 200) {
-          const percentage = Math.round(((ispu_ranking - 151) / (200 - 151)) * 100);
-          ispuColor = calculateColor("#ff0000", "#800080", percentage);
-
-        } else if (ispu_ranking >= 201 && ispu_ranking <= 300) {
-          const percentage = Math.round(((ispu_ranking - 201) / (300 - 201)) * 100);
-          ispuColor = calculateColor("#800080", "#000000", percentage);
-
-        } else {
-          ispuColor = "#000000"; // Default color for other cases
-
-        }
-
-        // Mengatur tampilan elemen dengan ID "nilaiIspu"
-        const nilaiIspuElement = document.getElementById("ranking");
-        nilaiIspuElement.innerHTML = ispu_ranking ?? "N/A";
-        nilaiIspuElement.style.backgroundColor = ispuColor;
-
-
-        ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
-        nilaiIspuElement.style.color = ispuTextColor;
+          // Mengatur tampilan elemen dengan ID "ranking-{index}"
+          const nilaiIspuElement = document.getElementById(`ranking-${index}`);
+          if (nilaiIspuElement) {
+            nilaiIspuElement.innerHTML = ispu_ranking ?? "N/A";
+            nilaiIspuElement.style.backgroundColor = ispuColor;
+            ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
+            nilaiIspuElement.style.color = ispuTextColor;
+          }
+        });
       })
       .catch((error) => console.error(error));
   });
@@ -333,7 +330,7 @@ function Home(props) {
       .catch(error => console.error(error));
   });
 
-  useEffect((whoactions) => {
+  useEffect(() => {
     {/*penentuan tindakan who*/ }
     let liveUrl = "";
     liveUrl = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
@@ -341,8 +338,8 @@ function Home(props) {
       .then(response => response.json())
       .then(data => {
         const tindakan = data[0].tindakan;
-        document.getElementById("tindakanWHO").innerHTML = tindakan || "Data tidak ditemukan";
-
+        const formattedTindakan = tindakan.replace(/\.\n/g, "<br><br>");
+        document.getElementById("tindakanWHO").innerHTML = formattedTindakan || "Data tidak ditemukan";
       })
       .catch(error => console.error(error));
   });
@@ -651,7 +648,7 @@ function Home(props) {
                 {rankingData.map((item, index) => (
                   <li key={index}>
                     {item.lokasi}
-                    <span id="ranking" className="nilai-ranking float-right card-body">{item.rata_nilai_ispu}</span>
+                    <span id={`ranking-${index}`} className="nilai-ranking float-right card-body">{item.rata_nilai_ispu}</span>
                   </li>
                 ))}
               </ol>
