@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import SigninForm from '../Pages/SigninForm';
 import './Navbar.css';
+import logo from '../../images/aqportwhite.png'
 
 function Navbar() {
   const [showOverlay, setShowOverlay] = useState(false);
@@ -32,14 +33,21 @@ function Navbar() {
     }
   }, []);
 
-  const handleLogin = (email, username) => {
-    setLoggedIn(true);
+  const handleLogin = (email, username, token, message) => {
+    setLoggedIn({
+      loggedIn: true,
+      email,
+      username,
+      token,
+      message,
+    });
     setUsername(username);
     setEmail(email);
+    closeOverlay();
   };
 
   const handleLogout = () => {
-    setLoggedIn(false);
+    setLoggedIn({ loggedIn: false, email: "", username: "", token: "", message: "" });
     localStorage.removeItem("loggedIn");
   };
 
@@ -56,7 +64,7 @@ function Navbar() {
               id="adminDropdown"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              style={{ border: "0", background: "transparent", color:"white" }}
+              style={{ border: "0", background: "transparent", color: "white" }}
 
             >
               {loggedIn.photoURL ? (
@@ -77,13 +85,15 @@ function Navbar() {
             </button>
             <ul className="dropdown-menu" aria-labelledby="adminDropdown">
               <li>
-                <button className="dropdown-item" onClick={handleLogout} style={{ zIndex: 1000 }}>
-                  <FontAwesomeIcon
-                    icon={faSignOutAlt}
-                    className="mr-2"
-                  />
-                  Logout
-                </button>
+                <Link to="/">
+                  <button className="dropdown-item" onClick={handleLogout} style={{ zIndex: 1000 }}>
+                    <FontAwesomeIcon
+                      icon={faSignOutAlt}
+                      className="mr-2"
+                    />
+                    Logout
+                  </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -99,7 +109,7 @@ function Navbar() {
             style={{ border: "0", background: "transparent" }}
           >
             <FontAwesomeIcon icon={faUser} className="mr-3" />
-            <span className="mr-4" style={{color:"white"}}>Admin</span>
+            <span className="mr-4" style={{ color: "white" }}>Admin</span>
           </button>
         </div>
       );
@@ -110,7 +120,7 @@ function Navbar() {
     if (loggedIn.loggedIn) {
       return (
         <li className="nav-item">
-          <Link to="/Dashboard" className="nav-link dashboard" style={{color:"white"}}>
+          <Link to="/Dashboard" className="nav-link dashboard" style={{ color: "white" }}>
             Dashboard
           </Link>
         </li>
@@ -119,16 +129,16 @@ function Navbar() {
   }
 
   // JavaScript
-window.addEventListener("scroll", function() {
-  var navbar = document.querySelector(".navbar");
-  navbar.classList.toggle("navbar-scrolled", window.scrollY > 0);
-});
+  window.addEventListener("scroll", function () {
+    var navbar = document.querySelector(".navbar");
+    navbar.classList.toggle("navbar-scrolled", window.scrollY > 0);
+  });
 
 
   return (
     <nav className="navbar fixed-top navbar-expand-lg navbar-dark p-md-3 transparent-navbar">
       <Link to="/" className="navbar-brand">
-        AQPort
+        <img src={logo} alt="AQPort" width="50" height="35" />
       </Link>
       <button
         className="navbar-toggler"
@@ -150,7 +160,7 @@ window.addEventListener("scroll", function() {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/About" className="nav-link" style={{color:"white"}}>
+            <Link to="/About" className="nav-link" style={{ color: "white" }}>
               About Us
             </Link>
           </li>

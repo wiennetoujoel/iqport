@@ -5,6 +5,7 @@ import '../../App.css';
 import SearchBar from '../inc/SearchBar';
 import Navbar from '../inc/Navbar';
 import './LandingPage.css';
+import Map from './Map.js';
 
 
 function LandingPage() {
@@ -13,8 +14,8 @@ function LandingPage() {
     return (
         <div>
             <div className="background">
-                <div className="d-flex align-items-center" style={{marginTop:"50px"}}>
-                    <h2 style={{ color: "white", opacity: "0.95", marginTop: "10px", marginLeft:"15px" }}> Explore Your Air Quality </h2>
+                <div className="d-flex align-items-center" style={{ marginTop: "50px" }}>
+                    <h2 style={{ color: "white", opacity: "0.95", marginTop: "10px", marginLeft: "15px" }}> Explore Your Air Quality </h2>
                     <SearchBar />
                 </div>
             </div>

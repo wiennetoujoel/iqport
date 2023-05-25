@@ -60,7 +60,7 @@ function MainGraph() {
         break;
 
       case "PM25":
-        yLabel = "PM2.5 (ppm)";
+        yLabel = "PM2.5 (µg/m3)";
         if (currentLabel === "hourly") {
           dataUrl = `http://34.101.124.69:3300/main/3/PM25/${encodedDateStr}/${kecamatan}`;
         }
@@ -73,7 +73,7 @@ function MainGraph() {
         break;
 
       case "PM10":
-        yLabel = "PM10 (ppm)";
+        yLabel = "PM10 (µg/m3)";
         if (currentLabel === "hourly") {
           dataUrl = `http://34.101.124.69:3300/main/4/PM10/${encodedDateStr}/${kecamatan}`;;
         }
@@ -125,10 +125,17 @@ function MainGraph() {
         break;
     }
 
+    const startTime = performance.now(); // Waktu awal
+
     fetch(dataUrl)
       .then(response => response.json())
       .then(data => {
         const labels = [];
+
+        const endTime = performance.now(); // Waktu akhir
+        const latency = endTime - startTime; // Perhitungan latency
+
+        console.log(`Latency Main Graph: ${latency} milliseconds`);
 
 
         if (currentLabel === "hourly") {

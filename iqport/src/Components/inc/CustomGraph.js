@@ -58,10 +58,16 @@ function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan 
             default:
                 break;
         }
+        const startTime = performance.now(); // Waktu awal
 
         try {
             const response = await fetch(dataUrl);
             const data = await response.json();
+
+            const endTime = performance.now(); // Waktu akhir
+            const latency = endTime - startTime; // Perhitungan latency
+    
+            console.log(`Latency Custom Graph: ${latency} milliseconds`);
 
             const labels = data.map((d) => d.tanggal);
             let yData = [];

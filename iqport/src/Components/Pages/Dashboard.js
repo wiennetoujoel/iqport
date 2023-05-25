@@ -3,9 +3,25 @@ import './Dashboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import SigninForm from '../Pages/SigninForm';
 
 const AdminDashboard = () => {
   const [data, setData] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("loggedIn");
+    if (isLoggedIn) {
+      const { username, email } = JSON.parse(isLoggedIn);
+      setLoggedIn({
+        loggedIn: true,
+        email,
+        username,
+      });
+      setUsername(username);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +43,8 @@ const AdminDashboard = () => {
   const generateCSV = (kecamatan) => {
     window.open(`http://34.101.124.69:3300/main/download-csv/${kecamatan}`);
   };
+
+
 
   //Dropdown untuk Tambah Lokasi
   const Dropdown = ({ title, inputs }) => {
@@ -84,6 +102,7 @@ const AdminDashboard = () => {
           if (existingIdAlat.includes(formData.id_alat)) {
             // Jika sudah digunakan, tampilkan pesan peringatan
             alert('ID Alat sudah digunakan!');
+            console.log(response.data)
           } else {
             // Jika belum digunakan, kirim permintaan POST ke backend menggunakan Axios
             axios
@@ -97,6 +116,13 @@ const AdminDashboard = () => {
               .catch((error) => {
                 // Tangani kesalahan jika terjadi
                 console.error(error);
+                if (error.response && error.response.status === 409) {
+                  // Jika respons status adalah 409 (Conflict), tampilkan pesan peringatan
+                  alert('Konflik data: ID Alat sudah digunakan!');
+                } else {
+                  // Jika kesalahan bukan karena konflik data, tangani secara umum
+                  console.error(error);
+                }
               });
           }
         })
@@ -116,18 +142,20 @@ const AdminDashboard = () => {
             <form onSubmit={handleSubmit} className="col">
               {inputs.map((input, index) => {
                 return (
-                  <input
-                    type="text"
-                    placeholder={input.split("_").join(" ")}
-                    name={input.toLowerCase()}
-                    value={formData[input.toLowerCase()]}
-                    key={index}
-                    onChange={handleInputChange}
-                    style={{ width: "180px" }}
-                  />
+                  <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                    <input
+                      type="text"
+                      placeholder={input.split("_").join(" ")}
+                      name={input.toLowerCase()}
+                      value={formData[input.toLowerCase()]}
+                      onChange={handleInputChange}
+                      style={{ width: "165px", marginRight: "10px" }}
+                    />
+                  </div>
                 );
               })}
-              <button type="submit">Submit</button>
+              <br />
+              <button type="submit" className='submit-button'>Submit</button>
             </form>
           </div>
         )}
@@ -138,6 +166,24 @@ const AdminDashboard = () => {
 
   //Dropddown untuk hapus lokasi 
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    // Fungsi untuk menutup dropdown jika pengguna mengklik di luar dropdown
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    // Tambahkan event listener ketika komponen dimount
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Hapus event listener ketika komponen akan unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleToggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -279,7 +325,7 @@ const AdminDashboard = () => {
             // nutup dropdown 
             setShowEditDropdown(!showEditDropdown);
           })
-          
+
           .catch((error) => {
             console.error("Terjadi kesalahan:", error);
           });
@@ -346,11 +392,12 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard col">
       <header>
-        <h1 style={{ paddingTop: "50px", color: "white", marginLeft: "20px" }}>Welcome, Admin!</h1>
+        <h2 style={{ paddingTop: "75px", color: "white", marginLeft: "20px" }}>Welcome, {username}!</h2>
       </header>
       <div className="admin-dashboard-content">
         <div className="admin-actions">
           <Dropdown
+            className="admin-action"
             title="Tambah Lokasi"
             inputs={[
               "ID_Alat",
@@ -370,8 +417,9 @@ const AdminDashboard = () => {
           </button>
           {showEditDropdown && <EditLocationDropdown />}
         </div>
-        <div className="admin-main-content">
-          <h4 style={{ marginLeft: "20px", color: "white" }}>Tabel Data</h4>
+        <h4 style={{ margin: "0 auto", display: "flex", color: "white", justifyContent: "center", alignItems: "center", marginBottom: "10px" }}>Tabel Lokasi</h4>
+        <div className="admin-main-content" style={{ margin: "0 auto", display: "flex", justifyContent: "center" }}>
+
           {provinces.map((province) => {
             const provinceData = data.filter((item) => item.provinsi === province);
             const cities = Array.from(new Set(provinceData.map((item) => item.kota))).sort();
@@ -436,7 +484,6 @@ const AdminDashboard = () => {
             );
           })}
           {data.length === 0 && <p>Tidak ada data yang tersedia.</p>}
-
         </div>
       </div>
 

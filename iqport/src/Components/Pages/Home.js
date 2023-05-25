@@ -94,7 +94,7 @@ function Home(props) {
           const endTime = performance.now(); // Waktu akhir
           const latency = endTime - startTime; // Perhitungan latency
 
-          console.log(`Latency: ${latency} milliseconds`);
+          console.log(`Latency Live Pollutant: ${latency} milliseconds`);
 
           setPm25(data[0].rata_konsentrasi_pm25);
           setPm10(data[0].rata_konsentrasi_pm10);
@@ -145,6 +145,7 @@ function Home(props) {
   }
 
 
+
   useEffect(() => {
     {/* Live ranking*/ }
     let liveUrl = "";
@@ -192,6 +193,7 @@ function Home(props) {
       })
       .catch((error) => console.error(error));
   });
+  
 
   useEffect((pollutantcolor) => {
     {/*Penentuan Warna Polutan */ }
@@ -356,12 +358,18 @@ function Home(props) {
     {/*penentuan tindakan who*/ }
     let liveUrl = "";
     liveUrl = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
+    const startTime = performance.now(); // Waktu awal
     fetch(liveUrl)
       .then(response => response.json())
       .then(data => {
         const tindakan = data[0].tindakan;
         const formattedTindakan = tindakan.replace(/\.\n/g, "<br><br>");
         document.getElementById("tindakanWHO").innerHTML = formattedTindakan || "Data tidak ditemukan";
+
+        const endTime = performance.now(); // Waktu akhir
+        const latency = endTime - startTime; // Perhitungan latency
+
+        console.log(`Latency Tindakan WHO: ${latency} milliseconds`);
       })
       .catch(error => console.error(error));
   });
@@ -406,7 +414,6 @@ function Home(props) {
         </div>
         <SearchBar />
       </div>
-
       <div className="row">
         <div className="kolom-kiri col">
           <div className="CurrentAQI card mb-3" style={{ backgroundColor: "rgb(236, 242, 255)" }}>

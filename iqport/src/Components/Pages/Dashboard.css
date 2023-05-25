@@ -1,215 +1,326 @@
 .admin-dashboard {
-    background: url('../images/nightsky.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+  background: url('../images/nightsky.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .data-table {
-    margin-left: 20px;
-    width: 50%;
-    border-collapse: collapse;
-    
+  margin-left: 20px;
+  width: 70%;
+  border-collapse: collapse;
+
 }
 
 .data-table th,
 .data-table td {
-    padding: 10px;
-    text-align: center;
-    border : 1px solid black;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid black;
 }
 
 .data-table th {
-    background-color: #f2f2f2;
-    color: #333;
+  background-color: #f2f2f2;
+  color: #333;
 }
 
 .data-table td {
-    color: #555;
+  color: #555;
 }
 
-#judul-kolom{
-    background-color: grey;
+#judul-kolom {
+  background-color: grey;
 }
+
 .data-table tbody tr:first-child {
-    background-color: #fff;
+  background-color: #fff;
 }
 
 .data-table tbody tr:not(:first-child) {
-    background-color: #fff;
+  background-color: #fff;
 }
 
 .data-table tbody tr:hover {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 .data-table td:first-child {
-    text-align: center;
+  text-align: center;
 }
 
 .data-table td:nth-child(2),
 .data-table td:nth-child(3),
 .data-table td:nth-child(4) {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .data-table td:nth-child(2),
 .data-table td:nth-child(3),
 .data-table td:nth-child(4) {
-    display: table-cell;
-    vertical-align: middle;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .data-table th:nth-child(1),
 .data-table td:nth-child(1) {
-    width: 1%;
+  width: 1%;
 }
 
 .data-table th:nth-child(2),
 .data-table td:nth-child(2) {
-    width: 10%;
+  width: 10%;
 }
 
 .data-table th:nth-child(3),
 .data-table td:nth-child(3) {
-    width: 10%;
+  width: 15%;
 }
 
 .data-table th:nth-child(4),
 .data-table td:nth-child(4) {
-    width: 10%;
+  width: 5%;
 }
 
-.dropdown-container{
-max-width: 100%;
+.dropdown-container {
+  max-width: 100%;
 }
 
 .admin-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .admin-action {
-    margin-left: 20px;
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f0f0f0;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .admin-action:hover {
-    background-color: #ccc;
-  }
-  
-  .dropdown-button {
-    margin-left: 20px;
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f0f0f0;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .dropdown-button:hover {
-    background-color: #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+
+.admin-action {
+  margin-left: 20px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3 ease-in-out;
+  background: #E9F2FB;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 35px;
+
+}
+
+.admin-action:hover {
+  background-color: #ccc;
+}
+
+.dropdown-button {
+  margin-left: 20px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background: #E9F2FB;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 35px;
+
+}
+
+.dropdown-button:hover {
+  background-color: #ccc;
+}
+
+.dropdown-content {
+  align-items: center;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  height: 100px;
+  background-color: rgb(236, 242, 255);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 2;
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.form {
+  width: 100px;
+}
+
+.dropdown-content form {
+  display: flex;
+
+  align-items: center;
+}
+
+.submit-button{
+  background-color: #4caf50 !important;
+  border: none;
+  border-radius: 10px !important;
+  padding: 5px;
+  width: 100px;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover{
+  background-color:#388e3c;
+  border: none;
+  border-radius: 10px !important;
+  padding: 5px;
+  width: 100px;
+  color: black;
+ 
+}
+
+
+/*untuk dropdown delete lokasi*/
+.delete-dropdown-content {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(236, 242, 255);
+  margin-left: 20px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-group label {
+  margin-right: 10px;
+}
+
+.input-group input {
+  margin-right: 10px;
+}
+
+.input-group button {
+  margin-right: 10px;
+}
+
+.location-data {
+  margin-top: 10px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+
+}
+
+.edit-dropdown-content {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(236, 242, 255);
+  margin-left: 20px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+}
+
+
+
+@media only screen and (max-width: 480px) {
+
+  /* Mengatur lebar dan padding pada admin-dashboard */
+  .admin-dashboard {
+    width: 100%;
+    padding: 20px;
   }
 
-  .dropdown-content{
-    align-items: center;
-    margin-left: 20px;
-    margin-bottom : 20px;
-    height: 100px;
-    background-color: rgb(236, 242, 255);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    line-height: 2;
-    max-width: 100%;
-  }
-  .form {
+  .data-table th {
+    font-size: 12px;
     width: 100px;
   }
 
-  .dropdown-content form {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  
-
-  .dropdown-content form button {
-    /* gaya tombol submit... */
-    margin-left: 10px;
-    grid-column: 1;
-    grid-row: 2;
+  /* Mengatur font-size pada sel data tabel */
+  .data-table td {
+    font-size: 12px;
   }
 
+  /* Mengatur lebar kolom pada tabel */
+  .data-table th:nth-child(1),
+  .data-table td:nth-child(1) {
+    width: 10%;
+  }
 
-  /*untuk dropdown delete lokasi*/
-  .delete-dropdown-content {
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(236, 242, 255);
-    margin-left: 20px;
+  .data-table th:nth-child(2),
+  .data-table td:nth-child(2) {
+    width: 20%;
+  }
+
+  .data-table th:nth-child(3),
+  .data-table td:nth-child(3) {
+    width: 20%;
+  }
+
+  .data-table th:nth-child(4),
+  .data-table td:nth-child(4) {
+    width: 20%;
+  }
+
+  .data-table th:nth-child(5),
+  .data-table td:nth-child(5) {
+    width: 20%;
+  }
+
+  .data-table th:nth-child(6),
+  .data-table td:nth-child(6) {
+    width: 20%;
+  }
+
+  /* Mengatur font-size pada judul h1 */
+  .admin-dashboard h1 {
+    font-size: 24px;
+  }
+
+  /* Mengatur padding dan margin pada admin-dashboard-content */
+  .admin-dashboard-content {
+    padding: 10px;
+    margin-top: 20px;
+  }
+
+  /* Mengatur margin pada admin-actions */
+  .admin-actions {
     margin-bottom: 10px;
-    padding-top: 10px;
   }
-  
-  .input-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+
+  /* Mengatur margin pada admin-action */
+  .admin-action {
+    margin-bottom: 5px;
   }
-  
-  .input-group label {
-    margin-right: 10px;
+
+  /* Mengatur font-size pada tabel data */
+  .admin-main-content h4 {
+    font-size: 16px;
   }
-  
-  .input-group input {
-    margin-right: 10px;
+
+  /* Mengatur font-size pada header kolom tabel */
+  .data-table th {
+    font-size: 14px;
   }
-  
-  .input-group button {
-    margin-right: 10px;
+
+  /* Mengatur font-size pada sel data tabel */
+  .data-table td {
+    font-size: 14px;
   }
-  
-  .location-data {
-    margin-top: 10px;
-  }
-  
-  .button-group {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
-  }
-  
-  .edit-dropdown-content {
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(236, 242, 255);
-    margin-left: 20px;
-    margin-bottom: 10px;
-    padding-top: 10px;
-  }
-  
+}

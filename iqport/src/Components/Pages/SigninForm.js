@@ -3,20 +3,12 @@ import axios from "axios";
 import "./SigninForm.css"
 
 
-const cors = require('cors');
-
-
-
-const SigninForm = ({ handleLogin }) => {
+const SigninForm = ({ handleLogin, closeOverlay }) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [errorMessage, setErrorMessage] = useState(""); // Menambah state untuk pesan kesalahan
 
   const openOverlay = () => {
     setShowOverlay(true);
-  };
-
-  const closeOverlay = () => {
-    setShowOverlay(false);
   };
 
   const [email, setEmail] = useState("");
@@ -27,28 +19,33 @@ const SigninForm = ({ handleLogin }) => {
 
   const signInWithEmail = () => {
     axios
-      .post("http://34.101.124.69:3300/main/login", { email, password }, { withCredentials: true },{
+      .post("http://34.101.124.69:3300/main/login", { email : email, password : password }, { withCredentials: true },{
         headers:{
           'Access-Control-Allow-Origin': '*', // Mengatur header Access-Control-Allow-Origin
           'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept' // Mengatur header Access-Control-Allow-Headers
         }
       })
       .then((response) => {
-        const { success, email, username, token } = response.data.data; // Menambahkan token ke respons data
-        if (success) {  
-          handleLogin(email, username);
+        const {email, username} = response.data.data; // Menambahkan token ke respons data
+        const token = response.data.token;
+        const message = response.data.message;
+        if (response.status === 200) {  
+          handleLogin(email, username, token, message);
             localStorage.setItem(
               "loggedIn",
               JSON.stringify({
                 loggedIn: true,
                 email,
                 username,
+                token, 
+                message,
               })
           );
-
-          // Menyimpan token pada header setiap kali melakukan permintaan ke server
-          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          closeOverlay();
         } else {
+          console.log(response.data.data)
+          console.log(response.data.token)
+          console.log(response.data.message)
           setErrorMessage("*Email or password is incorrect");
         }
       })
@@ -62,7 +59,6 @@ const SigninForm = ({ handleLogin }) => {
   const handleFormClick = (e) => {
     e.stopPropagation();
   };
-
 
 
   return (
