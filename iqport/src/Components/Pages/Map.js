@@ -1,4 +1,4 @@
-import React from 'react';
+{/*import React from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 
@@ -14,4 +14,4 @@ function Map() {
   );
 }
 
-export default Map;
+export default Map;*/}
