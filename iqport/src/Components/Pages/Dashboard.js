@@ -26,7 +26,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://34.101.124.69:3300/main/5/tampil_lokasi');
+        const response = await fetch('https://aqport.my.id/main/5/tampil_lokasi');
         const jsonData = await response.json();
         setData(jsonData);
       } catch (error) {
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
   const csvData = [];
 
   const generateCSV = (kecamatan) => {
-    window.open(`http://34.101.124.69:3300/main/download-csv/${kecamatan}`);
+    window.open(`https://aqport.my.id/main/download-csv/${kecamatan}`);
   };
 
 
@@ -93,7 +93,7 @@ const AdminDashboard = () => {
 
       // Kirim permintaan GET ke backend untuk memeriksa keberadaan id_alat
       axios
-        .get('http://34.101.124.69:3300/main/5/tampil_lokasi')
+        .get('https://aqport.my.id/main/5/tampil_lokasi')
         .then((response) => {
           // Dapatkan daftar id_alat dari respons backend
           const existingIdAlat = response.data.map((lokasi) => lokasi.id_alat);
@@ -200,7 +200,7 @@ const AdminDashboard = () => {
     const handleCheckLocation = () => {
       if (idAlat) {
         axios
-          .get(`http://34.101.124.69:3300/main/5/tampil_lokasi`)
+          .get(`https://aqport.my.id/main/5/tampil_lokasi`)
           .then((response) => {
             const filteredData = response.data.find(
               (location) => location.id_alat.toString() === idAlat
@@ -223,7 +223,7 @@ const AdminDashboard = () => {
     const handleDeleteLocation = () => {
       if (idAlat) {
         axios
-          .delete(`http://34.101.124.69:3300/main/5/hapus_lokasi/${idAlat}`)
+          .delete(`https://aqport.my.id/main/5/hapus_lokasi/${idAlat}`)
           .then((response) => {
             console.log("Lokasi berhasil dihapus:", response.data);
             // Lakukan tindakan tambahan setelah lokasi dihapus jika diperlukan
@@ -287,7 +287,7 @@ const AdminDashboard = () => {
     const handleCheckLocation = () => {
       if (idAlat) {
         axios
-          .get(`http://34.101.124.69:3300/main/5/tampil_lokasi`)
+          .get(`https://aqport.my.id/main/5/tampil_lokasi`)
           .then((response) => {
             const filteredData = response.data.find(
               (location) => location.id_alat.toString() === idAlat
@@ -319,7 +319,7 @@ const AdminDashboard = () => {
         };
 
         axios
-          .put(`http://34.101.124.69:3300/main/5/edit_lokasi/${idAlat}`, updatedLocationData)
+          .put(`https://aqport.my.id/main/5/edit_lokasi/${idAlat}`, updatedLocationData)
           .then((response) => {
             console.log("Lokasi berhasil diedit:", response.data);
             // nutup dropdown 

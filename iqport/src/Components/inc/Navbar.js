@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import SigninForm from '../Pages/SigninForm';
 import './Navbar.css';
-import logo from '../../images/aqportwhite.png'
+import logo from '../images/aqportwhite.png'
 
 function Navbar() {
   const [showOverlay, setShowOverlay] = useState(false);

@@ -89,7 +89,7 @@ function SearchBar() {
         setLocation(value);
 
         if (value !== "") {
-            fetch(`http://34.101.124.69:3300/main/5/tampil_lokasi`)
+            fetch(`https://aqport.my.id/main/5/tampil_lokasi`)
                 .then((response) => response.json())
                 .then((data) => {
                     const filteredLocations = data.filter((loc) =>

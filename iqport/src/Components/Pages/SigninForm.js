@@ -19,7 +19,7 @@ const SigninForm = ({ handleLogin, closeOverlay }) => {
 
   const signInWithEmail = () => {
     axios
-      .post("http://34.101.124.69:3300/main/login", { email : email, password : password }, { withCredentials: true },{
+      .post("https://aqport.my.id/main/login", { email : email, password : password }, { withCredentials: true },{
         headers:{
           'Access-Control-Allow-Origin': '*', // Mengatur header Access-Control-Allow-Origin
           'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept' // Mengatur header Access-Control-Allow-Headers

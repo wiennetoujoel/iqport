@@ -49,78 +49,78 @@ function MainGraph() {
       case "ISPU":
         yLabel = "ISPU";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/${encodedDateStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/1/ISPU/${encodedDateStr}/${kecamatan}`;
         }
         else if (currentLabel === "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/mingguan/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/1/ISPU/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/1/ISPU/harian/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/1/ISPU/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
 
       case "PM25":
         yLabel = "PM2.5 (µg/m3)";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/3/PM25/${encodedDateStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/3/PM25/${encodedDateStr}/${kecamatan}`;
         }
         else if (currentLabel == "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/3/PM25/mingguan/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/3/PM25/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/3/PM25/harian/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/3/PM25/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
 
       case "PM10":
         yLabel = "PM10 (µg/m3)";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/4/PM10/${encodedDateStr}/${kecamatan}`;;
+          dataUrl = `https://aqport.my.id/main/4/PM10/${encodedDateStr}/${kecamatan}`;;
         }
         else if (currentLabel === "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/4/PM10/mingguan/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/4/PM10/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/4/PM10/harian/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/4/PM10/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
 
       case "CO":
         yLabel = "CO (ppm)";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/4/CO/${encodedDateStr}/${kecamatan}`;;
+          dataUrl = `https://aqport.my.id/main/4/CO/${encodedDateStr}/${kecamatan}`;;
         }
         else if (currentLabel === "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/4/CO/mingguan/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/4/CO/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/4/CO/harian/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/4/CO/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
 
       case "temperatur":
         yLabel = "Temperature (°C)";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/2/temperatur/${encodedDateStr}/${kecamatan}`;;
+          dataUrl = `https://aqport.my.id/main/2/temperatur/${encodedDateStr}/${kecamatan}`;;
         }
         else if (currentLabel === "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/2/temperatur/mingguan/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/2/temperatur/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/2/temperatur/harian/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/2/temperatur/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
 
       case "kelembapan":
         yLabel = "Humidity (%)";
         if (currentLabel === "hourly") {
-          dataUrl = `http://34.101.124.69:3300/main/3/kelembapan/${encodedDateStr}/${kecamatan}`;;
+          dataUrl = `https://aqport.my.id/main/3/kelembapan/${encodedDateStr}/${kecamatan}`;;
         }
         else if (currentLabel === "daily") {
-          dataUrl = `http://34.101.124.69:3300/main/3/kelembapan/mingguan/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/3/kelembapan/mingguan/${encodedTanggalStr}/${kecamatan}`;
         }
         else {
-          dataUrl = `http://34.101.124.69:3300/main/3/kelembapan/harian/${encodedTanggalStr}/${kecamatan}`;
+          dataUrl = `https://aqport.my.id/main/3/kelembapan/harian/${encodedTanggalStr}/${kecamatan}`;
         }
         break;
     }

@@ -4,7 +4,7 @@ function RankingList() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://34.101.124.69:3300/main/5/live_ranking/2023-03-30%2009:00:00")
+    fetch("https://aqport.my.id/main/5/live_ranking/2023-03-30%2009:00:00")
       .then((response) => response.json())
       .then((data) => {
         // Sort the data by "rata_nilai_ispu" in descending order

@@ -27,32 +27,32 @@ function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan 
         switch (param) {
             case "ISPU":
                 yLabel = "ISPU";
-                dataUrl = `http://34.101.124.69:3300/main/1/ISPU/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                dataUrl = `https://aqport.my.id/main/1/ISPU/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             case "PM25":
                 yLabel = "PM2.5 (ppm)";
-                dataUrl = `http://34.101.124.69:3300/main/3/PM25/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                dataUrl = `https://aqport.my.id/main/3/PM25/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             case "PM10":
                 yLabel = "PM10 (ppm)";
-                dataUrl = `http://34.101.124.69:3300/main/4/PM10/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                dataUrl = `https://aqport.my.id/main/4/PM10/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             case "CO":
                 yLabel = "CO (ppm)";
-                dataUrl = `http://34.101.124.69:3300/main/4/CO/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                dataUrl = `https://aqport.my.id/main/4/CO/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             case "temperatur":
                 yLabel = "Temperature (°C)";
-                dataUrl = `http://34.101.124.69:3300/main/2/temperatur/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                dataUrl = `https://aqport.my.id/main/2/temperatur/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             case "kelembapan":
                 yLabel = "Humidity (%)";
-                dataUrl = `http://34.101.124.69:3300/main/3/kelembapan/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
+                dataUrl = `https://aqport.my.id/main/3/kelembapan/custom/${tanggalawal}/${tanggalakhir}/${kecamatan}`;
                 break;
 
             default:

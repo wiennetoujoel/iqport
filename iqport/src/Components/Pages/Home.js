@@ -14,7 +14,7 @@ function Home(props) {
   const [provinsi, setProvinsi] = useState("");
 
   useEffect((lokasi) => {
-    fetch(`http://34.101.124.69:3300/main/5/tampil_lokasi`)
+    fetch(`https://aqport.my.id/main/5/tampil_lokasi`)
       .then((response) => response.json())
       .then((data) => {
         const kota = data[0].kota;
@@ -80,7 +80,7 @@ function Home(props) {
     const fetchData = () => {
       const startTime = performance.now(); // Waktu awal
 
-      let url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
+      let url = `https://aqport.my.id/main/1/realtime/${encodedDateStr}/${kecamatan}`;
 
       fetch(url)
         .then(response => {
@@ -149,7 +149,7 @@ function Home(props) {
   useEffect(() => {
     {/* Live ranking*/ }
     let liveUrl = "";
-    liveUrl = `http://34.101.124.69:3300/main/5/live_ranking/${encodedDateStr}`;
+    liveUrl = `https://aqport.my.id/main/5/live_ranking/${encodedDateStr}`;
     fetch(liveUrl)
       .then((response) => response.json())
       .then((data) => {
@@ -199,7 +199,7 @@ function Home(props) {
     {/*Penentuan Warna Polutan */ }
     const fetchData = () => {
       let url = "";
-      url = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
+      url = `https://aqport.my.id/main/1/realtime/${encodedDateStr}/${kecamatan}`;
 
       fetch(url)
         .then(response => response.json())
@@ -357,7 +357,7 @@ function Home(props) {
   useEffect(() => {
     {/*penentuan tindakan who*/ }
     let liveUrl = "";
-    liveUrl = `http://34.101.124.69:3300/main/1/realtime/${encodedDateStr}/${kecamatan}`;
+    liveUrl = `https://aqport.my.id/main/1/realtime/${encodedDateStr}/${kecamatan}`;
     const startTime = performance.now(); // Waktu awal
     fetch(liveUrl)
       .then(response => response.json())
