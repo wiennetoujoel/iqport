@@ -106,7 +106,7 @@ const AdminDashboard = () => {
           } else {
             // Jika belum digunakan, kirim permintaan POST ke backend menggunakan Axios
             axios
-              .post('http://34.101.124.69:3300/main/5/tambah_lokasi', formData)
+              .post('https://aqport.my.id/main/5/tambah_lokasi', formData)
               .then((response) => {
                 // Tangani respon dari backend jika berhasil
                 console.log(response.status);

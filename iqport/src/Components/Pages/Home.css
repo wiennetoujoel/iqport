@@ -53,22 +53,45 @@
   position: flex;
 }
 
-/*untuk hover 3 polutan, pertama adalah temperatur*/
 
+/*untuk informasi lebih lanjut untuk 3 polutan*/
 /*pm25*/
+.pm25-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pm25-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+
+.pm25-header strong {
+  margin-right: 10px;
+}
+
+.pm25-header .info-icon {
+  cursor: pointer;
+}
+
 .pm25-overlay {
   position: absolute;
   top: 10%;
   left: 90%;
-  width: 200px;
-  height: 150px;
-  background-color: rgba(0, 0, 0, 0.8);
+  width: 350px;
+  height: 280px;
+  background-color: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: left;
   justify-content: left;
   transition: left 0.3s ease-in-out;
   z-index: 1000;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .hovered-element:hover + .pm25-overlay {

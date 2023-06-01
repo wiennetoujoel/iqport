@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import CustomGraph from './Components/inc/CustomGraph';
 import MainGraph from './Components/inc/MainGraph';
 import DateParam from './Components/inc/DateParam';
-
 import Home from './Components/Pages/Home';
 import Footer from './Components/inc/Footer';
-import SignupForm from './Components/Pages/SignupForm';
 import SigninForm from './Components/Pages/SigninForm';
 import Navbar from './Components/inc/Navbar';
 import LandingPage from './Components/Pages/LandingPage';

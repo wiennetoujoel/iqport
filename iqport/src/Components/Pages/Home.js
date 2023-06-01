@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from '../inc/SearchBar';
 import './Home.css';
 
@@ -29,9 +30,6 @@ function Home(props) {
   {/* Tampilan 5 parameter utama untuk 1 Kota*/ }
 
   const [error, setError] = useState(null);
-
-  {/*const untuk live ranking*/ }
-  const [rankingData, setRankingData] = useState([]);
 
   {/* const untuk 5 data polutan utama*/ }
   const [pm25, setPm25] = useState(null);
@@ -145,55 +143,87 @@ function Home(props) {
   }
 
 
+  {/*const untuk live ranking*/ }
+  const [rankingData, setRankingData] = useState([]);
+  const [nilaiIspuElements, setNilaiIspuElements] = useState([]);
+
+  const fetchRankingData = async () => {
+    try {
+      const liveUrl = `https://aqport.my.id/main/5/live_ranking/${encodedDateStr}`;
+      const response = await fetch(liveUrl);
+      const data = await response.json();
+
+      const startTime = performance.now();
+
+      const updatedRankingData = data.map((item, index) => {
+        const ispu_ranking = item.rata_nilai_ispu;
+        let ispuColor;
+        let ispuTextColor = "";
+
+        if (ispu_ranking >= 0 && ispu_ranking <= 50) {
+          const percentage = Math.round(((ispu_ranking - 0) / (50 - 0)) * 100);
+          ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
+        } else if (ispu_ranking >= 51 && ispu_ranking <= 100) {
+          const percentage = Math.round(((ispu_ranking - 51) / (100 - 51)) * 100);
+          ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
+        } else if (ispu_ranking >= 101 && ispu_ranking <= 150) {
+          const percentage = Math.round(((ispu_ranking - 101) / (150 - 101)) * 100);
+          ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
+        } else if (ispu_ranking >= 151 && ispu_ranking <= 200) {
+          const percentage = Math.round(((ispu_ranking - 151) / (200 - 151)) * 100);
+          ispuColor = calculateColor("#ff0000", "#800080", percentage);
+        } else if (ispu_ranking >= 201 && ispu_ranking <= 300) {
+          const percentage = Math.round(((ispu_ranking - 201) / (300 - 201)) * 100);
+          ispuColor = calculateColor("#800080", "#000000", percentage);
+        } else {
+          ispuColor = "#000000"; // Default color for other cases
+        }
+
+        const endTime = performance.now(); // Waktu akhir
+        const latency = endTime - startTime; // Perhitungan latency
+
+        console.log(`Latency Live Ranking: ${latency} milliseconds`);
+
+
+        return {
+          ...item,
+          ispuColor,
+          ispuTextColor,
+        };
+      });
+
+      const updatedNilaiIspuElements = Array.from({ length: updatedRankingData.length }, (_, index) => {
+        const ispu_ranking = updatedRankingData[index].rata_nilai_ispu;
+        const ispuColor = updatedRankingData[index].ispuColor;
+        const ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
+
+        return {
+          id: `ranking-${index}`,
+          value: ispu_ranking,
+          backgroundColor: ispuColor,
+          ispuTextColor,
+        };
+      });
+
+      setRankingData(updatedRankingData);
+      setNilaiIspuElements(updatedNilaiIspuElements);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    {/* Live ranking*/ }
-    let liveUrl = "";
-    liveUrl = `https://aqport.my.id/main/5/live_ranking/${encodedDateStr}`;
-    fetch(liveUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setRankingData(data);
+    fetchRankingData();
+  }, [encodedDateStr]);
 
-        // Loop through each data item
-        data.forEach((item, index) => {
-          const ispu_ranking = item.rata_nilai_ispu;
-          let ispuColor;
-          let ispuTextColor = "";
 
-          // Apply color based on the value range
-          if (ispu_ranking >= 0 && ispu_ranking <= 50) {
-            const percentage = Math.round(((ispu_ranking - 0) / (50 - 0)) * 100);
-            ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
-          } else if (ispu_ranking >= 51 && ispu_ranking <= 100) {
-            const percentage = Math.round(((ispu_ranking - 51) / (100 - 51)) * 100);
-            ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
-          } else if (ispu_ranking >= 101 && ispu_ranking <= 150) {
-            const percentage = Math.round(((ispu_ranking - 101) / (150 - 101)) * 100);
-            ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
-          } else if (ispu_ranking >= 151 && ispu_ranking <= 200) {
-            const percentage = Math.round(((ispu_ranking - 151) / (200 - 151)) * 100);
-            ispuColor = calculateColor("#ff0000", "#800080", percentage);
-          } else if (ispu_ranking >= 201 && ispu_ranking <= 300) {
-            const percentage = Math.round(((ispu_ranking - 201) / (300 - 201)) * 100);
-            ispuColor = calculateColor("#800080", "#000000", percentage);
-          } else {
-            ispuColor = "#000000"; // Default color for other cases
-          }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchRankingData(); // Panggil kembali fungsi fetchRankingData() untuk memperbarui data
+    }, 60000); // Set interval 1 menit
 
-          // Mengatur tampilan elemen dengan ID "ranking-{index}"
-          const nilaiIspuElement = document.getElementById(`ranking-${index}`);
-          if (nilaiIspuElement) {
-            nilaiIspuElement.innerHTML = ispu_ranking ?? "N/A";
-            nilaiIspuElement.style.backgroundColor = ispuColor;
-            ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
-            nilaiIspuElement.style.color = ispuTextColor;
-          }
-        });
-      })
-      .catch((error) => console.error(error));
-  });
-  
+    return () => clearInterval(interval); // Clear interval ketika komponen tidak lagi digunakan atau di-unmount
+  }, []);
 
   useEffect((pollutantcolor) => {
     {/*Penentuan Warna Polutan */ }
@@ -372,20 +402,22 @@ function Home(props) {
         console.log(`Latency Tindakan WHO: ${latency} milliseconds`);
       })
       .catch(error => console.error(error));
-  });
+  }, [encodedDateStr, kecamatan]);
+
 
   //untuk hover 5 polutan utama
-  const [ispm25Hovered, setIspm25Hovered] = useState(false);
+
   const [ispm10Hovered, setIspm10Hovered] = useState(false);
   const [iscoHovered, setIscoHovered] = useState(false);
 
-  const pm25HandleMouseEnter = () => {
-    setIspm25Hovered(true);
+
+  const [isOverlayVisible, setOverlayVisible] = useState(false);
+
+  const toggleOverlay = () => {
+    setOverlayVisible(!isOverlayVisible);
+    console.log(!isOverlayVisible)
   };
 
-  const pm25HandleMouseLeave = () => {
-    setIspm25Hovered(false);
-  };
 
   const pm10HandleMouseEnter = () => {
     setIspm10Hovered(true);
@@ -446,28 +478,70 @@ function Home(props) {
               </div>
             </div>
             <div className="card-deck">
-              <div className="card border-0"
-                style={{ backgroundColor: "transparent" }}
-                onMouseEnter={pm25HandleMouseEnter}
-                onMouseLeave={pm25HandleMouseLeave}
-              >
-                <div className="pm25 card-body text-center" style={{ cursor: "pointer" }}>
-                  <p><strong>PM2.5</strong></p>
-                  <h3 id="pm25">
-                    {pm25 ?? "N/A"}
-                  </h3>
+              <div className="card border-0" style={{ backgroundColor: "transparent" }}>
+                <div className="pm25 card-body text-center">
+                  <div className="pm25-header">
+                    <strong>PM2.5</strong>
+                    <div className="info-icon" onClick={toggleOverlay}>
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </div>
+                  </div>
+                  <h3 id="pm25">N/A</h3>
                   <p>µg/m3</p>
-                  {ispm25Hovered && (
-                    <div className="pm25-overlay">
+                  {isOverlayVisible && (
+                    <div className="pm25-overlay" onClick={toggleOverlay}>
                       <div className="pm25-overlay-content">
-                        <div className="pm25-overlay-column">
-                          <p>PM2.5</p>
-                          <p>PM2.5 (Particular Matter 2.5) adalah partikel partikel udara yang berukuran lebih kecil dari 2.5 mikrometer </p>
-                          <p>Paparan PM2.5 berlebih dapat menyebabkan gangguan saluran pernafasan, kanker paru-paru, dan penyakit paru-paru obstruktif kronis</p>
+                        <div className="pm25-overlay-column paragraph-column" style={{ width: "66.66%" }}>
+                          <p style = {{fontSize : "20px"}}>PM2.5</p>
+                          <p>
+                            PM2.5 (Particular Matter 2.5) adalah partikel-partikel udara yang berukuran lebih kecil dari 2.5 mikrometer
+                          </p>
+                          <p>
+                            Paparan PM2.5 berlebih dapat menyebabkan gangguan saluran pernafasan, kanker paru-paru, dan penyakit paru-paru obstruktif kronis
+                          </p>
+                        </div>
+                        <div className="pm25-overlay-column color-bar-column" style={{ width: "33.33%" }}>
+                          <div className="color-bar" style={{ width: "20px", height: "200px", borderRadius: "10px", background: "linear-gradient(to bottom, #00ff00 0%, #ffff00 20%, #ff7f00 40%, #ff0000 60%, #800080 80%, #000000 100%)" }}>
+                            <div className="scale" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", height: "100%" }}>
+                              <div className="scale-item" data-value="0">
+                                <span className="scale-value0">0</span>
+                                <span className="scale-label">Good</span>
+                              </div>
+                              <div className="scale-item" data-value="55">
+                                <span className="scale-value">55</span>
+                                <span className="scale-label">Moderate</span>
+                                <span className="vertical-line"></span>
+                              </div>
+                              <div className="scale-item" data-value="155">
+                                <span className="scale-value">155</span>
+                                <span className="scale-label">
+                                  <span className="scale-label-line1">Unhealthy for</span>
+                                  <span className="scale-label-line2">sensitive groups</span>
+                                </span>
+                                <span className="vertical-line"></span>
+                              </div>
+                              <div className="scale-item" data-value="255">
+                                <span className="scale-value">255</span>
+                                <span className="scale-label">Unhealthy</span>
+                                <span className="vertical-line"></span>
+                              </div>
+                              <div className="scale-item" data-value="355">
+                                <span className="scale-value">355</span>
+                                <span className="scale-label">Very Unhealthy</span>
+                                <span className="vertical-line"></span>
+                              </div>
+                              <div className="scale-item" data-value="425">
+                                <span className="scale-value-max">425</span>
+                                <span className="scale-label">Hazardous</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   )}
+
+
                 </div>
               </div>
               <div className="card border-0" style={{ backgroundColor: "transparent" }}>
@@ -677,7 +751,16 @@ function Home(props) {
                 {rankingData.map((item, index) => (
                   <li key={index}>
                     {item.lokasi}
-                    <span id={`ranking-${index}`} className="nilai-ranking float-right card-body">{item.rata_nilai_ispu}</span>
+                    <span
+                      id={`ranking-${index}`}
+                      className="nilai-ranking float-right card-body"
+                      style={{
+                        backgroundColor: nilaiIspuElements[index]?.backgroundColor || "",
+                        color: nilaiIspuElements[index]?.ispuTextColor || "",
+                      }}
+                    >
+                      {item.rata_nilai_ispu}
+                    </span>
                   </li>
                 ))}
               </ol>
