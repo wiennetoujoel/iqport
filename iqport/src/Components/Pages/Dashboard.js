@@ -239,21 +239,39 @@ const AdminDashboard = () => {
       <div className="delete-dropdown-content">
         <div className="input-group">
           <label>ID Alat:</label>
-          <input type="text" value={idAlat} onChange={handleIdAlatChange} />
-          <button onClick={handleCheckLocation}>Check</button>
+          <input type="text" value={idAlat} onChange={handleIdAlatChange} style={{ marginLeft: "10px", borderRadius: "5px" }} />
+          <button onClick={handleCheckLocation} style={{ marginLeft: "10px", borderRadius: "5px" }}>Check</button>
         </div>
         {locationData && (
           <div className="location-data">
-            <p>ID Alat: {locationData.id_alat}</p>
-            <p>Kecamatan: {locationData.kecamatan}</p>
-            <p>Kota: {locationData.kota}</p>
-            <p>Provinsi: {locationData.provinsi}</p>
-            <p>Latitude: {locationData.lattitude}</p>
-            <p>Longitude: {locationData.longitude}</p>
+            <div className="data-row">
+              <p className="data-label">ID Alat:</p>
+              <p>{locationData.id_alat}</p>
+            </div>
+            <div className="data-row">
+              <p className="data-label">Kecamatan:</p>
+              <p>{locationData.kecamatan}</p>
+            </div>
+            <div className="data-row">
+              <p className="data-label">Kota:</p>
+              <p>{locationData.kota}</p>
+            </div>
+            <div className="data-row">
+              <p className="data-label">Provinsi:</p>
+              <p>{locationData.provinsi}</p>
+            </div>
+            <div className="data-row">
+              <p className="data-label">Latitude:</p>
+              <p>{locationData.lattitude}</p>
+            </div>
+            <div className="data-row">
+              <p className="data-label">Longitude:</p>
+              <p>{locationData.longitude}</p>
+            </div>
           </div>
         )}
         {locationData && (
-          <div className="button-group" style={{ margin: "0 auto", paddingBottom: "10px" }}>
+          <div className="button-group">
             <button onClick={handleDeleteLocation}>Delete</button>
           </div>
         )}
@@ -336,44 +354,34 @@ const AdminDashboard = () => {
       <div className="edit-dropdown-content">
         <div className="input-group">
           <label>ID Alat:</label>
-          <input type="text" value={idAlat} onChange={handleEditIdAlatChange} />
-          <button onClick={handleCheckLocation}>Check</button>
+          <input type="text" value={idAlat} onChange={handleEditIdAlatChange} style={{ marginLeft: "10px", borderRadius: "5px" }}/>
+          <button onClick={handleCheckLocation} style={{ marginLeft: "10px", borderRadius: "5px"}}>Check</button>
         </div>
-        {editLocationData && (
-          <div className="location-data">
-            <p>ID Alat: {editLocationData.id_alat}</p>
-            <p>Kecamatan: {editLocationData.kecamatan}</p>
-            <p>Kota: {editLocationData.kota}</p>
-            <p>Provinsi: {editLocationData.provinsi}</p>
-            <p>Latitude: {editLocationData.lattitude}</p>
-            <p>Longitude: {editLocationData.longitude}</p>
-          </div>
-        )}
         {editLocationData && (
           <div className="edit-form">
             <div className="input-group">
               <label>Edit ID Alat:</label>
-              <input type="text" value={editIdAlat} onChange={(e) => setEditIdAlat(e.target.value)} />
+              <input type="text" value={editLocationData.id_alat} onChange={(e) => setEditLocationData({ ...editLocationData, id_alat: e.target.value })} />
             </div>
             <div className="input-group">
               <label>Edit Kecamatan:</label>
-              <input type="text" value={editKecamatan} onChange={(e) => setEditKecamatan(e.target.value)} />
+              <input type="text" value={editLocationData.kecamatan} onChange={(e) => setEditLocationData({ ...editLocationData, kecamatan: e.target.value })} />
             </div>
             <div className="input-group">
               <label>Edit Kota:</label>
-              <input type="text" value={editKota} onChange={(e) => setEditKota(e.target.value)} />
+              <input type="text" value={editLocationData.kota} onChange={(e) => setEditLocationData({ ...editLocationData, kota: e.target.value })} />
             </div>
             <div className="input-group">
               <label>Edit Provinsi:</label>
-              <input type="text" value={editProvinsi} onChange={(e) => setEditProvinsi(e.target.value)} />
+              <input type="text" value={editLocationData.provinsi} onChange={(e) => setEditLocationData({ ...editLocationData, provinsi: e.target.value })} />
             </div>
             <div className="input-group">
               <label>Edit Latitude:</label>
-              <input type="text" value={editLatitude} onChange={(e) => setEditLatitude(e.target.value)} />
+              <input type="text" value={editLocationData.lattitude} onChange={(e) => setEditLocationData({ ...editLocationData, lattitude: e.target.value })} />
             </div>
             <div className="input-group">
               <label>Edit Longitude:</label>
-              <input type="text" value={editLongitude} onChange={(e) => setEditLongitude(e.target.value)} />
+              <input type="text" value={editLocationData.longitude} onChange={(e) => setEditLocationData({ ...editLocationData, longitude: e.target.value })} />
             </div>
             <div className="button-group" style={{ margin: "0 auto", paddingBottom: "10px" }}>
               <button onClick={handleEditLocation}>Edit</button>

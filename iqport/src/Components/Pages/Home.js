@@ -41,6 +41,9 @@ function Home(props) {
   {/*const untuk nilai ispu */ }
   const [ispu, setIspu] = useState(null);
 
+  {/*const untu last update live pollutant */}
+  const [lastUpdate, setLastUpdate] = useState('');
+
   const [encodedDateStr, setEncodedDateStr] = useState('');
 
   const updateEncodedDateStr = () => {
@@ -55,8 +58,26 @@ function Home(props) {
     const dateStr = `${year}-${month}-${date}T${hours}:${minutes}:00`;
     const encodedDate = encodeURIComponent(dateStr);
     setEncodedDateStr(encodedDate);
-
   };
+
+  const getCurrentTime = () => {
+    const currentDate = new Date();
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+    const seconds = currentDate.getSeconds();
+  
+    // Format waktu dengan menambahkan nol di depan jika nilainya kurang dari 10
+    const formattedTime = `${day}/${month}/${year} ${addLeadingZero(hours)}:${addLeadingZero(minutes)}:${addLeadingZero(seconds)}`;
+  
+    return formattedTime;
+  };
+
+  const addLeadingZero = (value) => {
+  return value < 10 ? `0${value}` : value;
+};
 
 
 
@@ -84,15 +105,15 @@ function Home(props) {
         .then(response => {
           if (response.ok) {
             return response.json();
-          } else {
-            throw new Error('An error occurred while fetching data.');
           }
         })
         .then(data => {
           const endTime = performance.now(); // Waktu akhir
           const latency = endTime - startTime; // Perhitungan latency
 
+
           console.log(`Latency Live Pollutant: ${latency} milliseconds`);
+          console.log(`Waktu realtime ${encodedDateStr} dengan kecamatan ${kecamatan}`)
 
           setPm25(data[0].rata_konsentrasi_pm25);
           setPm10(data[0].rata_konsentrasi_pm10);
@@ -100,6 +121,7 @@ function Home(props) {
           setTemperatur(data[0].rata_temperatur);
           setKelembapan(data[0].rata_kelembapan);
           setIspu(data[0].nilai_ispu);
+          setLastUpdate(getCurrentTime());
         })
         .catch(error => {
           console.log(error);
@@ -208,7 +230,6 @@ function Home(props) {
       setRankingData(updatedRankingData);
       setNilaiIspuElements(updatedNilaiIspuElements);
     } catch (error) {
-      console.error(error);
     }
   };
 
@@ -339,26 +360,26 @@ function Home(props) {
           if (warna_ispu >= 0 && warna_ispu <= 50) {
             const percentage = Math.round(((warna_ispu - 0) / (50 - 0)) * 100);
             ispuColor = calculateColor("#00ff00", "#ffff00", percentage);
-            message = "Good";
+            message = "Baik";
           } else if (warna_ispu >= 51 && warna_ispu <= 100) {
             const percentage = Math.round(((warna_ispu - 51) / (100 - 51)) * 100);
             ispuColor = calculateColor("#ffff00", "#ff7f00", percentage);
-            message = "Moderate";
+            message = "Sedang";
           } else if (warna_ispu >= 101 && warna_ispu <= 150) {
             const percentage = Math.round(((warna_ispu - 101) / (150 - 101)) * 100);
             ispuColor = calculateColor("#ff7f00", "#ff0000", percentage);
-            message = "Unhealthy for Sensitive Groups";
+            message = "Tidak Sehat untuk Grup Sensitif";
           } else if (warna_ispu >= 151 && warna_ispu <= 200) {
             const percentage = Math.round(((warna_ispu - 151) / (200 - 151)) * 100);
             ispuColor = calculateColor("#ff0000", "#800080", percentage);
-            message = "Unhealthy";
+            message = "Tidak Sehat";
           } else if (warna_ispu >= 201 && warna_ispu <= 300) {
             const percentage = Math.round(((warna_ispu - 201) / (300 - 201)) * 100);
             ispuColor = calculateColor("#800080", "#000000", percentage);
-            message = "Very Unhealthy";
+            message = "Sangat Tidak Sehat";
           } else {
             ispuColor = "#000000"; // Default color for other cases
-            message = "Hazardous";
+            message = "Berbahaya";
           }
 
           // Mengatur tampilan elemen dengan ID "nilaiIspu"
@@ -405,36 +426,34 @@ function Home(props) {
   }, [encodedDateStr, kecamatan]);
 
 
-  //untuk hover 5 polutan utama
+  //untuk informasi lebih lanjut 3 polutan utama
+  const [pm25OverlayVisible, setPM25OverlayVisible] = useState(false);
+  const [pm10OverlayVisible, setPM10OverlayVisible] = useState(false);
+  const [coOverlayVisible, setCoOverlayVisible] = useState(false);
 
-  const [ispm10Hovered, setIspm10Hovered] = useState(false);
-  const [iscoHovered, setIscoHovered] = useState(false);
-
-
-  const [isOverlayVisible, setOverlayVisible] = useState(false);
-
-  const toggleOverlay = () => {
-    setOverlayVisible(!isOverlayVisible);
-    console.log(!isOverlayVisible)
+  const pm25ToggleOverlay = () => {
+    setPM25OverlayVisible(!pm25OverlayVisible);
   };
 
-
-  const pm10HandleMouseEnter = () => {
-    setIspm10Hovered(true);
+  const pm10ToggleOverlay = () => {
+    setPM10OverlayVisible(!pm10OverlayVisible);
   };
 
-  const pm10HandleMouseLeave = () => {
-    setIspm10Hovered(false);
+  const coToggleOverlay = () => {
+    setCoOverlayVisible(!coOverlayVisible);
   };
 
-  const coHandleMouseEnter = () => {
-    setIscoHovered(true);
+  const handleOutsideClick = (event) => {
+    if (pm25OverlayVisible && !event.target.closest('.pm25-overlay')) {
+      setPM25OverlayVisible(false);
+    }
+    if (pm10OverlayVisible && !event.target.closest('.pm10-overlay')) {
+      setPM10OverlayVisible(false);
+    }
+    if (coOverlayVisible && !event.target.closest('.co-overlay')) {
+      setCoOverlayVisible(false);
+    }
   };
-
-  const coHandleMouseLeave = () => {
-    setIscoHovered(false);
-  };
-
 
 
   return (
@@ -466,13 +485,13 @@ function Home(props) {
                 style={{ backgroundColor: "transparent" }}
               >
                 <div className="card-body text-center">
-                  <p><strong>Temperature</strong></p>
+                  <p><strong>Temperatur</strong></p>
                   <h3>{temperatur ?? 'N/A'}°C</h3>
                 </div>
               </div>
               <div className="card border-0" style={{ backgroundColor: "transparent" }}>
                 <div className="card-body text-center">
-                  <p><strong>Humidity</strong></p>
+                  <p><strong>Kelembaban</strong></p>
                   <h3>{kelembapan ?? 'N/A'}%</h3>
                 </div>
               </div>
@@ -482,57 +501,57 @@ function Home(props) {
                 <div className="pm25 card-body text-center">
                   <div className="pm25-header">
                     <strong>PM2.5</strong>
-                    <div className="info-icon" onClick={toggleOverlay}>
+                    <div className="info-icon" onClick={pm25ToggleOverlay}>
                       <FontAwesomeIcon icon={faInfoCircle} />
                     </div>
                   </div>
                   <h3 id="pm25">N/A</h3>
                   <p>µg/m3</p>
-                  {isOverlayVisible && (
-                    <div className="pm25-overlay" onClick={toggleOverlay}>
+                  {pm25OverlayVisible && (
+                    <div className="pm25-overlay" onClick={pm25ToggleOverlay} style={{ cursor: "pointer" }}>
                       <div className="pm25-overlay-content">
                         <div className="pm25-overlay-column paragraph-column" style={{ width: "66.66%" }}>
-                          <p style = {{fontSize : "20px"}}>PM2.5</p>
-                          <p>
+                          <p style={{ fontSize: "15px" }}>PM2.5</p>
+                          <p style={{ textAlign: "justify", fontSize: "11px" }}>
                             PM2.5 (Particular Matter 2.5) adalah partikel-partikel udara yang berukuran lebih kecil dari 2.5 mikrometer
                           </p>
-                          <p>
+                          <p style={{ textAlign: "justify", fontSize: "11px" }}>
                             Paparan PM2.5 berlebih dapat menyebabkan gangguan saluran pernafasan, kanker paru-paru, dan penyakit paru-paru obstruktif kronis
                           </p>
                         </div>
-                        <div className="pm25-overlay-column color-bar-column" style={{ width: "33.33%" }}>
+                        <div className="pm25-overlay-column color-bar-column" style={{ width: "33.33%", position: "relative", left: "50px" }}>
                           <div className="color-bar" style={{ width: "20px", height: "200px", borderRadius: "10px", background: "linear-gradient(to bottom, #00ff00 0%, #ffff00 20%, #ff7f00 40%, #ff0000 60%, #800080 80%, #000000 100%)" }}>
-                            <div className="scale" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", height: "100%" }}>
+                            <div className="scale" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end", height: "100%" }}>
                               <div className="scale-item" data-value="0">
-                                <span className="scale-value0">0</span>
-                                <span className="scale-label">Good</span>
+                                <span className="scale-value0" style={{ position: "relative", top: "-15px", left: "11px" }}>0</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-15px", left: "25px" }}>Baik</span>
+                              </div>
+                              <div className="scale-item" data-value="12">
+                                <span className="scale-value" style={{ position: "relative", left: "8px", top: "5px" }}>12</span>
+                                <span className="scale-label" style={{ position: "relative", left: "40px", top: "5px" }}>Sedang</span>
+                                <span className="horizontal-line"></span>
+                              </div>
+                              <div className="scale-item" data-value="35">
+                                <span className="scale-value" style={{ position: "relative", left: "64px", top: "25px" }}>35</span>
+                                <span className="scale-label">
+                                  <span className="scale-label-line1" style={{ position: "relative", top: "10px", left: "105px", display: "inline-block", width: "100px" }}>Tidak sehat</span>
+                                  <span className="scale-label-line2" style={{ position: "relative", top: "10px", left: "105px" }}> untuk grup sensitif</span>
+                                </span>
+
                               </div>
                               <div className="scale-item" data-value="55">
-                                <span className="scale-value">55</span>
-                                <span className="scale-label">Moderate</span>
-                                <span className="vertical-line"></span>
+                                <span className="scale-value" style={{ position: "relative", left: "43px", top: "13px" }}>55</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-2px", left: "85px", display: "inline-block", width: "80px" }}>Tidak Sehat</span>
+
                               </div>
-                              <div className="scale-item" data-value="155">
-                                <span className="scale-value">155</span>
-                                <span className="scale-label">
-                                  <span className="scale-label-line1">Unhealthy for</span>
-                                  <span className="scale-label-line2">sensitive groups</span>
-                                </span>
-                                <span className="vertical-line"></span>
+                              <div className="scale-item" data-value="150">
+                                <span className="scale-value" style={{ position: "relative", left: "38px", top: "13px" }}>150</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-2px", left: "85px", display: "inline-block", width: "80px" }}>Sangat Tidak Sehat</span>
+
                               </div>
-                              <div className="scale-item" data-value="255">
-                                <span className="scale-value">255</span>
-                                <span className="scale-label">Unhealthy</span>
-                                <span className="vertical-line"></span>
-                              </div>
-                              <div className="scale-item" data-value="355">
-                                <span className="scale-value">355</span>
-                                <span className="scale-label">Very Unhealthy</span>
-                                <span className="vertical-line"></span>
-                              </div>
-                              <div className="scale-item" data-value="425">
-                                <span className="scale-value-max">425</span>
-                                <span className="scale-label">Hazardous</span>
+                              <div className="scale-item" data-value="250">
+                                <span className="scale-value-max" style={{ position: "relative", left: "44px", top: "15px" }}>250</span>
+                                <span className="scale-label" style={{ position: "relative", left: "52px", top: "15px" }}>Berbahaya</span>
                               </div>
                             </div>
                           </div>
@@ -540,41 +559,129 @@ function Home(props) {
                       </div>
                     </div>
                   )}
-
-
                 </div>
               </div>
               <div className="card border-0" style={{ backgroundColor: "transparent" }}>
-                <div className="pm10 card-body text-center" style={{ cursor: "pointer" }} onMouseEnter={pm10HandleMouseEnter} onMouseLeave={pm10HandleMouseLeave}>
-                  <p><strong>PM10</strong></p>
+                <div className="pm10 card-body text-center">
+                  <div className="pm10-header">
+                    <strong>PM10</strong>
+                    <div className="info-icon" onClick={pm10ToggleOverlay}>
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </div>
+                  </div>
                   <h3 id="pm10">{pm10 ?? 'N/A'}</h3>
                   <p>µg/m3</p>
-                  {ispm10Hovered && (
-                    <div className="pm10-overlay">
+                  {pm10OverlayVisible && (
+                    <div className="pm10-overlay" onClick={pm10ToggleOverlay} style={{ cursor: "pointer" }}>
                       <div className="pm10-overlay-content">
-                        <div className="pm10-overlay-column">
-                          <p>PM10</p>
-                          <p>PM10 (Particular Matter 10) adalah partikel partikel udara yang berukuran lebih kecil dari 10 mikrometer </p>
-                          <p>Paparan PM10 berlebih dapat menyebabkan reaksi radang paru-paru dan ISPA</p>
+                        <div className="pm10-overlay-column paragraph-column" style={{ width: "66.66%" }}>
+                          <p style={{ fontSize: "15px" }}>PM10</p>
+                          <p style={{ textAlign: "justify", fontSize: "11px" }}>
+                            PM10 (Particular Matter 10) adalah partikel partikel udara yang berukuran lebih kecil dari 10 mikrometer
+                          </p>
+                          <p style={{ textAlign: "justify", fontSize: "11px" }}>
+                            Paparan PM10 berlebih dapat menyebabkan reaksi radang paru-paru dan ISPA
+                          </p>
+                        </div>
+                        <div className="pm10-overlay-column color-bar-column" style={{ width: "33.33%", position: "relative", left: "50px" }}>
+                          <div className="color-bar" style={{ width: "20px", height: "200px", borderRadius: "10px", background: "linear-gradient(to bottom, #00ff00 0%, #ffff00 20%, #ff7f00 40%, #ff0000 60%, #800080 80%, #000000 100%)" }}>
+                            <div className="scale" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end", height: "100%" }}>
+                              <div className="scale-item" data-value="0">
+                                <span className="scale-value0" style={{ position: "relative", top: "-15px", left: "11px" }}>0</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-15px", left: "25px" }}>Baik</span>
+                              </div>
+                              <div className="scale-item" data-value="55">
+                                <span className="scale-value" style={{ position: "relative", left: "8px", top: "5px" }}>55</span>
+                                <span className="scale-label" style={{ position: "relative", left: "40px", top: "5px" }}>Sedang</span>
+                                <span className="horizontal-line"></span>
+                              </div>
+                              <div className="scale-item" data-value="155">
+                                <span className="scale-value" style={{ position: "relative", left: "59px", top: "25px" }}>155</span>
+                                <span className="scale-label">
+                                  <span className="scale-label-line1" style={{ position: "relative", top: "10px", left: "105px", display: "inline-block", width: "100px" }}>Tidak sehat</span>
+                                  <span className="scale-label-line2" style={{ position: "relative", top: "10px", left: "105px" }}> untuk grup sensitif</span>
+                                </span>
+
+                              </div>
+                              <div className="scale-item" data-value="255">
+                                <span className="scale-value" style={{ position: "relative", left: "38px", top: "13px" }}>255</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-2px", left: "85px", display: "inline-block", width: "80px" }}>Tidak Sehat</span>
+
+                              </div>
+                              <div className="scale-item" data-value="355">
+                                <span className="scale-value" style={{ position: "relative", left: "38px", top: "13px" }}>355</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-2px", left: "85px", display: "inline-block", width: "80px" }}>Sangat Tidak Sehat</span>
+                              </div>
+                              <div className="scale-item" data-value="425">
+                                <span className="scale-value-max" style={{ position: "relative", left: "44px", top: "15px" }}>425</span>
+                                <span className="scale-label" style={{ position: "relative", left: "52px", top: "15px" }}>Berbahaya</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   )}
                 </div>
               </div>
-
               <div className="card border-0" style={{ backgroundColor: "transparent" }}>
-                <div className="co card-body text-center" style={{ cursor: "pointer" }} onMouseEnter={coHandleMouseEnter} onMouseLeave={coHandleMouseLeave}>
-                  <p><strong>CO</strong></p>
+                <div className="co card-body text-center" >
+                  <div className="co-header">
+                    <strong>CO</strong>
+                    <div className="info-icon" onClick={coToggleOverlay}>
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                    </div>
+                  </div>
                   <h3 id="co">{co ?? 'N/A'}</h3>
                   <p>ppm</p>
-                  {iscoHovered && (
-                    <div className="co-overlay">
-                      <div className="co-overlay-content">
-                        <div className="co-overlay-column">
-                          <p>CO</p>
-                          <p>CO (Carbon Monoxide) adalah gas tak berwarna, tidak berwarna, dan tidak berbau yang dihasilkan dari pembakaran gas, minyak, dan bahan bakar padat</p>
-                          <p>Paparan CO berlebih menyebabkan gangguan pada kerja jantung, sistem saraf pusat, dan saluran pernapasan</p>
+                  {coOverlayVisible && (
+                    <div className="pm10-overlay" onClick={coToggleOverlay} style={{ cursor: "pointer" }}>
+                      <div className="pm10-overlay-content">
+                        <div className="pm10-overlay-column paragraph-column" style={{ width: "66.66%" }}>
+                          <p style={{ fontSize: "15px" }}>CO</p>
+                          <p style={{ textAlign: "justify", fontSize: "11px" }}>
+                            CO (Carbon Monoxide) adalah gas tak berwarna, tidak berwarna, dan tidak berbau yang dihasilkan dari pembakaran gas, minyak, dan bahan bakar padat
+                          </p>
+                          <p style={{ textAlign: "justify", fontSize: "11px" }}>
+                            Paparan CO berlebih menyebabkan gangguan pada kerja jantung, sistem saraf pusat, dan saluran pernapasan
+                          </p>
+                        </div>
+                        <div className="pm10-overlay-column color-bar-column" style={{ width: "33.33%", position: "relative", left: "50px" }}>
+                          <div className="color-bar" style={{ width: "20px", height: "200px", borderRadius: "10px", background: "linear-gradient(to bottom, #00ff00 0%, #ffff00 20%, #ff7f00 40%, #ff0000 60%, #800080 80%, #000000 100%)" }}>
+                            <div className="scale" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end", height: "100%" }}>
+                              <div className="scale-item" data-value="0">
+                                <span className="scale-value0" style={{ position: "relative", top: "-15px", left: "11px" }}>0</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-15px", left: "25px" }}>Baik</span>
+                              </div>
+                              <div className="scale-item" data-value="4.5">
+                                <span className="scale-value" style={{ position: "relative", left: "8px", top: "5px" }}>4.5</span>
+                                <span className="scale-label" style={{ position: "relative", left: "40px", top: "5px" }}>Sedang</span>
+                                <span className="horizontal-line"></span>
+                              </div>
+                              <div className="scale-item" data-value="9.5">
+                                <span className="scale-value" style={{ position: "relative", left: "61px", top: "25px" }}>9.5</span>
+                                <span className="scale-label">
+                                  <span className="scale-label-line1" style={{ position: "relative", top: "10px", left: "105px", display: "inline-block", width: "100px" }}>Tidak sehat</span>
+                                  <span className="scale-label-line2" style={{ position: "relative", top: "10px", left: "105px" }}> untuk grup sensitif</span>
+                                </span>
+
+                              </div>
+                              <div className="scale-item" data-value="12.5">
+                                <span className="scale-value" style={{ position: "relative", left: "36px", top: "13px" }}>12.5</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-2px", left: "85px", display: "inline-block", width: "80px" }}>Tidak Sehat</span>
+
+                              </div>
+                              <div className="scale-item" data-value="15.5">
+                                <span className="scale-value" style={{ position: "relative", left: "36px", top: "13px" }}>15.5</span>
+                                <span className="scale-label" style={{ position: "relative", top: "-2px", left: "85px", display: "inline-block", width: "80px" }}>Sangat Tidak Sehat</span>
+
+                              </div>
+                              <div className="scale-item" data-value="30.5">
+                                <span className="scale-value-max" style={{ position: "relative", left: "45px", top: "15px" }}>30.5</span>
+                                <span className="scale-label" style={{ position: "relative", left: "52px", top: "15px" }}>Berbahaya</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -582,10 +689,11 @@ function Home(props) {
                 </div>
               </div>
             </div>
+            <div style={{ fontStyle: 'italic', fontSize : "12px", position:"relative", top : "10px", right:"5px" }}>Last Update: {lastUpdate}</div>
           </div>
         </div>
         <div className="kolom-kanan col">
-          <div className="penjelasan-polutan card" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
+          {/*<div className="penjelasan-polutan card" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
             <h5 style={{ marginTop: "10px", marginLeft: "15px" }}>Pollutant Measurement</h5>
             <div className="ISPU" style={{ margin: " 20px", marginBottom: "0px", marginTop: "0" }}>
               ISPU
@@ -739,39 +847,39 @@ function Home(props) {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div className="rank-who row card-body" style={{ marginTop: "20px", marginLeft: "10px" }}>
-        <div className="col-md">
-          <div className="ranking-list card" style={{ width: "580px", backgroundColor: "rgb(236, 242, 255)" }}>
-            <div className="card-body">
-              <h5>Kualitas Udara Kota Bandung setiap stasiun</h5>
-              <ol>
-                {rankingData.map((item, index) => (
-                  <li key={index}>
-                    {item.lokasi}
-                    <span
-                      id={`ranking-${index}`}
-                      className="nilai-ranking float-right card-body"
-                      style={{
-                        backgroundColor: nilaiIspuElements[index]?.backgroundColor || "",
-                        color: nilaiIspuElements[index]?.ispuTextColor || "",
-                      }}
-                    >
-                      {item.rata_nilai_ispu}
-                    </span>
-                  </li>
-                ))}
-              </ol>
+          </div>*/}
+          <div className="rank-who row card-body" style={{ marginTop: "20px", marginLeft: "10px" }}>
+            <div className="col-md">
+              <div className="ranking-list card" style={{ minHeight : " 180px",width: "580px", backgroundColor: "rgb(236, 242, 255)", marginBottom :"20px" }}>
+                <div className="card-body">
+                  <h5>Kualitas Udara Kota Bandung setiap stasiun</h5>
+                  <ol>
+                    {rankingData.map((item, index) => (
+                      <li key={index}>
+                        {item.lokasi}
+                        <span
+                          id={`ranking-${index}`}
+                          className="nilai-ranking float-right card-body"
+                          style={{
+                            backgroundColor: nilaiIspuElements[index]?.backgroundColor || "",
+                            color: nilaiIspuElements[index]?.ispuTextColor || "",
+                          }}
+                        >
+                          {item.rata_nilai_ispu}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="anjuranWHO col" style={{ marginRight: "20px" }}>
-          <div className="card" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
-            <div className="card-body">
-              <h5>Anjuran WHO</h5>
-              <p id="tindakanWHO"></p>
+            <div className="anjuranWHO col" style={{  marginRight: "20px" }}>
+              <div className="card" style={{ minHeight : "150px", backgroundColor: "rgb(236, 242, 255)" }}>
+                <div className="card-body">
+                  <h5>Anjuran WHO</h5>
+                  <p id="tindakanWHO"></p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

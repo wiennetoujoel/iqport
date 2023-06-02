@@ -11,6 +11,9 @@ function Map() {
       />
       <Marker position={[51.505, -0.09]} />
     </MapContainer>
+
+  <p>CO (Carbon Monoxide) adalah gas tak berwarna, tidak berwarna, dan tidak berbau yang dihasilkan dari pembakaran gas, minyak, dan bahan bakar padat</p>
+  <p>Paparan CO berlebih menyebabkan gangguan pada kerja jantung, sistem saraf pusat, dan saluran pernapasan</p>
   );
 }
 

@@ -107,6 +107,15 @@ function SearchBar() {
         }
     };
 
+    useEffect(() => {
+        // Fetch and set initial locations when the component mounts
+        fetch(`https://aqport.my.id/main/5/tampil_lokasi`)
+          .then((response) => response.json())
+          .then((data) => setLocations(data))
+          .catch((error) => console.log(error));
+      }, []);
+      
+
 
     return (
         <div className="search-bar" ref={searchRef} style={{ marginRight: "30px" }}>

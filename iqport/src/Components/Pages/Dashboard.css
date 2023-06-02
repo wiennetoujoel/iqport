@@ -196,37 +196,33 @@
   margin-left: 20px;
   margin-bottom: 10px;
   padding-top: 10px;
+  border-radius: 5px;
+  max-width: 100%;
+  padding: 10px;
 }
 
-.input-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.input-group label {
-  margin-right: 10px;
-}
-
-.input-group input {
-  margin-right: 10px;
-}
-
-.input-group button {
-  margin-right: 10px;
-}
 
 .location-data {
-  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.data-row {
+  display: flex;
+  align-items: center;
+}
+
+.data-label {
+  font-weight: bold;
+  margin-right: 5px;
 }
 
 .button-group {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-
+  grid-column: 1 / -1;
 }
 
+/*untuk edit lokasi*/
 .edit-dropdown-content {
   justify-content: center;
   display: flex;
@@ -235,6 +231,8 @@
   margin-left: 20px;
   margin-bottom: 10px;
   padding-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 
