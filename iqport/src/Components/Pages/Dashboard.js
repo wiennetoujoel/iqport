@@ -192,6 +192,7 @@ const AdminDashboard = () => {
   const DeleteLocationDropdown = () => {
     const [idAlat, setIdAlat] = useState("");
     const [locationData, setLocationData] = useState(null);
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const handleIdAlatChange = (e) => {
       setIdAlat(e.target.value);
@@ -209,6 +210,7 @@ const AdminDashboard = () => {
               console.log("Data lokasi:", filteredData);
               setLocationData(filteredData);
             } else {
+              alert('ID Alat tidak ditemukan');
               console.log("Data lokasi tidak ditemukan");
               setLocationData(null);
             }
@@ -233,6 +235,14 @@ const AdminDashboard = () => {
           });
         setShowDropdown(!showDropdown);
       }
+    };
+
+    const handleConfirmDelete = () => {
+      setShowConfirmation(true);
+    };
+
+    const handleCancelDelete = () => {
+      setShowConfirmation(false);
     };
 
     return (
@@ -268,11 +278,30 @@ const AdminDashboard = () => {
               <p className="data-label">Longitude:</p>
               <p>{locationData.longitude}</p>
             </div>
+            <div className="button-group button-delete">
+              <button
+                className="delete-button"
+                onClick={handleConfirmDelete}
+                style={{ position: "relative", borderRadius: "5px", textAlign: "center" }}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         )}
-        {locationData && (
-          <div className="button-group">
-            <button onClick={handleDeleteLocation}>Delete</button>
+        {locationData && showConfirmation && (
+          <div className="overlay-container">
+            <div className="delete-confirmation-overlay">
+              <p>Apakah anda yakin untuk menghapus lokasi ID alat ini?</p>
+              <div className="button-group" style={{ justifyContent: "center", display: "flex", position: "relative", width: "100%", margin: "auto", display: "flex", marginLeft: "-10px" }}>
+                <button className="cancel-button" onClick={handleCancelDelete}>
+                  Cancel
+                </button>
+                <button className="delete-button" onClick={handleDeleteLocation}>
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -314,6 +343,7 @@ const AdminDashboard = () => {
               console.log("Data lokasi:", filteredData);
               setEditLocationData(filteredData);
             } else {
+              alert('ID Alat tidak ditemukan');
               console.log("Data lokasi tidak ditemukan");
               setEditLocationData(null);
             }
@@ -326,62 +356,120 @@ const AdminDashboard = () => {
     };
 
     const handleEditLocation = () => {
-      if (idAlat) {
+      if (idAlat && editLocationData) {
         const updatedLocationData = {
-          id_revisi: editIdAlat, // Menggunakan id_revisi untuk menyimpan nilai yang sudah diedit
-          kecamatan: editKecamatan,
-          kota: editKota,
-          provinsi: editProvinsi,
-          lattitude: editLatitude,
-          longitude: editLongitude,
+          id_revisi: editLocationData.id_alat,
+          kecamatan: editLocationData.kecamatan,
+          kota: editLocationData.kota,
+          provinsi: editLocationData.provinsi,
+          lattitude: editLocationData.lattitude,
+          longitude: editLocationData.longitude,
         };
 
         axios
           .put(`https://aqport.my.id/main/5/edit_lokasi/${idAlat}`, updatedLocationData)
           .then((response) => {
             console.log("Lokasi berhasil diedit:", response.data);
-            // nutup dropdown 
             setShowEditDropdown(!showEditDropdown);
           })
-
           .catch((error) => {
             console.error("Terjadi kesalahan:", error);
           });
       }
     };
 
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setEditLocationData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    };
+
     return (
       <div className="edit-dropdown-content">
         <div className="input-group">
-          <label>ID Alat:</label>
-          <input type="text" value={idAlat} onChange={handleEditIdAlatChange} style={{ marginLeft: "10px", borderRadius: "5px" }}/>
-          <button onClick={handleCheckLocation} style={{ marginLeft: "10px", borderRadius: "5px"}}>Check</button>
+          <label >ID Alat:</label>
+          <input
+            type="text"
+            value={idAlat}
+            onChange={handleEditIdAlatChange}
+            style={{ marginLeft: "10px", borderRadius: "5px" }}
+          />
+          <button
+            onClick={handleCheckLocation}
+            style={{ marginLeft: "10px", borderRadius: "5px" }}
+          >
+            Check
+          </button>
         </div>
         {editLocationData && (
           <div className="edit-form">
             <div className="input-group">
-              <label>Edit ID Alat:</label>
-              <input type="text" value={editLocationData.id_alat} onChange={(e) => setEditLocationData({ ...editLocationData, id_alat: e.target.value })} />
+              <label style = {{fontWeight:"600"}}>Edit ID Alat:</label>
+              <input
+                className="data-input"
+                type="text"
+                name="id_alat"
+                value={editLocationData.id_alat}
+                onChange={handleInputChange}
+                style={{ marginLeft: "18px" }}
+              />
             </div>
             <div className="input-group">
-              <label>Edit Kecamatan:</label>
-              <input type="text" value={editLocationData.kecamatan} onChange={(e) => setEditLocationData({ ...editLocationData, kecamatan: e.target.value })} />
+              <label style = {{fontWeight:"600"}}>Edit Kecamatan:</label>
+              <input
+                className="data-input"
+                type="text"
+                name="kecamatan"
+                value={editLocationData.kecamatan}
+                onChange={handleInputChange}
+                style={{ marginLeft: "3px" }}
+              />
             </div>
             <div className="input-group">
-              <label>Edit Kota:</label>
-              <input type="text" value={editLocationData.kota} onChange={(e) => setEditLocationData({ ...editLocationData, kota: e.target.value })} />
+              <label style = {{fontWeight:"600"}}>Edit Kota:</label>
+              <input
+                className="data-input"
+                type="text"
+                name="kota"
+                value={editLocationData.kota}
+                onChange={handleInputChange}
+                style={{ marginLeft: "34px" }}
+              />
             </div>
             <div className="input-group">
-              <label>Edit Provinsi:</label>
-              <input type="text" value={editLocationData.provinsi} onChange={(e) => setEditLocationData({ ...editLocationData, provinsi: e.target.value })} />
+              <label style = {{fontWeight:"600"}}>Edit Provinsi  :</label>
+              <input
+                className="data-input"
+                type="text"
+                name="provinsi"
+                value={editLocationData.provinsi}
+                onChange={handleInputChange}
+                style={{ marginLeft: "21px" }}
+              />
             </div>
             <div className="input-group">
-              <label>Edit Latitude:</label>
-              <input type="text" value={editLocationData.lattitude} onChange={(e) => setEditLocationData({ ...editLocationData, lattitude: e.target.value })} />
+              <label style = {{fontWeight:"600"}}>Edit Latitude  :</label>
+              <input
+                className="data-input"
+                type="text"
+                name="lattitude"
+                value={editLocationData.lattitude}
+                onChange={handleInputChange}
+                style={{ marginLeft: "5px" }}
+              />
             </div>
             <div className="input-group">
-              <label>Edit Longitude:</label>
-              <input type="text" value={editLocationData.longitude} onChange={(e) => setEditLocationData({ ...editLocationData, longitude: e.target.value })} />
+              <label style = {{fontWeight:"600"}}>Edit Longitude :</label>
+              <input
+                className="data-input"
+                type="text"
+                name="longitude"
+                value={editLocationData.longitude}
+                onChange={handleInputChange}
+                style={{ marginLeft: "5px" }}
+              />
             </div>
             <div className="button-group" style={{ margin: "0 auto", paddingBottom: "10px" }}>
               <button onClick={handleEditLocation}>Edit</button>
@@ -390,9 +478,6 @@ const AdminDashboard = () => {
         )}
       </div>
     );
-
-
-
 
   }
 

@@ -186,6 +186,47 @@
  
 }
 
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Ubah opasitas sesuai kebutuhan */
+  backdrop-filter: blur(2px); /* Ubah nilai blur sesuai kebutuhan */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Pastikan z-index overlay lebih tinggi dari konten lainnya */
+}
+
+.delete-confirmation-overlay {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10000; /* Pastikan z-index overlay lebih tinggi dari konten lainnya */
+}
+
+/* CSS untuk tombol delete dan cancel */
+.delete-confirmation-overlay .button-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.delete-confirmation-overlay .button-group button {
+  margin-left: 10px;
+  border-radius: 5px;
+}
+
+
+
+/* CSS untuk mengatur posisi delete-dropdown-content */
+.delete-dropdown-content {
+  position: relative;
+}
+
 
 /*untuk dropdown delete lokasi*/
 .delete-dropdown-content {
@@ -206,7 +247,69 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
+  height: 200px;
+  margin: 0 auto;
+  padding: 10px;
 }
+
+.button-group{
+  margin-top: -10px;
+  display: flex;
+  width: 200%;
+  margin: 0 auto;
+}
+
+
+.delete-button {
+  margin: 0 auto;
+  position: relative;
+  background-color: #FF6969;
+  color: white;
+  padding: 3px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.delete-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.delete-button:hover {
+  transform: scale(1.1);
+}
+
+.delete-button:hover::before {
+  opacity: 1;
+}
+
+.cancel-button:hover {
+  transform: scale(1.1);
+}
+
+.cancel-button:hover::before {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.cancel-button{
+  transition: transform 0.3s ease;
+}
+
+
+
+
+
 
 .data-row {
   display: flex;
@@ -218,9 +321,7 @@
   margin-right: 5px;
 }
 
-.button-group {
-  grid-column: 1 / -1;
-}
+
 
 /*untuk edit lokasi*/
 .edit-dropdown-content {
@@ -233,7 +334,22 @@
   padding-top: 10px;
   padding: 10px;
   border-radius: 5px;
+} 
+
+.edit-form{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  height: 200px;
+  margin: 0 auto;
+  padding: 10px;
 }
+.data-input{
+  border-radius: 20px !important;
+  padding-left: 10px;
+  opacity: 0.7;
+}
+
 
 
 
