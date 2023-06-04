@@ -505,7 +505,7 @@ function Home(props) {
                       <FontAwesomeIcon icon={faInfoCircle} />
                     </div>
                   </div>
-                  <h3 id="pm25">N/A</h3>
+                  <h3 id="pm25">{pm25 ?? 'N/A'}</h3>
                   <p>µg/m3</p>
                   {pm25OverlayVisible && (
                     <div className="pm25-overlay" onClick={pm25ToggleOverlay} style={{ cursor: "pointer" }}>

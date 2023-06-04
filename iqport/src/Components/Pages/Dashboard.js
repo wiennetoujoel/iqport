@@ -3,6 +3,8 @@ import './Dashboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
+import LiveTable from './LiveTable';
 import SigninForm from '../Pages/SigninForm';
 
 const AdminDashboard = () => {
@@ -23,6 +25,9 @@ const AdminDashboard = () => {
     }
   }, []);
 
+
+
+  //untuk menampilkan tabel seluruh lokasi yang terdaftar di database
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,14 +42,12 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
 
-  const provinces = Array.from(new Set(data.map((item) => item.provinsi))).sort();
+  const provinces = Array.from(new Set(data.map((item) => item.provinsi))).sort((a, b) => a.localeCompare(b));
   const csvData = [];
 
   const generateCSV = (kecamatan) => {
     window.open(`https://aqport.my.id/main/download-csv/${kecamatan}`);
   };
-
-
 
   //Dropdown untuk Tambah Lokasi
   const Dropdown = ({ title, inputs }) => {
@@ -319,12 +322,6 @@ const AdminDashboard = () => {
     const [idAlat, setIdAlat] = useState("");
     const [locationData, setLocationData] = useState(null);
 
-    const [editIdAlat, setEditIdAlat] = useState("");
-    const [editKecamatan, setEditKecamatan] = useState("");
-    const [editKota, setEditKota] = useState("");
-    const [editProvinsi, setEditProvinsi] = useState("");
-    const [editLatitude, setEditLatitude] = useState("");
-    const [editLongitude, setEditLongitude] = useState("");
     const [editLocationData, setEditLocationData] = useState(null);
 
     const handleEditIdAlatChange = (e) => {
@@ -406,7 +403,7 @@ const AdminDashboard = () => {
         {editLocationData && (
           <div className="edit-form">
             <div className="input-group">
-              <label style = {{fontWeight:"600"}}>Edit ID Alat:</label>
+              <label style={{ fontWeight: "600" }}>Edit ID Alat:</label>
               <input
                 className="data-input"
                 type="text"
@@ -417,7 +414,7 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style = {{fontWeight:"600"}}>Edit Kecamatan:</label>
+              <label style={{ fontWeight: "600" }}>Edit Kecamatan:</label>
               <input
                 className="data-input"
                 type="text"
@@ -428,7 +425,7 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style = {{fontWeight:"600"}}>Edit Kota:</label>
+              <label style={{ fontWeight: "600" }}>Edit Kota:</label>
               <input
                 className="data-input"
                 type="text"
@@ -439,7 +436,7 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style = {{fontWeight:"600"}}>Edit Provinsi  :</label>
+              <label style={{ fontWeight: "600" }}>Edit Provinsi  :</label>
               <input
                 className="data-input"
                 type="text"
@@ -450,7 +447,7 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style = {{fontWeight:"600"}}>Edit Latitude  :</label>
+              <label style={{ fontWeight: "600" }}>Edit Latitude  :</label>
               <input
                 className="data-input"
                 type="text"
@@ -461,7 +458,7 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style = {{fontWeight:"600"}}>Edit Longitude :</label>
+              <label style={{ fontWeight: "600" }}>Edit Longitude :</label>
               <input
                 className="data-input"
                 type="text"
@@ -472,14 +469,102 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="button-group" style={{ margin: "0 auto", paddingBottom: "10px" }}>
-              <button onClick={handleEditLocation}>Edit</button>
+              <button onClick={handleEditLocation} className="edit-button">Edit</button>
             </div>
           </div>
         )}
       </div>
     );
-
   }
+
+  //Tombol untuk Tabel seluruh lokasi
+  const [showTable, setShowTable] = useState(false);
+
+  const handleTableDropdown = () => {
+    setShowTable(!showTable);
+    console.log(!showTable)
+  };
+
+  const TableLocation = () => {
+    return (
+      <div className="admin-main-content" style={{ margin: "0 auto", display: "flex", justifyContent: "center" }}>
+        {provinces.map((province) => {
+          const provinceData = data.filter((item) => item.provinsi === province);
+          const cities = Array.from(new Set(provinceData.map((item) => item.kota))).sort();
+          return (
+            <table className="data-table" key={province}>
+              <thead>
+                <tr>
+                  <th colSpan={7} className="judul-provinsi">{province}</th>
+                </tr>
+                <tr className="keterangan">
+                  <th>Kota</th>
+                  <th>Kecamatan</th>
+                  <th>ID Alat</th>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                  <th>CSV</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cities.map((city) => {
+                  const cityData = provinceData.filter((item) => item.kota === city);
+
+                  return cityData.map((item, index) => {
+                    const { lattitude, longitude, id_alat, kecamatan } = item;
+
+
+                    // Tambahkan data ke dalam array CSV
+                    csvData.push({
+                      Provinsi: province,
+                      Kota: city,
+                      Kecamatan: kecamatan,
+                      "ID Lokasi": id_alat,
+                      Latitude: lattitude,
+                      Longitude: longitude,
+                    });
+
+                    return (
+                      <tr key={index}>
+                        {index === 0 && (
+                          <td rowSpan={cityData.length} className="pengaturan-kota">{city}</td>
+                        )}
+                        <td className="pengaturan-kecamatan">{kecamatan}</td>
+                        <td className="pengaturan-alat">{id_alat}</td>
+                        <td className="pengaturan-lattitude">{lattitude}</td>
+                        <td className="pengaturan-longitude">{longitude}</td>
+                        <td>
+                          <FontAwesomeIcon
+                            className="csv-icon"
+                            icon={faFileArrowDown}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => generateCSV(kecamatan)}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  });
+                })}
+              </tbody>
+            </table>
+          );
+        })}
+        {data.length === 0 &&
+          <div className="data-empty">
+            <div className="card">
+              <div className="card-body">
+                Tidak ada data yang tersedia
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    );
+  }
+
+
+
+
 
   //return hasil keseluruhan
   return (
@@ -487,11 +572,13 @@ const AdminDashboard = () => {
       <header>
         <h2 style={{ paddingTop: "75px", color: "white", marginLeft: "20px" }}>Welcome, {username}!</h2>
       </header>
+      <LiveTable />
       <div className="admin-dashboard-content">
         <div className="admin-actions">
           <Dropdown
             className="admin-action"
             title="Tambah Lokasi"
+
             inputs={[
               "ID_Alat",
               "Kecamatan",
@@ -509,80 +596,12 @@ const AdminDashboard = () => {
             Edit Lokasi <i className="fas fa-angle-down" style={{ float: "right", marginTop: "4px" }}></i>
           </button>
           {showEditDropdown && <EditLocationDropdown />}
-        </div>
-        <h4 style={{ margin: "0 auto", display: "flex", color: "white", justifyContent: "center", alignItems: "center", marginBottom: "10px" }}>Tabel Lokasi</h4>
-        <div className="admin-main-content" style={{ margin: "0 auto", display: "flex", justifyContent: "center" }}>
-
-          {provinces.map((province) => {
-            const provinceData = data.filter((item) => item.provinsi === province);
-            const cities = Array.from(new Set(provinceData.map((item) => item.kota))).sort();
-
-            return (
-              <table className="data-table" key={province}>
-                <thead>
-                  <tr>
-                    <th colSpan={7}>{province}</th>
-                  </tr>
-                  <tr>
-                    <th>Kota</th>
-                    <th>Kecamatan</th>
-                    <th>ID Alat</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>CSV</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cities.map((city) => {
-                    const cityData = provinceData.filter((item) => item.kota === city);
-
-                    return cityData.map((item, index) => {
-                      const { lattitude, longitude, id_alat, kecamatan } = item;
-
-
-                      // Tambahkan data ke dalam array CSV
-                      csvData.push({
-                        Provinsi: province,
-                        Kota: city,
-                        Kecamatan: kecamatan,
-                        "ID Lokasi": id_alat,
-                        Latitude: lattitude,
-                        Longitude: longitude,
-                      });
-
-                      return (
-                        <tr key={index}>
-                          {index === 0 && (
-                            <td rowSpan={cityData.length}>{city}</td>
-                          )}
-                          <td>{kecamatan}</td>
-                          <td>{id_alat}</td>
-                          <td>{lattitude}</td>
-                          <td>{longitude}</td>
-                          <td>
-                            <button
-                              className="csv-button"
-                              onClick={() => generateCSV(kecamatan)}
-                            >
-                              CSV
-                            </button>
-                          </td>
-
-                        </tr>
-                      );
-                    });
-                  })}
-                </tbody>
-              </table>
-            );
-          })}
-          {data.length === 0 && <p>Tidak ada data yang tersedia.</p>}
+          <button className="admin-action tabel-lokasi text-left" onClick={handleTableDropdown}>
+            Tabel Lokasi <i className="fas fa-angle-down" style={{ float: "right", marginTop: "4px" }}></i>
+          </button>
+          {showTable && <TableLocation />}
         </div>
       </div>
-
-      <footer>
-        {/* Tambahkan footer jika diperlukan */}
-      </footer>
     </div>
   );
 };

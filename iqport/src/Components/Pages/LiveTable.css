@@ -1,0 +1,83 @@
+.data-empty{
+    color: black;
+    margin-top: 40px;
+}
+
+/*Tabel untuk menampilkan lokasi yang aktif memberikan data*/
+.live-table {
+    margin-left: 20px;
+    width: 50%;
+    border-collapse: collapse;
+    position: relative;
+  
+  }
+  
+  .judul-provinsi {
+    background-color: #DAE8FC !important;
+    position: relative;
+  }
+  
+  .live-table th,
+  .live-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid black;
+  }
+  
+  .live-table th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+  
+  .live-table td {
+    color: #555;
+  }
+  
+  #judul-kolom {
+    background-color: grey;
+  }
+  
+  .live-table tbody tr:first-child {
+    background-color: #fff;
+  }
+  
+  .live-table tbody tr:not(:first-child) {
+    background-color: #fff;
+  }
+  
+  .live-table tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .live-table td:first-child {
+    text-align: center;
+  }
+  
+  .live-table td:nth-child(2),
+  .live-table td:nth-child(3),
+  .live-table td:nth-child(4) {
+    white-space: nowrap;
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  .live-table th:nth-child(1),
+  .live-table td:nth-child(1) {
+    width: 1%;
+  }
+  
+  .live-table th:nth-child(2),
+  .live-table td:nth-child(2) {
+    width: 10%;
+  }
+  
+  .live-table th:nth-child(3),
+  .live-table td:nth-child(3) {
+    width: 15%;
+  }
+  
+  .live-table th:nth-child(4),
+  .live-table td:nth-child(4) {
+    width: 5%;
+  }
+  

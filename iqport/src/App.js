@@ -10,6 +10,7 @@ import LandingPage from './Components/Pages/LandingPage';
 import Dashboard from './Components/Pages/Dashboard';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
+import About from './Components/Pages/About';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<LandingPage />}/>
         <Route path="/main-graph/:kecamatan" element={<MainGraph />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </Router>
   );

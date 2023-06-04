@@ -1,52 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
+import './Footer.css'; // Import the CSS file for styling
 
-function Footer() {
-    //mau bikin 10 koordinat
-  const [koordinat, setKoordinat] = useState(Array(10).fill({ x: 0, y: 0 }));
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // mengambil nilai x dan y dari form
-    const x = e.target.elements.x.value;
-    const y = e.target.elements.y.value;
-    
-    // memperbarui nilai koordinat di state
-    setKoordinat((prevCoordinates) =>
-      prevCoordinates.map((coord, index) =>
-        index === Number(e.target.dataset.index) ? { x, y } : coord
-      )
-    );
-  };
-
+const Footer = () => {
   return (
-    <div>
-      {koordinat.map((coord, index) => (
-        <div
-          key={index}
-          id={`coor${index + 1}`}
-        >
-          <p>X: {coord.x}</p>
-          <p>Y: {coord.y}</p>
+    <footer className="footer">
+      <div className="footer-container">
+        <div className="column">
+          <h4 className="column-title">Kolom Pertama</h4>
+          <ul className="column-list">
+            <li>TA222301018</li>
+            <li>Kelvin Sutirta</li>
+            <li>M. Izzatul Fauzan</li>
+            <li>Wiennetou Joel</li>
+          </ul>
         </div>
-      ))}
-      <form onSubmit={handleSubmit}>
-        {koordinat.map((coord, index) => (
-          <div key={index}>
-            <label htmlFor={`coor${index + 1}`}>Coordinate {index + 1}</label>
-            <br />
-            <label htmlFor={`x${index + 1}`}>X:</label>
-            <input type="number" id={`x${index + 1}`} name="x" />
-            <label htmlFor={`y${index + 1}`}>Y:</label>
-            <input type="number" id={`y${index + 1}`} name="y" />
-            <button type="submit" data-index={index}>
-              Submit
-            </button>
-          </div>
-        ))}
-      </form>
-    </div>
+        <div className="column">
+          <h4 className="column-title">Kolom Kedua</h4>
+          <p className="column-text">Copyright 2023</p>
+        </div>
+        <div className="column">
+          <h4 className="column-title">Kolom Ketiga</h4>
+          <ul className="column-list">
+            <li>Pembimbing:</li>
+            <li>Elvayandri</li>
+            <li>Nana Sutisna</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
   );
-}
+};
 
 export default Footer;
