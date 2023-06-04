@@ -118,13 +118,19 @@
   }
 
   /*untuk smartphone*/
-  @media (max-width: 400px) {
+  @media (max-width: 480px) {
     .search-bar {
       flex-direction: column;
       margin-right: 0;
       margin-left: 10px;
-      position: flex;
-      
+      position: absolute;
+      display: flex;
+      align-items: center;
+      margin-right: 30px;
+      height: 50px;
+      width: 185px;
+      left:180px;
+      transform: translateY(10px);
     }
 
     .search-bar .form {
@@ -133,12 +139,9 @@
       }
   
     .search-bar .form-control {
-      flex-grow: unset;
       margin-bottom: 8px;
       width: 100%;
       height: auto;
-   
-      
     }
   
     .search-bar input {
@@ -146,6 +149,16 @@
       max-width: 105px; /* Menghapus batasan lebar input */
       height: auto;
       margin-left: -15px;
+      font-size: 15px;
+      background-color: white;
+      transform: translateY(20px) translateX(0px);
+      
+    }
+
+    #searchIcon{
+      background-color: white;
+      transform: translateY(15px) translateX(15px);
+      
     }
   
     .search-bar button {

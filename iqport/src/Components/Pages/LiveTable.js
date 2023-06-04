@@ -13,16 +13,20 @@ function LiveTable() {
                 const response = await fetch('https://aqport.my.id/main/status_alat');
                 const jsonData = await response.json();
                 setData(jsonData);
+                console.log(jsonData);
             } catch (error) {
                 console.error('terjadi kesalahan saat mengambil data', error);
             }
         };
+
+        fetchData(); // Panggil fetchData secara langsung saat komponen dimuat
 
         const interval = setInterval(fetchData, 60000); // Pemanggilan setiap 1 menit (60000 milidetik)
 
         // Membersihkan interval saat komponen tidak lagi digunakan
         return () => clearInterval(interval);
     }, []);
+
 
     const provinces = Array.from(new Set(data.map((item) => item.provinsi))).sort((a, b) => a.localeCompare(b));
 
@@ -35,11 +39,10 @@ function LiveTable() {
                 const cities = Array.from(new Set(provinceData.map((item) => item.kota))).sort();
 
                 return (
-                    <table className="live-table" key={province}>
-                        Tabel Alat Yang menyala
+                    <table className="live-table" key={province} style={{marginTop:"40px"}}>
                         <thead>
                             <tr>
-                                <th colSpan={4} className="judul-provinsi">{province}</th>
+                                <th colSpan={3} className="judul-provinsi">{province}</th>
                             </tr>
                             <tr className="keterangan">
                                 <th>Kota</th>
@@ -56,15 +59,12 @@ function LiveTable() {
 
 
                                     return (
-                                        <tr key={index}>
+                                        <tr key={index} >
                                             {index === 0 && (
                                                 <td rowSpan={cityData.length}>{city}</td>
                                             )}
                                             <td>{kecamatan}</td>
                                             <td>{id_alat}</td>
-                                            <td>{lattitude}</td>
-                                            <td>{longitude}</td>
-
                                         </tr>
                                     );
                                 });

@@ -466,7 +466,7 @@ function Home(props) {
         <SearchBar />
       </div>
       <div className="row">
-        <div className="kolom-kiri col">
+        <div className="kolom-kiri col" style ={{minHeight:"600px"}}> 
           <div className="CurrentAQI card mb-3" style={{ backgroundColor: "rgb(236, 242, 255)" }}>
             <div className="card-body col d-flex align-items-center">
               <div id="nilaiIspu" className="nilai-ISPU card-body d-flex align-items-center justify-content-center" style={{ backgroundColor: "red", maxWidth: "100px", borderRadius: "10px" }}>
@@ -850,7 +850,7 @@ function Home(props) {
           </div>*/}
           <div className="rank-who row card-body" style={{ marginTop: "20px", marginLeft: "10px" }}>
             <div className="col-md">
-              <div className="ranking-list card" style={{ minHeight : " 180px",width: "580px", backgroundColor: "rgb(236, 242, 255)", marginBottom :"20px" }}>
+              <div className="ranking-list card" style={{ minHeight : " 146px",width: "580px", backgroundColor: "rgb(236, 242, 255)", marginBottom :"20px" }}>
                 <div className="card-body">
                   <h5>Kualitas Udara Kota Bandung setiap stasiun</h5>
                   <ol>

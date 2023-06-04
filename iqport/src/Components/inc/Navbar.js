@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
@@ -104,7 +104,7 @@ function Navbar() {
       return (
         <div className="d-flex align-items-center mr-5">
           <button
-            className="nav-link"
+            className="nav-link admin-link"
             onClick={openOverlay}
             style={{ border: "0", background: "transparent" }}
           >
@@ -120,7 +120,7 @@ function Navbar() {
     if (loggedIn.loggedIn) {
       return (
         <li className="nav-item">
-          <Link to="/Dashboard" className="nav-link dashboard" style={{ color: "white" }}>
+          <Link to="/Dashboard" className="nav-link dashboard" style={{ color: "white" }} onClick={handleNavItemClick}>
             Dashboard
           </Link>
         </li>
@@ -134,32 +134,33 @@ function Navbar() {
     navbar.classList.toggle("navbar-scrolled", window.scrollY > 0);
   });
 
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+
+  const handleNavItemClick = () => {
+    setIsNavbarOpen(false); // Menutup navbar collapse saat salah satu nav-link dipilih
+  };
 
   return (
-    <nav className="navbar fixed-top navbar-expand-lg navbar-dark p-md-3 transparent-navbar">
+    <nav className="navbar fixed-top navbar-expand-lg navbar-dark p-md-3 navbar-transparent">
       <Link to="/" className="navbar-brand">
         <img src={logo} alt="AQPort" width="50" height="35" />
       </Link>
       <button
         className="navbar-toggler"
         type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+        onClick={() => setIsNavbarOpen(!isNavbarOpen)}
       >
-        <span className="navbar-toggler-icon"></span>
+        <i className="fas fa-bars"></i>
       </button>
 
-      <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+      <div className={`collapse navbar-collapse justify-content-end ${isNavbarOpen ? 'show' : ''}`}>
         <ul className="navbar-nav mr-auto">
-          <li className="nav-item active">
+          <li className="nav-item active" onClick={handleNavItemClick}>
             <Link to="/" className="nav-link">
               Home
             </Link>
           </li>
-          <li className="nav-item">
+          <li className="nav-item" onClick={handleNavItemClick}>
             <Link to="/About" className="nav-link" style={{ color: "white" }}>
               About Us
             </Link>
@@ -170,12 +171,13 @@ function Navbar() {
       </div>
       {showOverlay && (
         <div className={`overlay ${showOverlay ? 'active' : ''}`} onClick={closeOverlay}>
-          <div className="overlay-content" >
+          <div className="overlay-content">
             <SigninForm handleLogin={handleLogin} />
           </div>
         </div>
       )}
     </nav>
+
   );
 }
 
