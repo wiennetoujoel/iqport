@@ -1,3 +1,30 @@
-.cerita-ta018{
-    background-color: black;
-}
+
+.about-container{
+    background: url('../images/nightsky.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height:100vh;
+    overflow-x:hidden;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slick-dots li button:before {
+    color: rgba(255, 255, 255, 0.85); /* Warna default dengan opacity 0.7 */
+  }
+  
+  .slick-dots li.slick-active button:before {
+    color: rgba(255, 255, 255, 1); /* Warna saat aktif dengan opacity 1 */
+  }
+.slider {
+    width: 40%;
+    margin: 0 auto;
+   
+    
+  }
+  
+  .slider img {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 5px;
+  }

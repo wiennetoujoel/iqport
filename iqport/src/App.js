@@ -20,7 +20,7 @@ function App() {
         <Route path="/" element={<LandingPage />}/>
         <Route path="/main-graph/:kecamatan" element={<MainGraph />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/About" element={<About />} />
       </Routes>
     </Router>
   );
