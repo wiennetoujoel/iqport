@@ -676,6 +676,15 @@
     width: 100%;
     max-width: 342px;
   }
+  .daftar-ranking{
+    font-size: 14px;
+  }
+
+  .nilai-ranking{
+    font-size: 10px;
+    font-weight: 400;
+    padding: 5px;
+  }
 
   .card-deck-wrapper {
     margin-bottom: -10px !important;

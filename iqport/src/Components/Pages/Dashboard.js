@@ -145,8 +145,9 @@ const AdminDashboard = () => {
             <form onSubmit={handleSubmit} className="col">
               {inputs.map((input, index) => {
                 return (
-                  <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                  <div key={index} className = "masukan-tambah" style={{ display: "flex", flexDirection: "column" }}>
                     <input
+                      className="tambah-input"
                       type="text"
                       placeholder={input.split("_").join(" ")}
                       name={input.toLowerCase()}
@@ -259,27 +260,27 @@ const AdminDashboard = () => {
           <div className="location-data">
             <div className="data-row label-delete-alat">
               <p className="data-label ">ID Alat:</p>
-              <p className = "value-data">{locationData.id_alat}</p>
+              <p className="value-data">{locationData.id_alat}</p>
             </div>
             <div className="data-row label-delete-kecamatan">
               <p className="data-label ">Kecamatan:</p>
-              <p className = "value-data">{locationData.kecamatan}</p>
+              <p className="value-data">{locationData.kecamatan}</p>
             </div>
             <div className="data-row label-delete-kota">
               <p className="data-label ">Kota:</p>
-              <p className = "value-data">{locationData.kota}</p>
+              <p className="value-data">{locationData.kota}</p>
             </div>
             <div className="data-row label-delete-provinsi">
               <p className="data-label">Provinsi:</p>
-              <p className = "value-data">{locationData.provinsi}</p>
+              <p className="value-data">{locationData.provinsi}</p>
             </div>
             <div className="data-row label-delete-latitude">
               <p className="data-label">Latitude:</p>
-              <p className = "value-data">{locationData.lattitude}</p>
+              <p className="value-data">{locationData.lattitude}</p>
             </div>
             <div className="data-row label-delete-longitude">
               <p className="data-label">Longitude:</p>
-              <p className = "value-data">{locationData.longitude}</p>
+              <p className="value-data">{locationData.longitude}</p>
             </div>
             <div className="button-group button-delete">
               <button
@@ -572,7 +573,7 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard col">
       <header>
-        <h2 style={{ paddingTop: "75px", color: "white", marginLeft: "20px" }}>Welcome, {username}!</h2>
+        <h2 className ="judul-dashboard" style={{ paddingTop: "75px", color: "white", marginLeft: "20px" }}>Welcome, {username}!</h2>
       </header>
       <LiveTable />
       <div className="admin-dashboard-content">

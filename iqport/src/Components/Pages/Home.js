@@ -865,7 +865,7 @@ function Home(props) {
                   <h5>Kualitas Udara Kota Bandung setiap stasiun</h5>
                   <ol>
                     {rankingData.map((item, index) => (
-                      <li key={index}>
+                      <li key={index} className = "daftar-ranking">
                         {item.lokasi}
                         <span
                           id={`ranking-${index}`}
