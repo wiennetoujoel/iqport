@@ -70,7 +70,12 @@
     max-width: 350px;
     height: 600px;
     margin-bottom: 0;
-    padding-bottom: -10px;
+    height: 450px!important;
+    transform: translateY(-100px);
+  }
+
+  #clock{
+    transform: translateY(-100px);
   }
 
   .graph-card h5 {

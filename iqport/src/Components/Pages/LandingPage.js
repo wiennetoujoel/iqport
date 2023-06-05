@@ -15,7 +15,9 @@ function LandingPage() {
         <div>
             <div className="background">
                 <div className="d-flex align-items-center" style={{ marginTop: "50px" }}>
-                    <h2 style={{ color: "white", opacity: "0.95", marginTop: "10px", marginLeft: "15px" }}> Explore Your Air Quality </h2>
+                    <h2 className="title" style={{ color: "white", opacity: "0.95", marginTop: "10px", marginLeft: "15px" }}>
+                        Explore Your <span className="break-line">Air Quality</span>
+                    </h2>
                     <SearchBar />
                 </div>
             </div>

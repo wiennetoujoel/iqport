@@ -93,7 +93,7 @@
   transition: left 0.3s ease-in-out;
   z-index: 9999;
   border-radius: 5px;
-  
+
 }
 
 .pm25-overlay-content {
@@ -199,6 +199,7 @@
 .co-header .info-icon {
   cursor: pointer;
 }
+
 .co-overlay {
   display: block;
   position: absolute;
@@ -239,7 +240,7 @@
 .nilai-ranking {
 
   width: 100px;
-  line-height: 0.01 ;
+  line-height: 0.01;
   padding: 5px;
   text-align: center;
   border-radius: 10px;
@@ -253,7 +254,7 @@
 }
 
 .ranking-list li {
-  
+
   margin-bottom: 10px;
 }
 
@@ -420,6 +421,17 @@
   height: 83%;
 
 }
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer !important;
+  color: #ffffff;
+  font-size: 20px;
+  z-index: 9999999;
+}
+
 
 /*Untuk bar pengukuran PM10 */
 
@@ -591,12 +603,16 @@
     height: auto;
     color: white;
   }
-  .kolom-kanan .penjelasan-polutan{
+
+  .kolom-kanan .penjelasan-polutan {
     margin: 20px auto;
     max-width: 345px;
   }
 
-  .ISPU, .PM25, .PM10, .CO {
+  .ISPU,
+  .PM25,
+  .PM10,
+  .CO {
     margin: 25px !important;
   }
 
@@ -624,14 +640,15 @@
   }
 
   .scale-label {
-    max-width: 74px; /* Ubah lebar maksimum sesuai kebutuhan */
+    max-width: 74px;
+    /* Ubah lebar maksimum sesuai kebutuhan */
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
     text-align: center;
     font-size: 6px !important;
-  
+
   }
 
   .scale-label-line1 {
@@ -646,18 +663,268 @@
     width: 100%;
   }
 
-  .rank-who{
+  .rank-who {
     margin-top: 0 !important;
-    }
-
-  .col-md, .anjuranWHO{
-    margin:20px 0;
   }
-  
+
+  .col-md,
+  .anjuranWHO {
+    margin: 20px 0;
+  }
+
   .ranking-list.card {
     width: 100%;
     max-width: 342px;
   }
+
+  .card-deck-wrapper {
+    margin-bottom: -10px !important;
+  }
+
+  .rank-who {
+    display: flex;
+    transform: translateY(-60px);
+  }
+
+  .anjuranWHO {
+    transform: translateY(-20px);
+  }
+
+  /*untuk overlay more info*/
+  .pm25-overlay {
+    transform: translateX(-115px);
+    z-index: 999;
+  }
+
+  .pm25-0-value {
+    top: -15px !important;
+    left: 7px !important;
+  }
+
+  .pm25-0 {
+    top: -28px !important;
+    left: 25px !important;
+  }
+
+  .pm25-12-value {
+    top: 0px !important;
+    left: -9px !important;
+  }
+
+  .pm25-12 {
+    top: -13px !important;
+    left: 33px !important;
+  }
+
+  .pm25-35-label {
+    top: -9px !important;
+    left: 80px !important;
+    position: relative;
+
+  }
+
+  .pm25-35-value {
+    top: 5px !important;
+    left: 38px !important;
+  }
+
+  .pm25-35-line1 {
+    top: 1px !important;
+    left: -29px !important;
+  }
+
+  .pm25-35-line2 {
+    top: 0px !important;
+    left: -3px !important;
+  }
+
+  .pm25-55-value{
+    top: 4px !important;
+    left: 38px !important;
+  }
+
+  .pm25-55{
+    top: -9px !important;
+    left: 64px !important;
+  }
+
+  
+  .pm25-150-value{
+    top: 15px !important;
+    left: 32px !important;
+  }
+
+  .pm25-150{
+    top: 2px !important;
+    left: 77px !important;
+  }
+
+  .pm25-250-value{
+    top: 30px !important;
+    left: 19px !important;
+  }
+
+  .pm25-250{
+    top: 17px !important;
+    left: 44px !important;
+  }
+
+  .pm10-overlay {
+    transform: translateX(-215px);
+    z-index: 999;
+  }
+
+  .pm10-0-value {
+    top: -15px !important;
+    left: 7px !important;
+  }
+
+  .pm10-0 {
+    top: -28px !important;
+    left: 25px !important;
+  }
+
+  .pm10-55-value {
+    top: 0px !important;
+    left: -9px !important;
+  }
+
+  .pm10-55 {
+    top: -13px !important;
+    left: 32px !important;
+  }
+
+  .pm10-155-label {
+    top: -10px !important;
+    left: 78px !important;
+    position: relative;
+  }
+
+  .pm10-155-value {
+    top: 5px !important;
+    left: 33px !important;
+  }
+
+  .pm10-155-line1 {
+    top: 1px !important;
+    left: -28px !important;
+  }
+
+  .pm10-155-line2 {
+    top: 0px !important;
+    left: -2px !important;
+  }
+
+  .pm10-255-value{
+    top: 5px !important;
+    left: 33px !important;
+  }
+
+  .pm10-255{
+    top: -8px !important;
+    left: 64px !important;
+  }
+  
+  .pm10-355-value{
+    top: 15px !important;
+    left: 32px !important;
+  }
+
+  .pm10-355{
+    top: 2px !important;
+    left: 77px !important;
+  }
+
+  .pm10-425-value{
+    top: 30px !important;
+    left: 19px !important;
+  }
+
+  .pm10-425{
+    top: 17px !important;
+    left: 43px !important;
+  }
+
+  .co-overlay {
+    transform: translateX(-315px);
+    z-index: 999;
+  }
+
+  .co-0-value {
+    top: -15px !important;
+    left: 7px !important;
+  }
+
+  .co-0 {
+    top: -28px !important;
+    left: 25px !important;
+  }
+
+  .co-45-value {
+    top: 0px !important;
+    left: -12px !important;
+  }
+
+  .co-45 {
+    top: -13px !important;
+    left: 33px !important;
+  }
+
+  .co-95-label {
+    top: -10px !important;
+    left: 80px !important;
+    position: relative;
+
+  }
+
+  .co-95-value {
+    top: 5px !important;
+    left: 35px !important;
+  }
+
+  .co-95-line1 {
+    top: 1px !important;
+    left: -29px !important;
+  }
+
+  .co-95-line2 {
+    top: 0px !important;
+    left: -3px !important;
+  }
+
+  .co-125-value{
+    top: 4px !important;
+    left: 29px !important;
+  }
+
+  .co-125{
+    top: -9px !important;
+    left: 64px !important;
+  }
+
+  
+  .co-155-value{
+    top: 15px !important;
+    left: 29px !important;
+  }
+
+  .co-155{
+    top: 2px !important;
+    left: 77px !important;
+  }
+
+  .co-305-value{
+    top: 30px !important;
+    left: 17px !important;
+  }
+
+  .co-305{
+    top: 17px !important;
+    left: 44px !important;
+  }
+
+
+
 
 
 

@@ -43,6 +43,7 @@
   .customgraph {
     margin: 0 auto;
     max-width: 355px !important; 
+    transform: translateY(-100px);
   }
   
 

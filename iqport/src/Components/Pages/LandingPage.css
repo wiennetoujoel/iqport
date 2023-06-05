@@ -5,4 +5,14 @@
     height:100vh;
     overflow-y:hidden;
   }
+
+  .break-line {
+    display: inline-block; /* Default style, untuk tampilan desktop */
+  }
   
+  @media (max-width: 480px) {
+    .title {
+        display: flex;
+        flex-direction: column;
+    }
+}

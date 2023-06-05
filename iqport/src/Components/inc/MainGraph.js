@@ -238,7 +238,7 @@ function MainGraph() {
             case "biru":
               return "#C0DBEA";
             default:
-              return "grey";
+              return "white";
           }
         });
 
@@ -277,7 +277,7 @@ function MainGraph() {
                 }
               }]
             },
-          
+
           }
         });
       });
@@ -320,7 +320,7 @@ function MainGraph() {
     <div className="Main-Container" style={{ paddingTop: "20px" }}>
       <Home kecamatan={kecamatan} />
       <div className="graph-card card" style={{ margin: "30px auto", marginBottom: "0", height: "570px", backgroundColor: "rgb(236, 242, 255)  " }}>
-        <h5 className = "title-card" style={{ margin: "0 auto", marginTop: "10px" }}> Historic Air Quality Graphic for {kecamatan} </h5>
+        <h5 className="title-card" style={{ margin: "0 auto", marginTop: "10px" }}> Historic Air Quality Graphic for {kecamatan} </h5>
         <div id="button-container" style={{ marginTop: "20px" }}  >
           <button className="button" id="ispuButton" onClick={handleParamClick}>ISPU</button>
           <button className="button" id="pm25Button" onClick={handleParamClick}>PM2.5</button>
