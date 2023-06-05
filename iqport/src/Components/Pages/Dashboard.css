@@ -4,8 +4,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  min-height: 100vh;
-  
+  min-height: 100vh
 }
 
 
@@ -16,7 +15,15 @@
   width: 50%;
   border-collapse: collapse;
   position: relative;
+  margin-bottom: 20px;
+  transform: translateX(-10px);
+}
 
+.admin-main-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100% !important;
 }
 
 .judul-provinsi {
@@ -86,14 +93,14 @@
   width: 5%;
 }
 
-.pengaturan-kota{
+.pengaturan-kota {
   font-size: 14px;
 }
 
-.pengaturan-kecamatan, 
+.pengaturan-kecamatan,
 .pengaturan-alat,
 .pengaturan-lattitude,
-.pengaturan-longitude{
+.pengaturan-longitude {
   font-size: 12px;
 }
 
@@ -201,6 +208,7 @@
   color: black;
 
 }
+
 /*untuk delete location*/
 .overlay-container {
   position: fixed;
@@ -216,7 +224,7 @@
   align-items: center;
   justify-content: center;
   z-index: 9999;
- 
+
 }
 
 .delete-confirmation-overlay {
@@ -225,7 +233,7 @@
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 10000;
-  
+
 }
 
 /* CSS untuk tombol delete dan cancel */
@@ -374,11 +382,11 @@
   color: white;
   background-color: #3282B8;
   border: none;
-  transition : transform 0.3s ease
+  transition: transform 0.3s ease
 }
 
 .edit-button::before {
-  content : "";
+  content: "";
   position: absolute;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 5px;
@@ -386,7 +394,7 @@
   transition: opacity 0.3s ease;
 }
 
-.edit-button:hover{
+.edit-button:hover {
   transform: scale(1.1);
 }
 
@@ -399,14 +407,31 @@
     padding: 20px;
   }
 
+  /* untuk tabel seluruh lokasi terdaftar*/
+
+  .data-table {
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 20px;
+  }
+
+  .admin-main-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100% !important;
+  }
+
   .data-table th {
-    font-size: 12px;
+    font-size: 1px;
     width: 100px;
+    padding: 2px;
   }
 
   /* Mengatur font-size pada sel data tabel */
   .data-table td {
-    font-size: 12px;
+    font-size: 8px;
+    padding: 1px;
   }
 
   /* Mengatur lebar kolom pada tabel */
@@ -470,8 +495,167 @@
   .data-table th {
     font-size: 14px;
   }
+
   /* Mengatur font-size pada sel data tabel */
   .data-table td {
     font-size: 14px;
   }
+
+  .pengaturan-kota {
+    font-size: 10px !important;
+  }
+
+  .keterangan th {
+    font-size: 10px !important;
+  }
+
+  .pengaturan-kecamatan,
+  .pengaturan-alat,
+  .pengaturan-lattitude,
+  .pengaturan-longitude {
+    font-size: 8px !important;
+  }
+
+  /*untuk seluruh tombol fitur dashboard*/
+  .admin-action {
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+
+  .dropdown-container {
+    width: 100%;
+  }
+
+  .dropdown-button {
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+
+  /*untuk edit lokasi*/
+  .edit-dropdown-content {
+    width: 100% !important;
+    transform: translateX(-16px);
+
+    .masukin-id {
+      width: 300px;
+
+      .label {
+        font-size: 15px !important;
+        transform: translateX(5px) translateY(3px);
+      }
+
+      .input-edit {
+        margin-bottom: 5px;
+        width: 50%;
+      }
+
+      .check-edit {
+        height: 90%;
+      }
+    }
+
+    .edit-form {
+      width: 41%;
+      height: auto;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateX(13px);
+
+      .input-group {
+
+        margin: 0 auto;
+        margin-bottom: 0px;
+        transform: translateX(-100px);
+
+        .label-input {
+          font-size: 14px;
+          display: flex;
+        }
+
+        .data-input {
+          width: 200px;
+          font-size: 14px;
+        }
+
+        .input-id {
+          transform: translateX(-18px);
+        }
+
+        .input-kecamatan {
+          transform: translateX(-3px);
+        }
+
+        .input-kota {
+          transform: translateX(-34px);
+        }
+
+        .input-provinsi {
+          transform: translateX(-21px);
+        }
+
+        .input-latitude {
+          transform: translateX(-5px);
+        }
+
+        .input-longitude {
+          transform: translateX(-5px);
+        }
+      }
+
+      .button-group {
+        margin: 0 auto;
+        transform: translateX(-65px);
+      }
+    }
+  }
+
+  /*untuk hapus lokasi*/
+  .delete-dropdown-content {
+    width: 100% !important;
+    transform: translateX(-16px);
+
+    .input-group {
+      width: 300px !important;
+      transform: translateX(10px);
+
+      .label-delete {
+        font-size: 15px !important;
+        display: flex;
+      }
+
+      .input-delete {
+        margin-bottom: 5px;
+        width: 50%;
+      }
+
+      .check-delete {
+        height: 90%;
+      }
+    }
+
+    .location-data {
+      width: 41%;
+      height: auto;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+      transform: translateX(-86px);
+
+      .data-row {
+        font-size: 14px;
+
+        .value-data {
+          white-space: nowrap !important;
+         
+        }
+
+      }
+    }
+
+
+  }
+
 }

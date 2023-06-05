@@ -250,36 +250,36 @@ const AdminDashboard = () => {
 
     return (
       <div className="delete-dropdown-content">
-        <div className="input-group">
-          <label>ID Alat:</label>
-          <input type="text" value={idAlat} onChange={handleIdAlatChange} style={{ marginLeft: "10px", borderRadius: "5px" }} />
-          <button onClick={handleCheckLocation} style={{ marginLeft: "10px", borderRadius: "5px" }}>Check</button>
+        <div className="input-group masuk-id">
+          <label className="label-delete">ID Alat:</label>
+          <input className="input-delete" type="text" value={idAlat} onChange={handleIdAlatChange} style={{ marginLeft: "10px", borderRadius: "5px" }} />
+          <button className="check-delete" onClick={handleCheckLocation} style={{ marginLeft: "10px", borderRadius: "5px" }}>Check</button>
         </div>
         {locationData && (
           <div className="location-data">
-            <div className="data-row">
-              <p className="data-label">ID Alat:</p>
-              <p>{locationData.id_alat}</p>
+            <div className="data-row label-delete-alat">
+              <p className="data-label ">ID Alat:</p>
+              <p className = "value-data">{locationData.id_alat}</p>
             </div>
-            <div className="data-row">
-              <p className="data-label">Kecamatan:</p>
-              <p>{locationData.kecamatan}</p>
+            <div className="data-row label-delete-kecamatan">
+              <p className="data-label ">Kecamatan:</p>
+              <p className = "value-data">{locationData.kecamatan}</p>
             </div>
-            <div className="data-row">
-              <p className="data-label">Kota:</p>
-              <p>{locationData.kota}</p>
+            <div className="data-row label-delete-kota">
+              <p className="data-label ">Kota:</p>
+              <p className = "value-data">{locationData.kota}</p>
             </div>
-            <div className="data-row">
+            <div className="data-row label-delete-provinsi">
               <p className="data-label">Provinsi:</p>
-              <p>{locationData.provinsi}</p>
+              <p className = "value-data">{locationData.provinsi}</p>
             </div>
-            <div className="data-row">
+            <div className="data-row label-delete-latitude">
               <p className="data-label">Latitude:</p>
-              <p>{locationData.lattitude}</p>
+              <p className = "value-data">{locationData.lattitude}</p>
             </div>
-            <div className="data-row">
+            <div className="data-row label-delete-longitude">
               <p className="data-label">Longitude:</p>
-              <p>{locationData.longitude}</p>
+              <p className = "value-data">{locationData.longitude}</p>
             </div>
             <div className="button-group button-delete">
               <button
@@ -385,15 +385,17 @@ const AdminDashboard = () => {
 
     return (
       <div className="edit-dropdown-content">
-        <div className="input-group">
-          <label >ID Alat:</label>
+        <div className="input-group masukin-id">
+          <label className="label">ID Alat:</label>
           <input
+            className="input-edit"
             type="text"
             value={idAlat}
             onChange={handleEditIdAlatChange}
             style={{ marginLeft: "10px", borderRadius: "5px" }}
           />
           <button
+            className="check-edit"
             onClick={handleCheckLocation}
             style={{ marginLeft: "10px", borderRadius: "5px" }}
           >
@@ -403,9 +405,9 @@ const AdminDashboard = () => {
         {editLocationData && (
           <div className="edit-form">
             <div className="input-group">
-              <label style={{ fontWeight: "600" }}>Edit ID Alat:</label>
+              <label className="label-input " style={{ fontWeight: "600" }}>Edit ID Alat:</label>
               <input
-                className="data-input"
+                className="data-input input-id"
                 type="text"
                 name="id_alat"
                 value={editLocationData.id_alat}
@@ -414,9 +416,9 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style={{ fontWeight: "600" }}>Edit Kecamatan:</label>
+              <label className="label-input " style={{ fontWeight: "600" }}>Edit Kecamatan:</label>
               <input
-                className="data-input"
+                className="data-input input-kecamatan"
                 type="text"
                 name="kecamatan"
                 value={editLocationData.kecamatan}
@@ -425,9 +427,9 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style={{ fontWeight: "600" }}>Edit Kota:</label>
+              <label className="label-input " style={{ fontWeight: "600" }}>Edit Kota:</label>
               <input
-                className="data-input"
+                className="data-input input-kota"
                 type="text"
                 name="kota"
                 value={editLocationData.kota}
@@ -436,9 +438,9 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style={{ fontWeight: "600" }}>Edit Provinsi  :</label>
+              <label className="label-input " style={{ fontWeight: "600" }}>Edit Provinsi  :</label>
               <input
-                className="data-input"
+                className="data-input input-provinsi"
                 type="text"
                 name="provinsi"
                 value={editLocationData.provinsi}
@@ -447,9 +449,9 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style={{ fontWeight: "600" }}>Edit Latitude  :</label>
+              <label className="label-input " style={{ fontWeight: "600" }}>Edit Latitude  :</label>
               <input
-                className="data-input"
+                className="data-input input-latitude"
                 type="text"
                 name="lattitude"
                 value={editLocationData.lattitude}
@@ -458,9 +460,9 @@ const AdminDashboard = () => {
               />
             </div>
             <div className="input-group">
-              <label style={{ fontWeight: "600" }}>Edit Longitude :</label>
+              <label className="label-input " style={{ fontWeight: "600" }}>Edit Longitude :</label>
               <input
-                className="data-input"
+                className="data-input input-longitude"
                 type="text"
                 name="longitude"
                 value={editLocationData.longitude}
