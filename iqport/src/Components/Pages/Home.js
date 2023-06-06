@@ -115,7 +115,6 @@ function Home(props) {
 
 
           console.log(`Latency Live Pollutant: ${latency} milliseconds`);
-          console.log(`Waktu realtime ${encodedDateStr} dengan kecamatan ${kecamatan}`)
 
           setPm25(data[0].rata_konsentrasi_pm25);
           setPm10(data[0].rata_konsentrasi_pm10);
@@ -192,12 +191,13 @@ function Home(props) {
   const [nilaiIspuElements, setNilaiIspuElements] = useState([]);
 
   const fetchRankingData = async () => {
+    const startTime = performance.now();
     try {
       const liveUrl = `https://aqport.my.id/main/5/live_ranking/${encodedDateStr}`;
       const response = await fetch(liveUrl);
       const data = await response.json();
 
-      const startTime = performance.now();
+
 
       const updatedRankingData = data.map((item, index) => {
         const ispu_ranking = item.rata_nilai_ispu;
@@ -223,11 +223,6 @@ function Home(props) {
           ispuColor = "#000000"; // Default color for other cases
         }
 
-        const endTime = performance.now(); // Waktu akhir
-        const latency = endTime - startTime; // Perhitungan latency
-
-        console.log(`Latency Live Ranking: ${latency} milliseconds`);
-
         return {
           ...item,
           ispuColor,
@@ -240,6 +235,7 @@ function Home(props) {
         const ispu_ranking = updatedRankingData[index].rata_nilai_ispu;
         const ispuColor = updatedRankingData[index].ispuColor;
         const ispuTextColor = ispuColor === "#000000" ? "#ffffff" : "#000000";
+        
 
         return {
           id: `ranking-${index}`,
@@ -248,6 +244,11 @@ function Home(props) {
           ispuTextColor,
         };
       });
+
+      const endTime = performance.now(); // Waktu akhir
+      const latency = endTime - startTime; // Perhitungan latency
+
+      console.log(`Latency Live Ranking: ${latency} milliseconds`);
 
       setRankingData(updatedRankingData);
       setNilaiIspuElements(updatedNilaiIspuElements);

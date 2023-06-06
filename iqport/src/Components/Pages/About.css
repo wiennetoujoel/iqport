@@ -19,7 +19,6 @@
     width: 40%;
     margin: 0 auto;
    
-    
   }
   
   .slider img {
@@ -27,4 +26,11 @@
     height: auto;
     margin: 0 auto;
     border-radius: 5px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .slider {
+      width: 80%;
+      margin: 0 auto;
+    }
   }
