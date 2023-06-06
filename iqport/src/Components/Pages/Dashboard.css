@@ -399,7 +399,7 @@
 }
 
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 800px) {
 
   /* Mengatur lebar dan padding pada admin-dashboard */
   .admin-dashboard {
@@ -411,7 +411,6 @@
 
   .data-table {
     width: 100%;
-    max-width: 480px;
     margin-bottom: 20px;
   }
 
@@ -424,7 +423,6 @@
 
   .data-table th {
     font-size: 1px;
-    width: 100px;
     padding: 2px;
   }
 

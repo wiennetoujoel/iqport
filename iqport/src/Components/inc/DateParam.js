@@ -81,8 +81,8 @@ function DateParam(props) {
             style={{ margin: "0 auto", maxWidth: "1000px", backgroundColor: "rgb(236, 242, 255)" }}
         >
             <div className="title-card" style={{ margin: "0 auto", marginTop: "20px" }}>
-                <h5 className="title-line1">Historic Air Quality Custom Graphic</h5>
-                <h5 className="title-line2">for {kecamatan}</h5>
+                <h5 className="title-line1">Grafik Historis Custom untuk</h5>
+                <h5 className="title-line2"> {kecamatan}</h5>
             </div>
             <div className="row">
                 <div className="col">

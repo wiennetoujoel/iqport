@@ -254,8 +254,22 @@
 }
 
 .ranking-list li {
-
   margin-bottom: 10px;
+}
+
+.rank-who{
+  width: 100%;
+  display: flex;
+ 
+  .ranking-list{
+    width: 90%!important;
+    margin: 0 auto;
+    
+  }
+  .anjuranWHO{
+    width: 90%!important;
+    margin: 0 auto !important;
+  }
 }
 
 
@@ -595,7 +609,7 @@
 
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 800px) {
   .home-container .informasiKota {
     /* Modifikasi CSS Anda di sini */
     /* Contoh: */
@@ -659,44 +673,42 @@
     display: block;
   }
 
-  .col-md {
+  .rank-who{
+    margin: 0 auto!important;
+    margin-top: 0;
     width: 100%;
-  }
-
-  .rank-who {
-    margin-top: 0 !important;
-  }
-
-  .col-md,
-  .anjuranWHO {
-    margin: 20px 0;
-  }
-
-  .ranking-list.card {
-    width: 100%;
-    max-width: 342px;
-  }
-  .daftar-ranking{
-    font-size: 14px;
-  }
-
-  .nilai-ranking{
-    font-size: 10px;
-    font-weight: 400;
-    padding: 5px;
+    display: flex;
+   
+    transform: translateY(-60px);
+   
+    .ranking-list{
+      width: 90%!important;
+      margin: 0 auto;
+      display: inline-block;
+      .card-body{
+        .daftar-ranking{
+          font-size: 12px;
+          
+          width: 100%;
+  
+        }
+        .nilai-ranking{
+          font-size: 10px;
+          font-weight: 400;
+          padding: 10px;
+        
+        }
+      }
+      
+    }
+    .anjuranWHO{
+      width: 90%!important;
+      margin: 0 auto !important;
+    }
   }
 
   .card-deck-wrapper {
     margin-bottom: -10px !important;
-  }
-
-  .rank-who {
-    display: flex;
-    transform: translateY(-60px);
-  }
-
-  .anjuranWHO {
-    transform: translateY(-20px);
   }
 
   /*untuk overlay more info*/

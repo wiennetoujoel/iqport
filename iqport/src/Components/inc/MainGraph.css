@@ -1,6 +1,6 @@
 .graph-card {
   margin: 0 auto;
-  width: 1000px;
+  width: 80%;
   display: flex;
 
 }
@@ -13,7 +13,6 @@
   align-items: center;
   max-width: 800px;
   margin: 0 auto;
-
 }
 
 .graph {
@@ -54,28 +53,36 @@
   transition: background-color 0.3s, color 0.3s;
   border: 1.5px solid black;
 }
+.param-button.active {
+  background-color: white;
+  color: black;
+}
 
 .button:hover {
   background-color: #333;
   color: #fff;
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 800px) {
   .Main-Container {
     padding-top: 10px;
   }
 
   .graph-card {
-    margin: 20px auto;
-    max-width: 350px;
-    height: 600px;
+    margin: 0 auto;
+    width: 100%;
     margin-bottom: 0;
-    height: 450px!important;
-    transform: translateY(-100px);
+    transform: translateY(-50px);
+
+    .graph-container{
+      width: 90%;
+      margin: 0 auto;
+      height: 50%;
+    }
   }
 
   #clock{
-    transform: translateY(-100px);
+    transform: translateY(-50px);
   }
 
   .graph-card h5 {

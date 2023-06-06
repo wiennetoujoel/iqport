@@ -38,6 +38,7 @@ function Home(props) {
   const [co, setCo] = useState(null);
   const [temperatur, setTemperatur] = useState(null);
   const [kelembapan, setKelembapan] = useState(null);
+  const [timestamp, setTimestamp] = useState(null);
 
   {/*const untuk nilai ispu */ }
   const [ispu, setIspu] = useState(null);
@@ -122,7 +123,20 @@ function Home(props) {
           setTemperatur(data[0].rata_temperatur);
           setKelembapan(data[0].rata_kelembapan);
           setIspu(data[0].nilai_ispu);
+
           setLastUpdate(getCurrentTime());
+
+          const rawDateTime = data[0].waktu;
+          const dateTime = new Date(rawDateTime);
+
+          // Kurangi 7 jam dari nilai jam
+          dateTime.setHours(dateTime.getHours() - 7);
+
+          const formattedDateTime = `${dateTime.getFullYear()}-${padZero(dateTime.getMonth() + 1)}-${padZero(dateTime.getDate())} ${padZero(dateTime.getHours())}:${padZero(dateTime.getMinutes())}:${padZero(dateTime.getSeconds())}`;
+
+          setTimestamp(formattedDateTime);
+
+
         })
         .catch(error => {
           console.log(error);
@@ -138,6 +152,13 @@ function Home(props) {
       clearInterval(interval); // Clean up interval on component unmount
     };
   }, [encodedDateStr, kecamatan]);
+
+  // Function to pad zero for single digit numbers
+  function padZero(number) {
+    return number.toString().padStart(2, '0');
+  }
+
+
 
 
   // untuk penentuan warna
@@ -207,11 +228,11 @@ function Home(props) {
 
         console.log(`Latency Live Ranking: ${latency} milliseconds`);
 
-
         return {
           ...item,
           ispuColor,
           ispuTextColor,
+          index,
         };
       });
 
@@ -424,6 +445,7 @@ function Home(props) {
         console.log(`Latency Tindakan WHO: ${latency} milliseconds`);
       })
       .catch(error => console.error(error));
+    document.getElementById("tindakanWHO").innerHTML = "Data tidak ditemukan";
   }, [encodedDateStr, kecamatan]);
 
 
@@ -699,7 +721,8 @@ function Home(props) {
                 </div>
               </div>
             </div>
-            <div style={{ fontStyle: 'italic', fontSize: "12px", position: "relative", top: "10px", right: "5px" }}>Last Update: {lastUpdate}</div>
+            {/*<div style={{ fontStyle: 'italic', fontSize: "12px", position: "relative", top: "10px", right: "5px" }}>Last Update: {lastUpdate}</div>*/}
+            <div style={{ fontStyle: 'italic', fontSize: "12px", position: "relative", top: "10px", right: "5px" }}>Time stamp : {timestamp}</div>
           </div>
         </div>
         <div className="kolom-kanan col">
@@ -858,37 +881,33 @@ function Home(props) {
               </div>
             </div>
           </div>*/}
-          <div className="rank-who row card-body" style={{ marginTop: "20px", marginLeft: "10px" }}>
-            <div className="col-md">
-              <div className="ranking-list card" style={{ minHeight: " 146px", width: "580px", backgroundColor: "rgb(236, 242, 255)", marginBottom: "20px" }}>
-                <div className="card-body">
-                  <h5>Kualitas Udara Kota Bandung setiap stasiun</h5>
-                  <ol>
-                    {rankingData.map((item, index) => (
-                      <li key={index} className = "daftar-ranking">
-                        {item.lokasi}
-                        <span
-                          id={`ranking-${index}`}
-                          className="nilai-ranking float-right card-body"
-                          style={{
-                            backgroundColor: nilaiIspuElements[index]?.backgroundColor || "",
-                            color: nilaiIspuElements[index]?.ispuTextColor || "",
-                          }}
-                        >
-                          {item.rata_nilai_ispu}
-                        </span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
+          <div className="rank-who row card-body" style={{ marginTop: "20px" }}>
+            <div className="ranking-list card" style={{ minHeight: " 146px", backgroundColor: "rgb(236, 242, 255)", marginBottom: "20px" }}>
+              <div className="card-body">
+                <h5>Kualitas Udara Kota Bandung setiap stasiun</h5>
+                <ol>
+                  {rankingData.map((item, index) => (
+                    <li key={index} className="daftar-ranking">
+                      {item.lokasi}
+                      <span
+                        id={`ranking-${index}`}
+                        className="nilai-ranking float-right card-body"
+                        style={{
+                          backgroundColor: nilaiIspuElements[index]?.backgroundColor || "",
+                          color: nilaiIspuElements[index]?.ispuTextColor || "",
+                        }}
+                      >
+                        {item.rata_nilai_ispu}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
               </div>
             </div>
-            <div className="anjuranWHO col" style={{ marginRight: "20px" }}>
-              <div className="card" style={{ minHeight: "150px", backgroundColor: "rgb(236, 242, 255)" }}>
-                <div className="card-body">
-                  <h5>Anjuran WHO</h5>
-                  <p id="tindakanWHO"></p>
-                </div>
+            <div className=" anjuranWHO card" style={{ minHeight: "150px", backgroundColor: "rgb(236, 242, 255)" }}>
+              <div className="card-body">
+                <h5>Anjuran WHO</h5>
+                <p id="tindakanWHO"></p>
               </div>
             </div>
           </div>

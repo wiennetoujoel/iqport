@@ -320,14 +320,14 @@ function MainGraph() {
     <div className="Main-Container" style={{ paddingTop: "20px" }}>
       <Home kecamatan={kecamatan} />
       <div className="graph-card card" style={{ margin: "30px auto", marginBottom: "0", height: "570px", backgroundColor: "rgb(236, 242, 255)  " }}>
-        <h5 className="title-card" style={{ margin: "0 auto", marginTop: "10px" }}> Historic Air Quality Graphic for {kecamatan} </h5>
+        <h5 className="title-card" style={{ margin: "0 auto", marginTop: "10px" }}> Grafik Historis {kecamatan} </h5>
         <div id="button-container" style={{ marginTop: "20px" }}  >
-          <button className="button" id="ispuButton" onClick={handleParamClick}>ISPU</button>
-          <button className="button" id="pm25Button" onClick={handleParamClick}>PM2.5</button>
-          <button className="button" id="pm10Button" onClick={handleParamClick}>PM10</button>
-          <button className="button" id="coButton" onClick={handleParamClick}>CO</button>
-          <button className="button" id="temperaturButton" onClick={handleParamClick}>Temperature</button>
-          <button className="button" id="kelembapanButton" onClick={handleParamClick}>Humidity</button>
+          <button className="button param-button" id="ispuButton" onClick={handleParamClick}>ISPU</button>
+          <button className="button param-button" id="pm25Button" onClick={handleParamClick}>PM2.5</button>
+          <button className="button param-button" id="pm10Button" onClick={handleParamClick}>PM10</button>
+          <button className="button param-button" id="coButton" onClick={handleParamClick}>CO</button>
+          <button className="button param-button" id="temperaturButton" onClick={handleParamClick}>Temperature</button>
+          <button className="button param-button" id="kelembapanButton" onClick={handleParamClick}>Humidity</button>
         </div>
         <div className="graph-container">
           <div className="graph d-flex">
@@ -335,9 +335,9 @@ function MainGraph() {
           </div>
         </div>
         <div id="button-container" style={{ margin: "0 auto", marginBottom: "20px" }}>
-          <button className="button" id="hourlyButton" onClick={(p) => { handleLabelClick(p, "hourly"); }}>Hourly</button>
-          <button className="button" id="dailyButton" onClick={(p) => { handleLabelClick(p, "daily"); }}>Daily</button>
-          <button className="button" id="weeklyButton" onClick={(p) => { handleLabelClick(p, "weekly"); }}>This Week</button>
+          <button className="button label-button" id="hourlyButton" onClick={(p) => { handleLabelClick(p, "hourly"); }}>Hourly</button>
+          <button className="button label-button" id="dailyButton" onClick={(p) => { handleLabelClick(p, "daily"); }}>Daily</button>
+          <button className="button label-button" id="weeklyButton" onClick={(p) => { handleLabelClick(p, "weekly"); }}>This Week</button>
         </div>
       </div>
       <div id="clock">

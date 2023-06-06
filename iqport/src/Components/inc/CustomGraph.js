@@ -113,7 +113,7 @@ function CustomGraph({ startDateString, endDateString, selectedParam, kecamatan 
                     case "biru":
                         return "#C0DBEA";
                     default:
-                        return "grey";
+                        return "white";
                 }
             });
 
