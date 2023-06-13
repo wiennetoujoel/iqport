@@ -1,167 +1,201 @@
 .search-bar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end; /* align to the right */
-    margin: 20px;
-    background-color: #fff;
-    border-radius: 30px;
-    border: none;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 6px 20px;
-    transition: all 0.3s ease-in-out;
-    width: 300px;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 100;
-    margin-left:auto;
-  }
-  
-  
-  .search-bar form {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  /* align to the right */
+  background-color: #fff;
+  border-radius: 30px;
+  border: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 6px 20px;
+  transition: all 0.3s ease-in-out;
+  width: 22%;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 100;
+  margin-left: auto;
+
+  .form-inline {
     display: flex;
     align-items: center;
     flex-grow: 1;
+    width: 100%;
+    display: flex;
   }
 
-  .search-bar input {
-    flex-basis: 70%; /* Mengatur ukuran input */
+  .form-control {
+    flex-basis: 70%;
+    /* Mengatur ukuran input */
     padding: 8px;
     font-size: 16px;
-    max-width: 200px; /* Batasi lebar input */
-  }
-  .search-bar input[type=search] {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    flex-grow: 1;
-    box-shadow: none;
-  }
-  
-  .search-bar button {
-    background-color: transparent;
-    border: none;
-    margin-left: 10px;
-    cursor: pointer;
-  }
-  
-  .search-bar:hover {
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
-    transform: scale(1.00);
-  }
-  
-  .location-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #ECF9FF;
-    border-radius: 5px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 6px 20px;
-    width: 100%;
+    width: 70%;
   }
 
-  .location-item{
-    background: rgb(255, 251, 235);
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-top: 5px;
-    box-shadow:10px 5px 8px rgba(0, 0, 0, 0.1);   
-    transition: all 0.3s ease-in-out; 
-  }
+}
 
-  .location-item:hover{
-    background: rgb(255, 251, 235);
-    border-radius: 10px;
-    padding-left: 10px;
-    padding-top: 5px;
-    box-shadow:10px 5px 8px rgba(0, 0, 0, 0.1); 
+input[type=search] {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  flex-grow: 1;
+  box-shadow: none;
+  outline: none;
+}
 
-  }
 
-  .location-item .kecamatan:hover{
-    transform: scale(1.2);
-    opacity:1.8;
-    transition: all 0.4s ease-in-out;
-    transform: translateX(4px);
-  
-  }
 
-  .location-item > span:nth-of-type(1) {
-    font-weight: bold;
-  }
-  
-  .location-item > span:nth-of-type(2) {
-    font-weight: bold;
-  }
-  
-  .location-item > div {
-    font-size: 0.8em;
-    opacity: 0.6;
-  }
+.search-bar input {
 
-  .location-item > div :hover{
-    font-size: 0.8em;
-    opacity: 1;
-    transition: all 0.3s  ease-in-out;
-    cursor: pointer;
+  /* Batasi lebar input */
+}
 
-  }
 
-  
-  
-  .dropdown-menu .location-item {
-    padding: 10px 0;
-  }
-  
-  .location-dropdown .location-item > div {
-    margin-bottom: 5px;
-  }
 
-  /*untuk smartphone*/
-  @media (max-width: 480px) {
-    .search-bar {
-      flex-direction: column;
-      margin-right: 0;
-      margin-left: 10px;
-      position: absolute;
+.search-bar button {
+  background-color: transparent;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.search-bar:hover {
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+  transform: scale(1.00);
+}
+
+.location-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ECF9FF;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 6px 20px;
+  width: 100%;
+}
+
+.location-item {
+  background: rgb(255, 251, 235);
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-top: 5px;
+  box-shadow: 10px 5px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.location-item:hover {
+  background: rgb(255, 251, 235);
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-top: 5px;
+  box-shadow: 10px 5px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.location-item .kecamatan:hover {
+  transform: scale(1.2);
+  opacity: 1.8;
+  transition: all 0.4s ease-in-out;
+  transform: translateX(4px);
+
+}
+
+.location-item>span:nth-of-type(1) {
+  font-weight: bold;
+}
+
+.location-item>span:nth-of-type(2) {
+  font-weight: bold;
+}
+
+.location-item>div {
+  font-size: 0.8em;
+  opacity: 0.6;
+}
+
+.location-item>div :hover {
+  font-size: 0.8em;
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+
+}
+
+
+
+.dropdown-menu .location-item {
+  padding: 10px 0;
+}
+
+.location-dropdown .location-item>div {
+  margin-bottom: 5px;
+}
+
+/*Untuk tablet*/
+
+@media (max-width : 800px) {
+  .search-bar {
+
+    width: 30%;
+  }
+}
+
+/*untuk smartphone*/
+@media (max-width: 480px) {
+  .search-bar {
+
+
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45%;
+    margin: 0 auto !important;
+    transform: translateY(5px);
+
+
+    .form-inline {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      
       display: flex;
       align-items: center;
-      margin-right: 30px;
-      height: 50px;
-      width: 185px;
-      left:180px;
-      transform: translateY(10px);
-    }
+      justify-content: center;
 
-    .search-bar .form {
-        flex-wrap: wrap;
-        margin-right: 0;
+      .form-control {
+
+        margin: 0 auto;
+        width: 10%;
+        font-size: 14px;
+
       }
-  
-    .search-bar .form-control {
-      margin-bottom: 8px;
-      width: 100%;
-      height: auto;
-    }
-  
-    .search-bar input {
-      flex-basis: 100%; /* Mengatur ukuran input agar mengisi seluruh lebar */
-      max-width: 105px; /* Menghapus batasan lebar input */
-      height: auto;
-      margin-left: -15px;
-      font-size: 15px;
-      background-color: white;
-      transform: translateY(20px) translateX(0px);
-      
+
+      .submitButton {
+        background-color: black;
+
+
+      }
     }
 
-    #searchIcon{
-      background-color: white;
-      transform: translateY(15px) translateX(15px);
-      
-    }
-  
-    .search-bar button {
-      margin-left: 10px;
-    }
   }
+
+
+  .search-bar input {
+    flex-basis: 100%;
+    /* Mengatur ukuran input agar mengisi seluruh lebar */
+    max-width: 105px;
+    /* Menghapus batasan lebar input */
+    height: auto;
+    margin-left: 0px;
+    
+    background-color: white;
+
+
+  }
+
+  #searchIcon {
+    background-color: white;
+  }
+}

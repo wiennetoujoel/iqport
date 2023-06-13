@@ -128,7 +128,7 @@ function SearchBar() {
                     value={location}
                     onChange={handleLocationChange}
                 />
-                <button id ="searchIcon" className="btn btn-outline-success my-2 my-sm-0" type="submit">
+                <button id ="searchIcon" className="submitButton btn-outline-success my-2 my-sm-0" type="submit">
                     <FontAwesomeIcon icon={faSearch} />
                 </button>
             </form>
